@@ -319,7 +319,7 @@ class MasterRepositary {
       String blockId,
       String panchayatId,
       String villageId,
-      String habitationId,
+
       ) async {
 
     try {
@@ -343,7 +343,7 @@ class MasterRepositary {
           "&BlockId=$blockId"
           "&Panchayatid=$panchayatId"
           "&VillageId=$villageId"
-          "&HabitationId=$habitationId"
+          "&HabitationId=0"
           "&UserID=0";
 
       debugPrint("➡️ Directory API URL: $endpoint");

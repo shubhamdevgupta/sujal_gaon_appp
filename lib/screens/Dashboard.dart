@@ -328,8 +328,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(height: 14),
 
            /* if (masterProvider.tempId != null)*/
-              unifiedInfoCard(masterProvider)
-          ],
+        verificationSlider(masterProvider.directoryList),
+
+        ],
         ),
       ),
     );
@@ -337,178 +338,207 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // ---------------- Widgets ----------------
 
-  Widget unifiedInfoCard(MasterProvider master) {
+  Widget verificationCard({
+    required String habitationId,
+    required String rpwssId,
+    required String sujlamId,
+    required VoidCallback onProceed,
+  }) {
     return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      padding: const EdgeInsets.all(18),
 
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(18),
+
+        // 🔷 Gradient Border Effect
+        border: Border.all(
+          color: const Color(0xFF1976D2),
+          width: 1.5,
+        ),
+
         gradient: const LinearGradient(
           colors: [
-            Color(0xFFF8FBFF),
-            Color(0xFFFFFFFF),
+            Color(0xFFF9FCFF),
+            Colors.white,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
+
         boxShadow: [
           BoxShadow(
             color: Colors.blue.withOpacity(0.12),
-            blurRadius: 16,
+            blurRadius: 14,
             offset: const Offset(0, 6),
           ),
         ],
       ),
 
       child: Column(
-        children: [
-
-          // ===== Header Strip =====
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(
-              vertical: 14,
-              horizontal: 16,
-            ),
-
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF1976D2),
-                  Color(0xFF42A5F5),
-                ],
-              ),
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(20),
-              ),
-            ),
-
-            child: Row(
-              children: const [
-
-                Icon(Icons.verified, color: Colors.white),
-
-                SizedBox(width: 8),
-
-                Text(
-                  "Verification Summary",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // ===== Body =====
-          Padding(
-            padding: const EdgeInsets.all(18),
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-
-                _colorInfoLine(
-                  "Habitation ID",
-                  master.selectedHabitationId,
-                  color: Colors.grey.shade800,
-                ),
-
-                _colorInfoLine(
-                  "RPWSS ID",
-                  master.tempId,
-                  color: const Color(0xFF1565C0),
-                  big: true,
-                ),
-
-                _colorInfoLine(
-                  "Sujlam Gaon ID",
-                  master.serviceAreaId,
-                  color: const Color(0xFF00796B),
-                ),
-
-                const SizedBox(height: 18),
-                const Divider(),
-
-                // ===== Button =====
-                Align(
-                  alignment: Alignment.centerRight,
-
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      elevation: 4,
-                      backgroundColor: const Color(0xFF1976D2),
-                    ),
-
-                    onPressed: master.tempId == null
-                        ? null
-                        : () {
-                      debugPrint("Proceed → ${master.tempId}");
-                    },
-
-                    child: const Text(
-                      "Proceed →",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-
-
-  Widget _colorInfoLine(
-      String label,
-      String? value, {
-        required Color color,
-        bool big = false,
-      }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-
-      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+
         children: [
 
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade600,
-            ),
+          /// HEADER
+          Row(
+            children: const [
+              Icon(Icons.verified, color: Color(0xFF1976D2)),
+              SizedBox(width: 8),
+              Text(
+                "Verification Summary",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1976D2),
+                ),
+              ),
+            ],
           ),
 
-          const SizedBox(height: 4),
+          const SizedBox(height: 16),
+          const Divider(),
 
-          Text(
-            value == null || value.isEmpty ? "--" : value,
-            style: TextStyle(
-              fontSize: big ? 20 : 15,
-              fontWeight: big ? FontWeight.w700 : FontWeight.w600,
-              color: color,
+          /// DATA ROWS
+          _infoRow("Habitation ID", habitationId),
+          _infoRow("RPWSS ID", rpwssId),
+          _infoRow("Sujlam Gaon", sujlamId),
+
+          const SizedBox(height: 20),
+
+          /// BUTTON
+          Align(
+            alignment: Alignment.centerRight,
+
+            child: ElevatedButton(
+              onPressed: onProceed,
+
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF1976D2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 26,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+
+              child: const Text(
+                "Proceed →",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
+  /// Small reusable row
+  Widget _infoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+
+      child: Row(
+        children: [
+
+          SizedBox(
+            width: 120,
+            child: Text(
+              "$label :",
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey.shade700,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+
+          Expanded(
+            child: Text(
+              value.isEmpty ? "--" : value,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  int currentIndex = 0;
+
+  Widget verificationSlider(List<dynamic> dataList) {
+    return Column(
+      children: [
+
+        /// SLIDER
+        SizedBox(
+          height: 260,
+
+          child: PageView.builder(
+            itemCount: dataList.length,
+
+            onPageChanged: (index) {
+              currentIndex = index;
+            },
+
+            itemBuilder: (context, index) {
+
+              final item = list[index];
+
+              return verificationCard(
+
+                habitationId: item.habitationName ?? "--",
+
+                rpwssId: item.temporaryId ?? "--",
+
+                sujlamId: item.serviceAreaId ?? "--",
+
+                onProceed: () {
+                  debugPrint("Proceed → ${item.temporaryId}");
+                },
+              );
+            },
+          ),
+        ),
+
+        const SizedBox(height: 6),
+
+        /// DOT INDICATOR
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+
+          children: List.generate(
+            dataList.length,
+                (index) => AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+
+              height: 8,
+              width: currentIndex == index ? 22 : 8,
+
+              decoration: BoxDecoration(
+                color: currentIndex == index
+                    ? const Color(0xFF1976D2)
+                    : Colors.grey.shade400,
+
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
 
 
 

@@ -320,8 +320,8 @@ class MasterProvider extends ChangeNotifier {
         selectedDistrictId == null ||
         selectedBlockId == null ||
         selectedGpId == null ||
-        selectedVillageId == null ||
-        selectedHabitationId == null) {
+        selectedVillageId == null
+        ) {
 
       debugPrint("❌ Directory: Missing selection");
       return;
@@ -339,7 +339,7 @@ class MasterProvider extends ChangeNotifier {
         selectedBlockId!,
         selectedGpId!,
         selectedVillageId!,
-        selectedHabitationId!,
+
       );
 
       baseStatus = rawDir.status;
