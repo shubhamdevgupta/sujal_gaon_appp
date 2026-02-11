@@ -9,7 +9,6 @@ import '../utils/custom screen/custom_exception.dart';
 
 class BaseApiService {
 
-  // ================= BASE URL =================
 
   final String _baseUrl = 'https://ejalshakti.gov.in/WebAPI/';
 
