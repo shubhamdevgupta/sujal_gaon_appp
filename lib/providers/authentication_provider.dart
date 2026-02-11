@@ -26,11 +26,11 @@ class AuthenticationProvider extends ChangeNotifier {
 
   var randomOne = 0, randomTwo = 0, captchResult = 0;
 
-  LoginResponse? _loginResponse;
+  LoginResponseModel? _loginResponse;
   bool _isLoading = false;
 
   // Getters
-  LoginResponse? get loginResponse => _loginResponse;
+  LoginResponseModel? get loginResponse => _loginResponse;
 
   bool get isLoading => _isLoading;
 
@@ -63,90 +63,22 @@ class AuthenticationProvider extends ChangeNotifier {
 
   // Method to login user
   Future<void> loginUser(
-    phoneNumber,
+    userName,
     password,
-    appId,
     Function() onSuccess,
     Function onFailure,
   ) async {
     _isLoading = true;
     notifyListeners();
-    String txtSalt = generateSalt();
-    String encryPass = encryptPassword(password, txtSalt);
+    String hashPass = generatePasswordHash(password);
 
     try {
       _loginResponse = await _authRepository.loginUser(
-        phoneNumber,
-        encryPass,
-        txtSalt,
-        appId,
+        userName,
+        hashPass,
+        "DWS_WS",
       );
-      if (_loginResponse?.status == 1) {
-        _isLoggedIn = true;
-        _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
-        _localStorage.saveString(
-          AppConstants.prefToken,
-          _loginResponse!.token.toString(),
-        );
-        _localStorage.saveString(
-          AppConstants.prefName,
-          _loginResponse!.name.toString(),
-        );
-        _localStorage.saveString(
-          AppConstants.prefMobile,
-          _loginResponse!.mobileNumber.toString(),
-        );
-        _localStorage.saveString(
-          AppConstants.prefLoginID,
-          _loginResponse!.loginId!,
-        );
-
-        _localStorage.saveInt(AppConstants.prefRegId, _loginResponse!.regId!);
-        _localStorage.saveInt(AppConstants.prefRoleId, _loginResponse!.roleId!);
-
-        _localStorage.saveInt(
-          AppConstants.prefStateId,
-          _loginResponse!.stateId!,
-        );
-        _localStorage.saveInt(
-          AppConstants.prefDistrictId,
-          _loginResponse!.districtId!,
-        );
-        _localStorage.saveInt(
-          AppConstants.prefBlockId,
-          _loginResponse!.blockId!,
-        );
-        _localStorage.saveInt(
-          AppConstants.prefPanchayatId,
-          _loginResponse!.gramPanchayatId!,
-        );
-        _localStorage.saveInt(
-          AppConstants.prefVillageId,
-          _loginResponse!.villageId!,
-        );
-
-        _localStorage.saveString(
-          AppConstants.prefStateName,
-          _loginResponse!.stateName.toString(),
-        );
-        _localStorage.saveString(
-          AppConstants.prefDistName,
-          _loginResponse!.districtName.toString(),
-        );
-        _localStorage.saveString(
-          AppConstants.prefBlockName,
-          _loginResponse!.blockName.toString(),
-        );
-        _localStorage.saveString(
-          AppConstants.prefGramPanchayatName,
-          _loginResponse!.panchayatName.toString(),
-        );
-        _localStorage.saveString(
-          AppConstants.prefVillageName,
-          _loginResponse!.villageName.toString(),
-        );
-
-        notifyListeners();
+      if (_loginResponse?.msgCode == 200) {
         onSuccess();
         generateCaptcha();
       } else {
@@ -166,7 +98,7 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-/*
+  /*
   Future<void> fetchLocation() async {
     _isLoading = true;
     notifyListeners();
@@ -229,6 +161,19 @@ class AuthenticationProvider extends ChangeNotifier {
       (_) => random.nextInt(256),
     );
     return base64Encode(saltBytes);
+  }
+
+  String generatePasswordHash(String password) {
+    // Step 1: Convert password to bytes
+    final passwordBytes = utf8.encode(password);
+
+    // Step 2: MD5 hash
+    final md5Hash = md5.convert(passwordBytes).toString();
+
+    // Step 3: SHA256 of MD5 result
+    final sha256Hash = sha256.convert(utf8.encode(md5Hash)).toString();
+
+    return sha256Hash;
   }
 
   int generateCaptcha() {

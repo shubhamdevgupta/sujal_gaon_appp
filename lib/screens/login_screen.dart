@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/authentication_provider.dart';
@@ -26,19 +25,16 @@ class _LoginpageState extends State<Loginscreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => AuthenticationProvider(),
-        child: Consumer<AuthenticationProvider>(
-            builder: (context, provider, child) {
+      create: (_) => AuthenticationProvider(),
+      child: Consumer<AuthenticationProvider>(
+        builder: (context, provider, child) {
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(40.0),
               child: AppBar(
                 automaticallyImplyLeading: false,
                 centerTitle: true,
-                title: Text(
-                  'Login ',
-                  style: AppStyles.appBarTitle,
-                ),
+                title: Text('Login ', style: AppStyles.appBarTitle),
                 backgroundColor: Appcolor.btncolor,
               ),
             ),
@@ -47,9 +43,10 @@ class _LoginpageState extends State<Loginscreen> {
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/icons/header_bg.png'),
-                    fit: BoxFit.fill,
-                    scale: 3),
+                  image: AssetImage('assets/icons/header_bg.png'),
+                  fit: BoxFit.fill,
+                  scale: 3,
+                ),
               ),
               child: Stack(
                 children: [
@@ -61,31 +58,28 @@ class _LoginpageState extends State<Loginscreen> {
                           padding: const EdgeInsets.only(left: 20, top: 10),
                           child: buildHeader(),
                         ),
-                        const SizedBox(
-                          height: 30,
-                        ),
+                        const SizedBox(height: 30),
                         Card(
                           elevation: 6,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           color: Colors.white,
                           margin: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
+                            horizontal: 20,
+                            vertical: 20,
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all(24),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                buildFormLabel('Mobile Number / Username'),
+                                buildFormLabel('Username'),
                                 buildTextFormField(
                                   controller: phoneController,
                                   hint: 'Enter Mobile Number or Username',
                                   icon: Icons.person_outline,
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(10),
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
+                                  keyboardType: TextInputType.name,
                                 ),
                                 const SizedBox(height: 20),
                                 buildFormLabel('Password'),
@@ -115,8 +109,9 @@ class _LoginpageState extends State<Loginscreen> {
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
                                           color: const Color(0xFFF1F3F4),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                         ),
                                         child: Text(
                                           '${provider.randomOne} + ${provider.randomTwo} = ?',
@@ -134,10 +129,12 @@ class _LoginpageState extends State<Loginscreen> {
                                       borderRadius: BorderRadius.circular(30),
                                       child: CircleAvatar(
                                         backgroundColor: Colors.blue.shade50,
-                                        child: const Icon(Icons.refresh,
-                                            color: Colors.blue),
+                                        child: const Icon(
+                                          Icons.refresh,
+                                          color: Colors.blue,
+                                        ),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 16),
@@ -153,60 +150,50 @@ class _LoginpageState extends State<Loginscreen> {
                                   height: 52,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Navigator.pushReplacementNamed(
-                                          context,
-                                          AppConstants
-                                              .navigateToDashboardScreen);
-                                    /*  if (validateLoginInput(provider)) {
+                                      print(
+                                        "----> ${provider.generatePasswordHash("Admin@12345")}",
+                                      );
+
+                                      if (validateLoginInput(provider)) {
                                         provider.loginUser(
                                           phoneController.text,
                                           passwordController.text,
-                                          1,
+
                                           () {
-                                            provider.fetchLocation();
-                                            if (provider
-                                                    .loginResponse?.roleId ==
-                                                4) {
-                                              Navigator.pushReplacementNamed(
-                                                  context,
-                                                  AppConstants
-                                                      .navigateToDashboardScreen);
-                                            } else if (provider
-                                                    .loginResponse?.roleId ==
-                                                8) {
-                                              Navigator.pushReplacementNamed(
-                                                  context,
-                                                  AppConstants
-                                                      .navigateToDwsmDashboard);
-                                            } else if (provider
-                                                    .loginResponse?.roleId ==
-                                                7) {
-                                              Navigator.pushReplacementNamed(
-                                                  context,
-                                                  AppConstants
-                                                      .navigateToFtkDashboard);
-                                            }
+                                            Navigator.pushReplacementNamed(
+                                              context,
+                                              AppConstants
+                                                  .navigateToDashboardScreen,
+                                            );
                                           },
                                           (errorMessage) {
-                                            *//*ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(content: Text(errorMessage)));*//*
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                content: Text(errorMessage),
+                                              ),
+                                            );
                                             ToastHelper.showToastMessage(
-                                                errorMessage);
+                                              errorMessage,
+                                            );
                                           },
                                         );
                                       } else {
                                         ToastHelper.showToastMessage(
-                                            provider.errorMsg);
-                                      }*/
+                                          provider.errorMsg,
+                                        );
+                                      }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Appcolor.btncolor,
                                       shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14)),
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
                                       elevation: 4,
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 14),
+                                        vertical: 14,
+                                      ),
                                     ),
                                     child: const Text(
                                       'LOGIN',
@@ -224,16 +211,17 @@ class _LoginpageState extends State<Loginscreen> {
                                   children: [
                                     Align(
                                       alignment: Alignment.centerRight,
-                                      child: Image.asset("assets/icons/nicone.png",
-                                          height: 40),
+                                      child: Image.asset(
+                                        "assets/icons/nicone.png",
+                                        height: 40,
+                                      ),
                                     ),
                                     Align(
                                       alignment: Alignment.topLeft,
                                       child: Text("v${AppUtil.appVersion}"),
                                     ),
                                   ],
-                                )
-
+                                ),
                               ],
                             ),
                           ),
@@ -242,13 +230,15 @@ class _LoginpageState extends State<Loginscreen> {
                     ),
                   ),
                   // Loading Overlay
-            /*      if (provider.isLoading)
+                  /*      if (provider.isLoading)
                     LoaderUtils.conditionalLoader(isLoading: provider.isLoading)*/
                 ],
               ),
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 
   bool validateLoginInput(AuthenticationProvider provider) {
@@ -258,16 +248,14 @@ class _LoginpageState extends State<Loginscreen> {
 
     int? enteredCaptcha = int.tryParse(captcha);
     // Using a single if-else statement
-    provider.errorMsg = (phone.isNotEmpty &&
-            phone.length == 10 &&
-            RegExp(r'^[0-9]{10}$').hasMatch(phone))
-        ? (password.isNotEmpty
-            ? (captcha.isNotEmpty &&
-                    enteredCaptcha == provider.captchResult // Compare as int
-                ? ""
-                : "Please Enter Correct Captcha")
-            : "Please Enter Password")
-        : "Please Enter Valid Mobile Number";
+    provider.errorMsg = (password.isNotEmpty
+        ? (captcha.isNotEmpty &&
+                  enteredCaptcha ==
+                      provider
+                          .captchResult // Compare as int
+              ? ""
+              : "Please Enter Correct Captcha")
+        : "Please Enter Password");
 
     return provider.errorMsg.isEmpty;
   }
@@ -277,13 +265,8 @@ class _LoginpageState extends State<Loginscreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Logo
-        Image.asset(
-          'assets/icons/appjalicon.png',
-          width: 55,
-          height: 65,
-        ),
+        Image.asset('assets/icons/appjalicon.png', width: 55, height: 65),
         const SizedBox(width: 12), // Adjusted spacing for a balanced layout
-
         // Title & Subtitle
         Expanded(
           child: Column(
@@ -293,7 +276,8 @@ class _LoginpageState extends State<Loginscreen> {
                 'Jal Jeevan Mission',
                 style: TextStyle(
                   fontSize: 18, // Slightly reduced for better balance
-                  fontWeight: FontWeight.w700, fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'OpenSans',
                   color: Appcolor.txtColor,
                 ),
                 maxLines: 1,
@@ -303,7 +287,8 @@ class _LoginpageState extends State<Loginscreen> {
               Text(
                 'Jal Sanchalan',
                 style: TextStyle(
-                  fontSize: 16, fontFamily: 'OpenSans',
+                  fontSize: 16,
+                  fontFamily: 'OpenSans',
                   fontWeight: FontWeight.w500,
                   color: Colors.grey[800], // Softer color for better contrast
                 ),
@@ -347,8 +332,10 @@ class _LoginpageState extends State<Loginscreen> {
         filled: true,
         fillColor: const Color(0xFFF5F7FA),
         hintText: hint,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 18,
+          horizontal: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),

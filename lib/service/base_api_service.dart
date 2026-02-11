@@ -14,8 +14,9 @@ class BaseApiService {
 
   static const String ejalShakti = "https://ejalshakti.gov.in/WebAPI/";
   static const String _masterdic = "https://ejalshakti.gov.in/WebAPI/api/RPWSS/RPWSS_Result_Lsit_BY_Directory";
-  static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
+  static const String egramswaraj = "https://egramswaraj.gov.in/covidWebService/";
   static const String github = "https://api.github.com/repos/";
+
 
 
   // ================= TOKEN =================
@@ -53,11 +54,13 @@ class BaseApiService {
 
   Future<dynamic> post(
       String endpoint, {
+        ApiType apiType = ApiType.ejalShakti,
         Map<String, String>? headers,
         dynamic body,
       }) async {
 
-    final Uri url = Uri.parse('$_baseUrl$endpoint');
+    final String baseUrl = getBaseUrl(apiType);
+    final Uri url = Uri.parse('$baseUrl$endpoint');
 
     final finalHeaders = _defaultHeaders(extra: headers);
 
@@ -239,8 +242,8 @@ class BaseApiService {
       case ApiType.ejalShakti:
         return ejalShakti;
 
-      case ApiType.reverseGeocoding:
-        return reverseGeocoding;
+      case ApiType.egramswaraj:
+        return egramswaraj;
 
       case ApiType.github:
         return github;
@@ -266,6 +269,6 @@ class BaseApiService {
 
 enum ApiType {
   ejalShakti,
-  reverseGeocoding,
+  egramswaraj,
   github,
 }
