@@ -39,7 +39,10 @@ class BaseResponseModel<T> {
             json['Blocklist'] ??
             json['Grampanchayatlist'] ??
             json['Villagelist'] ??
-            json['HabitationList'];
+            json['HabitationList']??
+            json['RPWSS_Result_list'];
+
+
 
             [];
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/block_model.dart';
+import '../models/dictorey_model.dart';
 import '../models/district_model.dart';
 import '../models/gp_model.dart';
 import '../models/habitaion_model.dart';
@@ -75,6 +76,13 @@ class MasterProvider extends ChangeNotifier {
     selectedHabitationId = value;
     notifyListeners();
   }
+
+
+  List<RpwssResultList> directoryList = [];
+
+  String? tempId;
+  String? serviceAreaId;
+
 
 
 
@@ -303,6 +311,74 @@ class MasterProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+  Future<void> fetchDirectory() async {
+
+    // Make sure all IDs exist
+    if (selectedStateId == null ||
+        selectedDistrictId == null ||
+        selectedBlockId == null ||
+        selectedGpId == null ||
+        selectedVillageId == null ||
+        selectedHabitationId == null) {
+
+      debugPrint("❌ Directory: Missing selection");
+      return;
+    }
+
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+
+      final rawDir =
+      await _masterRepositary.fetchDirectory(
+        selectedStateId!,
+        selectedDistrictId!,
+        selectedBlockId!,
+        selectedGpId!,
+        selectedVillageId!,
+        selectedHabitationId!,
+      );
+
+      baseStatus = rawDir.status;
+
+      if (rawDir.status == 1 && rawDir.result.isNotEmpty) {
+
+        directoryList = rawDir.result;
+
+        // Usually only 1 record comes
+        final data = directoryList.first;
+
+        tempId = data.temporaryId;
+        serviceAreaId = data.serviceAreaId;
+
+        debugPrint("Directory Loaded");
+        debugPrint("TempId: $tempId");
+        debugPrint("ServiceAreaId: $serviceAreaId");
+
+      } else {
+
+        errorMsg = rawDir.message;
+        directoryList = [];
+
+        tempId = null;
+        serviceAreaId = null;
+      }
+
+    } catch (e) {
+
+      debugPrint("Directory Error: $e");
+      errorMsg = "Failed to load directory data";
+
+    } finally {
+
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
 
 
 

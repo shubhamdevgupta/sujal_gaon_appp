@@ -54,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: const Text(
-                'Jal Seva',
+                'Sujlam Bharat',
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
@@ -63,48 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             /// MULTI-COLOR TOP CARD
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF1565C0), // Blue
-                    Color(0xFF00838F), // Teal
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(22),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Water Coverage',
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                        SizedBox(height: 6),
-                        Text(
-                          'Progress Overview',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Nationwide implementation status',
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                      ],
-                    ),
-                  ),
-                  _progressCircle(0.82),
-                ],
-              ),
-            ),
+            dashboardHeader(0.82),
 
 
 
@@ -306,7 +265,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           masterProvider.setSelectedVillage(value); // ✅ Save state
 
                           if (value != null && value.isNotEmpty) {
-                            masterProvider.fetchHabitation(value); // Next API
+                            masterProvider.fetchDirectory();// Next API
                           }
                         },
 
@@ -315,7 +274,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
 
-                  SizedBox(height: 15,),
+                 /* SizedBox(height: 15,),
 
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,15 +301,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                           masterProvider.setSelectedHabitation(value); // ✅ Save state
 
-                         /* if (value != null && value.isNotEmpty) {
-                            masterProvider.fetchHabitation(value); // Next API
-                          }*/
+                          if (value != null && value.isNotEmpty) {
+                            masterProvider.fetchDirectory(); // Next API
+                          }
                         },
 
                         appBarTitle: "Select Habitaion",
                       ),
                     ],
-                  ),
+                  ),*/
                 ],
               ),
             ),
@@ -368,29 +327,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: 14),
 
-            Row(
-              children: [
-                _overviewCard(
-                  title: 'Total Villages',
-                  value: '586,944',
-                  icon: Icons.location_city,
-                  colors: const [
-                    Color(0xFF5C6BC0),
-                    Color(0xFF3949AB),
-                  ],
-                ),
-                const SizedBox(width: 14),
-                _overviewCard(
-                  title: 'ODF Plus',
-                  value: '568,544',
-                  icon: Icons.water_drop,
-                  colors: const [
-                    Color(0xFF26A69A),
-                    Color(0xFF00796B),
-                  ],
-                ),
-              ],
-            ),
+           /* if (masterProvider.tempId != null)*/
+              unifiedInfoCard(masterProvider)
           ],
         ),
       ),
@@ -399,26 +337,134 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // ---------------- Widgets ----------------
 
-  Widget _progressCircle(double progress) {
-    return SizedBox(
-      width: 72,
-      height: 72,
-      child: Stack(
-        children: [
-          CircularProgressIndicator(
-            value: progress,
-            strokeWidth: 7,
-            backgroundColor: Colors.white24,
-            valueColor:
-            const AlwaysStoppedAnimation<Color>(Colors.amber),
+  Widget unifiedInfoCard(MasterProvider master) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 16),
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFFF8FBFF),
+            Color(0xFFFFFFFF),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blue.withOpacity(0.12),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
           ),
-          Center(
-            child: Text(
-              '${(progress * 100).toInt()}%',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+        ],
+      ),
+
+      child: Column(
+        children: [
+
+          // ===== Header Strip =====
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 16,
+            ),
+
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF1976D2),
+                  Color(0xFF42A5F5),
+                ],
               ),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
+            ),
+
+            child: Row(
+              children: const [
+
+                Icon(Icons.verified, color: Colors.white),
+
+                SizedBox(width: 8),
+
+                Text(
+                  "Verification Summary",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // ===== Body =====
+          Padding(
+            padding: const EdgeInsets.all(18),
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                _colorInfoLine(
+                  "Habitation ID",
+                  master.selectedHabitationId,
+                  color: Colors.grey.shade800,
+                ),
+
+                _colorInfoLine(
+                  "RPWSS ID",
+                  master.tempId,
+                  color: const Color(0xFF1565C0),
+                  big: true,
+                ),
+
+                _colorInfoLine(
+                  "Sujlam Gaon ID",
+                  master.serviceAreaId,
+                  color: const Color(0xFF00796B),
+                ),
+
+                const SizedBox(height: 18),
+                const Divider(),
+
+                // ===== Button =====
+                Align(
+                  alignment: Alignment.centerRight,
+
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      elevation: 4,
+                      backgroundColor: const Color(0xFF1976D2),
+                    ),
+
+                    onPressed: master.tempId == null
+                        ? null
+                        : () {
+                      debugPrint("Proceed → ${master.tempId}");
+                    },
+
+                    child: const Text(
+                      "Proceed →",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -426,80 +472,119 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _dropdown(
-      IconData icon,
-      Color iconColor,
+
+
+  Widget _colorInfoLine(
       String label,
-      String? value,
-      ValueChanged<String?> onChanged,
-      ) {
+      String? value, {
+        required Color color,
+        bool big = false,
+      }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
-      child: DropdownButtonFormField<String>(
-        value: value,
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: iconColor),
-          labelText: label,
-          filled: true,
-          fillColor: const Color(0xFFF1F4FF),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
+
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey.shade600,
+            ),
           ),
-        ),
-        items: list
-            .map(
-              (e) => DropdownMenuItem(
-            value: e,
-            child: Text(e),
+
+          const SizedBox(height: 4),
+
+          Text(
+            value == null || value.isEmpty ? "--" : value,
+            style: TextStyle(
+              fontSize: big ? 20 : 15,
+              fontWeight: big ? FontWeight.w700 : FontWeight.w600,
+              color: color,
+            ),
           ),
-        )
-            .toList(),
-        onChanged: onChanged,
+        ],
       ),
     );
   }
 
-  Widget _overviewCard({
-    required String title,
-    required String value,
-    required IconData icon,
-    required List<Color> colors,
-  }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: colors),
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 12,
-              offset: Offset(0, 6),
-            ),
+
+
+
+
+
+
+  Widget dashboardHeader(double progress) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF2196F3),
+            Color(0xFF1565C0),
           ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: Colors.white),
-            const SizedBox(height: 16),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+          // LEFT TEXT
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+
+                Text(
+                  "Welcome 👋",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+
+                SizedBox(height: 6),
+
+                Text(
+                  "Panchayat User",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                SizedBox(height: 6),
+
+                Text(
+                  "Have a productive day!",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 6),
-            Text(
-              title,
-              style: const TextStyle(color: Colors.white70),
-            ),
-          ],
-        ),
+          ),
+
+
+          // RIGHT PROGRESS
+
+        ],
       ),
     );
   }
