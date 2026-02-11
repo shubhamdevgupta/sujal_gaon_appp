@@ -31,18 +31,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final masterProvider = context.watch<MasterProvider>();
     return Scaffold(
       backgroundColor: const Color(0xFFF2F6FF),
-      /*appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: const Text(
-          'Jal Seva',
-          style: TextStyle(
-            color: Color(0xFF1A237E),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),*/
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
