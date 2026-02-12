@@ -55,17 +55,38 @@ class RpwssResultList {
     required this.distributionNetwork,
   });
 
-  factory RpwssResultList.fromJson(Map<String, dynamic> json) => RpwssResultList(
-    stateName: stateNameValues.map[json["StateName"]]!,
-    districtname: districtnameValues.map[json["Districtname"]]!,
-    blockName: json["BlockName"],
-    panchayatName: json["PanchayatName"],
-    villageName: json["VillageName"],
-    habitationName: json["HabitationName"],
-    temporaryId: json["Temporary_ID"],
-    serviceAreaId: json["Service_Area_ID"],
-    distributionNetwork: json["Distribution_Network"],
-  );
+  factory RpwssResultList.fromJson(Map<String, dynamic> json) {
+
+    // Debug (optional - remove later)
+    print("RPWSS JSON ITEM: $json");
+
+    return RpwssResultList(
+
+      // SAFE ENUM PARSING
+      stateName: stateNameValues.map[json["StateName"]?.toString().trim()]
+          ?? StateName.ANDHRA_PRADESH,
+
+      districtname: districtnameValues.map[json["Districtname"]?.toString().trim()]
+          ?? Districtname.ANAKAPALLI, // default
+
+      // SAFE STRING PARSING
+      blockName: json["BlockName"]?.toString() ?? "--",
+
+      panchayatName: json["PanchayatName"]?.toString() ?? "--",
+
+      villageName: json["VillageName"]?.toString() ?? "--",
+
+      habitationName: json["HabitationName"]?.toString() ?? "--",
+
+      temporaryId: json["Temporary_ID"]?.toString() ?? "--",
+
+      serviceAreaId: json["Service_Area_ID"]?.toString() ?? "--",
+
+      distributionNetwork:
+      json["Distribution_Network"]?.toString() ?? "--",
+    );
+  }
+
 
   Map<String, dynamic> toJson() => {
     "StateName": stateNameValues.reverse[stateName],
