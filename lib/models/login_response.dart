@@ -1,131 +1,127 @@
-class LoginResponse {
-  final String? token;
-  final String? loginId;
-  final String? password;
-  final String? adPassword;
-  final int? regId;
-  final int? roleId;
-  final String? mobileNumber;
-  final String? name;
-  final String? emailId;
-  final String? sha512;
-  final String? txtSaltedHash;
-  final String? stateName;
-  final int? stateId;
-  final int? districtId;
-  final int? blockId;
-  final int? gramPanchayatId;
-  final int? villageId;
-  final int? pincode;
-  final String? isChangePwd;
-  final int? status;
+class LoginResponseModel {
+  final int? msgCode;
   final String? msg;
-  final String? lang;
-  final int? agencyId;
-  final bool? isUpdateProfile;
-  final dynamic agencyListData;
-  final String? districtName;
-  final String? blockName;
-  final String? panchayatName;
-  final String? villageName;
+  final String? username;
+  final int? userid;
+  final int? stateCode;
+  final String? stateNameEnglish;
+  final int? zpcode;
+  final String? zpname;
+  final int? districtlgdcode;
+  final String? districtlgdname;
+  final int? bpcode;
+  final String? bpname;
+  final int? blocklgdcode;
+  final String? blocklgdname;
+  final int? gpcode;
+  final String? gpname;
+  final int? entityLevel;
+  final List<VillageModel>? villagelist;
+  final String? roletype;
+  final String? roleId;
 
-  LoginResponse({
-    required this.token,
-    required this.loginId,
-    required this.password,
-    required this.adPassword,
-    required this.regId,
-    required this.roleId,
-    required this.mobileNumber,
-    required this.name,
-    required this.emailId,
-    this.sha512,
-    this.txtSaltedHash,
-    required this.stateName,
-    required this.stateId,
-    required this.districtId,
-    required this.blockId,
-    required this.gramPanchayatId,
-    required this.villageId,
-    required this.pincode,
-    required this.isChangePwd,
-    required this.status,
+  LoginResponseModel({
+    this.msgCode,
     this.msg,
-    this.lang,
-    required this.agencyId,
-    required this.isUpdateProfile,
-    this.agencyListData,
-    required this.districtName,
-    required this.blockName,
-    required this.panchayatName,
-    required this.villageName,
+    this.username,
+    this.userid,
+    this.stateCode,
+    this.stateNameEnglish,
+    this.zpcode,
+    this.zpname,
+    this.districtlgdcode,
+    this.districtlgdname,
+    this.bpcode,
+    this.bpname,
+    this.blocklgdcode,
+    this.blocklgdname,
+    this.gpcode,
+    this.gpname,
+    this.entityLevel,
+    this.villagelist,
+    this.roletype,
+    this.roleId,
   });
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) {
-    return LoginResponse(
-      token: json['Token'],
-      loginId: json['loginid'],
-      password: json['password'],
-      adPassword: json['adpassword'],
-      regId: json['reg_id'],
-      roleId: json['role_id'],
-      mobileNumber: json['MobileNumber'],
-      name: json['Name'],
-      emailId: json['EmailId'],
-      sha512: json['Sha512'],
-      txtSaltedHash: json['txtSaltedHash'],
-      stateName: json['StateName'],
-      stateId: json['StateId'],
-      districtId: json['DistrictId'],
-      blockId: json['BlockId'],
-      gramPanchayatId: json['GramPanchayatId'],
-      villageId: json['VillageId'],
-      pincode: json['Pincode'],
-      isChangePwd: json['isChngPwd'],
-      status: json['status'],
+  factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
+    return LoginResponseModel(
+      msgCode: json['msg_code'],
       msg: json['msg'],
-      lang: json['lang'],
-      agencyId: json['AgencyId'],
-      isUpdateProfile: json['isupdateprofile'],
-      agencyListData: json['AgencyListData'],
-      districtName: json['DistrictName'],
-      blockName: json['BlockName'],
-      panchayatName: json['PanchayatName'],
-      villageName: json['VillageName'],
+      username: json['username'],
+      userid: json['userid'],
+      stateCode: json['state_code'],
+      stateNameEnglish: json['state_name_english'],
+      zpcode: json['zpcode'],
+      zpname: json['zpname'],
+      districtlgdcode: json['districtlgdcode'],
+      districtlgdname: json['districtlgdname'],
+      bpcode: json['bpcode'],
+      bpname: json['bpname'],
+      blocklgdcode: json['blocklgdcode'],
+      blocklgdname: json['blocklgdname'],
+      gpcode: json['gpcode'],
+      gpname: json['gpname'],
+      entityLevel: json['entity_level'],
+      villagelist: json['villagelist'] != null
+          ? (json['villagelist'] as List)
+          .map((v) => VillageModel.fromJson(v))
+          .toList()
+          : [],
+      roletype: json['roletype'],
+      roleId: json['role_id'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'Token': token,
-      'loginid': loginId,
-      'password': password,
-      'adpassword': adPassword,
-      'reg_id': regId,
-      'role_id': roleId,
-      'MobileNumber': mobileNumber,
-      'Name': name,
-      'EmailId': emailId,
-      'Sha512': sha512,
-      'txtSaltedHash': txtSaltedHash,
-      'StateName': stateName,
-      'StateId': stateId,
-      'DistrictId': districtId,
-      'BlockId': blockId,
-      'GramPanchayatId': gramPanchayatId,
-      'VillageId': villageId,
-      'Pincode': pincode,
-      'isChngPwd': isChangePwd,
-      'status': status,
+      'msg_code': msgCode,
       'msg': msg,
-      'lang': lang,
-      'AgencyId': agencyId,
-      'isupdateprofile': isUpdateProfile,
-      'AgencyListData': agencyListData,
-      'DistrictName': districtName,
-      'BlockName': blockName,
-      'PanchayatName': panchayatName,
-      'VillageName': villageName,
+      'username': username,
+      'userid': userid,
+      'state_code': stateCode,
+      'state_name_english': stateNameEnglish,
+      'zpcode': zpcode,
+      'zpname': zpname,
+      'districtlgdcode': districtlgdcode,
+      'districtlgdname': districtlgdname,
+      'bpcode': bpcode,
+      'bpname': bpname,
+      'blocklgdcode': blocklgdcode,
+      'blocklgdname': blocklgdname,
+      'gpcode': gpcode,
+      'gpname': gpname,
+      'entity_level': entityLevel,
+      'villagelist': villagelist?.map((v) => v.toJson()).toList(),
+      'roletype': roletype,
+      'role_id': roleId,
+    };
+  }
+}
+
+class VillageModel {
+  final int? sno;
+  final int? villagelgdcode;
+  final String? villagename;
+
+  VillageModel({
+    this.sno,
+    this.villagelgdcode,
+    this.villagename,
+  });
+
+  factory VillageModel.fromJson(Map<String, dynamic> json) {
+    return VillageModel(
+      sno: json['sno'],
+      villagelgdcode: json['villagelgdcode'],
+      villagename: json['villagename'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'sno': sno,
+      'villagelgdcode': villagelgdcode,
+      'villagename': villagename,
     };
   }
 }
