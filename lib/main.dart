@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/providers/login_provider.dart';
 import 'package:jal_sanchalan/providers/master_provider.dart';
+import 'package:jal_sanchalan/service/local_storage_service.dart';
+import 'package:jal_sanchalan/utils/AppUtil.dart';
+import 'package:jal_sanchalan/utils/app_constants.dart';
+import 'package:jal_sanchalan/utils/app_routes.dart';
 import 'package:provider/provider.dart';
-import 'screens/Dashboard.dart';
 
-void main() {
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppUtil.init(); // <-- Load version at startup
+  await LocalStorageService.init();
+
   runApp(
     MultiProvider(
       providers: [
@@ -22,9 +31,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: DashboardScreen(),
+      navigatorKey: navigatorKey,
+      title: 'Jal Sanchalan',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      initialRoute: AppConstants.navigateToSplashScreen,
+      routes: AppRoutes.getRoutes(),
     );
   }
 }
