@@ -316,9 +316,9 @@ class MasterRepositary {
   Future<BaseResponseModel<RpwssResultList>> fetchDirectory(
       String stateId,
       String districtId,
-      String blockId,
+   /*   String blockId,
       String panchayatId,
-      String villageId,
+      String villageId,*/
 
       ) async {
 
@@ -340,9 +340,9 @@ class MasterRepositary {
           "api/RPWSS/RPWSS_Result_Lsit_BY_Directory"
           "?StateId=$stateId"
           "&DistrictID=$districtId"
-          "&BlockId=$blockId"
-          "&Panchayatid=$panchayatId"
-          "&VillageId=$villageId"
+          "&BlockId=0"
+          "&Panchayatid=0"
+          "&VillageId=0"
           "&HabitationId=0"
           "&UserID=0";
 
@@ -353,7 +353,7 @@ class MasterRepositary {
         headers: headers,
       );
 
-      debugPrint("✅ fetchDirectory() Response:");
+      debugPrint("✅ ------------fetchDirectory() Response:");
       debugPrint("📦 $response");
 
       final result = BaseResponseModel<RpwssResultList>.fromJson(

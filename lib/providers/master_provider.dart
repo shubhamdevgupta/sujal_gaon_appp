@@ -317,10 +317,7 @@ class MasterProvider extends ChangeNotifier {
 
     // Make sure all IDs exist
     if (selectedStateId == null ||
-        selectedDistrictId == null ||
-        selectedBlockId == null ||
-        selectedGpId == null ||
-        selectedVillageId == null
+        selectedDistrictId == null
         ) {
 
       debugPrint("❌ Directory: Missing selection");
@@ -335,10 +332,10 @@ class MasterProvider extends ChangeNotifier {
       final rawDir =
       await _masterRepositary.fetchDirectory(
         selectedStateId!,
-        selectedDistrictId!,
-        selectedBlockId!,
+        selectedDistrictId!
+     /*   selectedBlockId!,
         selectedGpId!,
-        selectedVillageId!,
+        selectedVillageId!,*/
 
       );
 
