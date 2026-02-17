@@ -153,8 +153,12 @@ class _LoginpageState extends State<Loginscreen> {
                                       print(
                                         "----> ${provider.generatePasswordHash("Admin@12345")}",
                                       );
-
-                                      if (validateLoginInput(provider)) {
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        AppConstants
+                                            .navigateToDashboardScreen,
+                                      );
+                                /*      if (validateLoginInput(provider)) {
                                         provider.loginUser(
                                           phoneController.text,
                                           passwordController.text,
@@ -183,7 +187,7 @@ class _LoginpageState extends State<Loginscreen> {
                                         ToastHelper.showToastMessage(
                                           provider.errorMsg,
                                         );
-                                      }
+                                      }*/
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Appcolor.btncolor,
@@ -285,7 +289,7 @@ class _LoginpageState extends State<Loginscreen> {
               ),
               const SizedBox(height: 3), // Minor spacing for readability
               Text(
-                'Jal Sanchalan',
+                'Jal Mitra',
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'OpenSans',

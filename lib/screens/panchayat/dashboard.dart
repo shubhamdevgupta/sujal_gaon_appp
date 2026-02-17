@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/dictorey_model.dart';
-import '../models/district_model.dart';
-import '../providers/master_provider.dart';
-import '../utils/custom screen/custom_dropdown.dart';
+import '../../models/dictorey_model.dart';
+import '../../models/district_model.dart';
+import '../../providers/master_provider.dart';
+import '../../utils/custom screen/custom_dropdown.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
