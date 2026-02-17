@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import '../../providers/master_provider.dart';
 import '../../utils/app_constants.dart';
 
-class GpLoginDashboardScreen extends StatelessWidget {
-  const GpLoginDashboardScreen({super.key});
+class PanchayatDashboard extends StatelessWidget {
+  const PanchayatDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {

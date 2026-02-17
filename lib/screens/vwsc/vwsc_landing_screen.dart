@@ -147,7 +147,7 @@ class VwscLandingScreen extends StatelessWidget {
                               onPressed: () {
                                 Navigator.pushReplacementNamed(
                                   context,
-                                  AppConstants.navigateToGpLogin,
+                                  AppConstants.navigateToVWSCDashboard,
                                 );
                               },
                             ),
@@ -155,7 +155,7 @@ class VwscLandingScreen extends StatelessWidget {
                         ),
 
                         const Text(
-                          "Overview Your Panchayat Area",
+                          "Overview Your VWSC Area",
                           style: TextStyle(color: Colors.black87, fontSize: 13),
                         ),
         
@@ -169,71 +169,6 @@ class VwscLandingScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-        
-                  /* Container(
-                    height: 90,
-                    padding: const EdgeInsets.all(16),
-        
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-        
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-        
-                      boxShadow: [
-                        BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
-                      ],
-                    ),
-        
-                    child: Row(
-                      children: [
-                        const Icon(Icons.app_registration, color: Colors.white, size: 28),
-        
-                        const SizedBox(width: 12),
-        
-                        const Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Register VWSC",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-        
-                              SizedBox(height: 4),
-        
-                              Text(
-                                "Register Village Committee",
-                                style: TextStyle(color: Colors.white70, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ),
-        
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              AppConstants.navigateToRegisterVwscScreen,
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  )*/
                 ],
               ),
             ),
@@ -244,79 +179,6 @@ class VwscLandingScreen extends StatelessWidget {
   }
 
 
-  Widget _dashboard(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Navigator.push(context,
-        // MaterialPageRoute(builder: (_) => RegisterVWSC()));
-      },
-
-      child: Container(
-        height: 90,
-        padding: const EdgeInsets.all(16),
-
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-
-          gradient: const LinearGradient(
-            colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-
-          boxShadow: [
-            BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
-          ],
-        ),
-
-        child: Row(
-          children: [
-            const Icon(Icons.app_registration, color: Colors.white, size: 28),
-
-            const SizedBox(width: 12),
-
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Dashboard",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-
-                  SizedBox(height: 4),
-
-                  Text(
-                    "",
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
-                  ),
-                ],
-              ),
-            ),
-
-            IconButton(
-              icon: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-                size: 16,
-              ),
-              onPressed: () {
-                Navigator.pushReplacementNamed(
-                  context,
-                  AppConstants.navigateToGpLogin,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _registerCard(BuildContext context) {
     return GestureDetector(
@@ -355,7 +217,7 @@ class VwscLandingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Register VWSC",
+                    "Register NJM/WSO",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -366,7 +228,7 @@ class VwscLandingScreen extends StatelessWidget {
                   SizedBox(height: 4),
 
                   Text(
-                    "Register Village Committee",
+                    "Register NJM/WSO Member",
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
@@ -382,7 +244,7 @@ class VwscLandingScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacementNamed(
                   context,
-                  AppConstants.navigateToRegisterVwscScreen,
+                  AppConstants.navigateToRegisterNJMWSOScreen,
                 );
               },
             ),
@@ -392,15 +254,13 @@ class VwscLandingScreen extends StatelessWidget {
     );
   }
 
-  // =======================================================
-  // LIST CARD
-  // =======================================================
-
   Widget _listCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(context,
-        // MaterialPageRoute(builder: (_) => VWSCListScreen()));
+        Navigator.pushReplacementNamed(
+          context,
+          AppConstants.navigateToNJMListScrenn,
+        );
       },
 
       child: Container(
@@ -434,14 +294,14 @@ class VwscLandingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "List VWSC",
+                    "List of NJM/WSO",
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
 
                   SizedBox(height: 4),
 
                   Text(
-                    "View Registered Villages",
+                    "View RegisteredNJM/WSO Members",
                     style: TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                 ],
@@ -667,19 +527,6 @@ class VwscLandingScreen extends StatelessWidget {
                 ),
               ),
 
-              /*   CircleAvatar(
-                radius: 32,
-                backgroundColor: Colors.white,
-                child: Container(
-                  decoration: BoxDecoration(shape: BoxShape.circle,image: DecorationImage(image: image)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Image.asset(
-                      "assets/icons/user_icon.png",
-                    ),
-                  ),
-                ),
-              )*/
             ],
           ),
         ),
