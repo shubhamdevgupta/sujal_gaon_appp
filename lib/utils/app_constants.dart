@@ -32,6 +32,7 @@ class AppConstants {
   static const String navigateToGpLogin = '/gplogin ';
   static const String navigateToLandingScreen = '/landingscreen ';
   static const String navigateToRegisterVwscScreen = '/registrationvwsc ';
+  static const String navigateToPreLoginScreen = '/preLoginScreen ';
   static const String navigateToSplashScreen = '/ ';
 //////////////////////////////////////////////////////////////////////////
   static const String departmentalUser = 'Departmental User';

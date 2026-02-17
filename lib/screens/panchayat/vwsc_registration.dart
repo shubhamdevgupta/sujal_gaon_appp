@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/app_constants.dart';
+import '../../utils/app_constants.dart';
 
 class RegisterVwscScreen extends StatelessWidget {
   const RegisterVwscScreen({super.key});

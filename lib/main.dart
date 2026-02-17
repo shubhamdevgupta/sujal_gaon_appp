@@ -32,12 +32,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      title: 'Jal Sanchalan',
+      title: 'Jal Mitra',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: AppConstants.navigateToSplashScreen,
+      initialRoute: AppConstants.navigateToPreLoginScreen,
       routes: AppRoutes.getRoutes(),
     );
   }

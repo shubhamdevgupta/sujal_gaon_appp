@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../utils/app_constants.dart';
+import '../../utils/app_constants.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -10,8 +10,6 @@ class LandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F6FF),
-
       appBar: AppBar(
         centerTitle: true,
 
@@ -34,69 +32,57 @@ class LandingScreen extends StatelessWidget {
         ),
       ),
 
-
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: "History",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt),
-            label: "Reports",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: "Reports"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(10),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          gradient:  LinearGradient(
+            colors: [Color(0xFF64B5F6), Colors.blue.shade50],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
 
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(10),
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /*_buildCustomHeader(),*/
-            // ================= WELCOME =================
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /*_buildCustomHeader(),*/
+              // ================= WELCOME =================
+              const SizedBox(height: 20),
 
-            const SizedBox(height: 20),
+              _buildWelcomeCard(),
 
+              SizedBox(height: 20,),
+              // ================= DASHBOARD =================
+              _dashboardCard(context),
 
-            _buildWelcomeCard(),
-
-            // ================= DASHBOARD =================
-            _dashboardCard(context),
-
-            const SizedBox(height: 16),
-         /*   InkWell(onTap: () { Navigator.pushReplacementNamed(
-                context,AppConstants.navigateToGpLogin);},child: _dashboard(context)),*/
-            const SizedBox(height: 16),
-            // ================= REGISTER =================
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _registerCard(context),
-            ),
-
-            const SizedBox(height: 16),
-
-            // ================= LIST =================
-            _listCard(context),
-          ],
+              const SizedBox(height: 16),
+              /*   InkWell(onTap: () { Navigator.pushReplacementNamed(
+                  context,AppConstants.navigateToGpLogin);},child: _dashboard(context)),*/
+              _listCard(context),
+            ],
+          ),
         ),
       ),
     );
   }
+
   Widget _buildCustomHeader() {
     return Container(
       margin: const EdgeInsets.only(top: 30),
@@ -124,17 +110,16 @@ class LandingScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min, // ✅ Prevent extra height
         children: [
-
           // ================= TOP BAR =================
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 1, 14, 6), // ✅ Reduced height
+            padding: const EdgeInsets.fromLTRB(14, 1, 14, 6),
 
+            // ✅ Reduced height
             child: SafeArea(
               bottom: false,
 
               child: Row(
                 children: [
-
                   // Logo
                   Container(
                     padding: const EdgeInsets.all(6),
@@ -168,7 +153,6 @@ class LandingScreen extends StatelessWidget {
                   // Notification
                   Stack(
                     children: [
-
                       const Icon(
                         Icons.notifications,
                         color: Colors.white,
@@ -189,10 +173,7 @@ class LandingScreen extends StatelessWidget {
 
                           child: const Text(
                             "3",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 9,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 9),
                           ),
                         ),
                       ),
@@ -206,8 +187,9 @@ class LandingScreen extends StatelessWidget {
                     radius: 13,
                     backgroundColor: Colors.white,
 
-                    backgroundImage:
-                    const AssetImage('assets/icons/user_icon.png'),
+                    backgroundImage: const AssetImage(
+                      'assets/icons/user_icon.png',
+                    ),
                   ),
                 ],
               ),
@@ -234,16 +216,12 @@ class LandingScreen extends StatelessWidget {
 
             child: const Text(
               "Welcome Panchayat User",
-              style: TextStyle(
-                fontSize: 14.5,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600),
             ),
           ),
         ],
       ),
     );
-
   }
 
   // =======================================================
@@ -251,91 +229,139 @@ class LandingScreen extends StatelessWidget {
   // =======================================================
 
   Widget _dashboardCard(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Navigate to dashboard screen
-      },
-
-      child: Container(
-        padding: const EdgeInsets.all(8),
-
-
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
-
-          // Outer shadow
-          boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withOpacity(0.18),
-              blurRadius: 25,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(22),
-
-          child: Stack(
-            children: [
-
-              // ================= BACKGROUND IMAGE =================
-              Positioned.fill(
-                child: Image.asset(
-                  "assets/icons/dashboard.png",
-                    fit: BoxFit.fill,
-
-                ),
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            // Navigate to dashboard screen
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(22),
+              gradient: LinearGradient(
+                colors: [Colors.white, Colors.blue.shade200],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
+        
+              // Outer shadow
+              boxShadow: [BoxShadow(color: Colors.white)],
+            ),
+        
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(22),
+        
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+        
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Header
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.dashboard_customize,
+                              color: Colors.blue,
+                              size: 26,
+                            ),
+        
+                            const SizedBox(width: 8),
+        
+                            const Text(
+                              "Dashboard",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+        
+                            const Spacer(),
+        
+                            IconButton(
+                              icon: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.blue,
+                                size: 16,
+                              ),
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  AppConstants.navigateToGpLogin,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
 
-              // ================= GRADIENT OVERLAY =================
-              Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFF64B5F6),
-                        Color(0xFF1E88E5),
+                        const Text(
+                          "Overview Your Panchayat Area",
+                          style: TextStyle(color: Colors.black87, fontSize: 13),
+                        ),
+        
+                        const SizedBox(height: 8),
+        
+                        // ================= INNER WHITE CARD =================
+                        _buildLocationCard(),
 
-
+                        SizedBox(height: 20,),
+                        _registerCard(context)
                       ],
                     ),
                   ),
-                ),
-              ),
-              // ================= CONTENT =================
-              Padding(
-                padding: const EdgeInsets.all(16),
-
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    // Header
-                    Row(
+        
+                  /* Container(
+                    height: 90,
+                    padding: const EdgeInsets.all(16),
+        
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+        
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+        
+                      boxShadow: [
+                        BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
+                      ],
+                    ),
+        
+                    child: Row(
                       children: [
-
-                        const Icon(
-                          Icons.dashboard_customize,
-                          color: Colors.white,
-                          size: 26,
-                        ),
-
-                        const SizedBox(width: 8),
-
-                        const Text(
-                          "Dashboard",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        const Icon(Icons.app_registration, color: Colors.white, size: 28),
+        
+                        const SizedBox(width: 12),
+        
+                        const Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Register VWSC",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+        
+                              SizedBox(height: 4),
+        
+                              Text(
+                                "Register Village Committee",
+                                style: TextStyle(color: Colors.white70, fontSize: 12),
+                              ),
+                            ],
                           ),
                         ),
-
-                        const Spacer(),
-
+        
                         IconButton(
                           icon: const Icon(
                             Icons.arrow_forward_ios,
@@ -345,36 +371,19 @@ class LandingScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.pushReplacementNamed(
                               context,
-                              AppConstants.navigateToGpLogin,
+                              AppConstants.navigateToRegisterVwscScreen,
                             );
                           },
-                        )
-
+                        ),
                       ],
                     ),
-
-                    const SizedBox(height: 6),
-
-                    const Text(
-                      "Overview Your Panchayat Area",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 13,
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // ================= INNER WHITE CARD =================
-
-                    _buildLocationCard(),
-                  ],
-                ),
+                  )*/
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -391,13 +400,8 @@ class LandingScreen extends StatelessWidget {
 
         child: Row(
           children: [
-
             // Logo
-            const Icon(
-              Icons.water_drop,
-              color: Colors.white,
-              size: 22,
-            ),
+            const Icon(Icons.water_drop, color: Colors.white, size: 22),
 
             const SizedBox(width: 8),
 
@@ -416,7 +420,6 @@ class LandingScreen extends StatelessWidget {
             // Notification
             Stack(
               children: [
-
                 const Icon(
                   Icons.notifications_outlined,
                   color: Colors.white,
@@ -434,10 +437,7 @@ class LandingScreen extends StatelessWidget {
                     ),
                     child: const Text(
                       "3",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 9,
-                      ),
+                      style: TextStyle(color: Colors.white, fontSize: 9),
                     ),
                   ),
                 ),
@@ -449,16 +449,13 @@ class LandingScreen extends StatelessWidget {
             // Profile Image
             const CircleAvatar(
               radius: 14,
-              backgroundImage:
-              AssetImage('assets/icons/user_icon.png'),
+              backgroundImage: AssetImage('assets/icons/user_icon.png'),
             ),
           ],
         ),
       ),
     );
   }
-
-
 
   // =======================================================
   // REGISTER CARD
@@ -479,31 +476,19 @@ class LandingScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
 
           gradient: const LinearGradient(
-            colors: [
-              Color(0xFF64B5F6),
-              Color(0xFF1E88E5),
-            ],
+            colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
 
-
           boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withOpacity(0.25),
-              blurRadius: 10,
-            ),
+            BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
           ],
         ),
 
         child: Row(
           children: [
-
-            const Icon(
-              Icons.app_registration,
-              color: Colors.white,
-              size: 28,
-            ),
+            const Icon(Icons.app_registration, color: Colors.white, size: 28),
 
             const SizedBox(width: 12),
 
@@ -512,7 +497,6 @@ class LandingScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(
                     "Dashboard",
                     style: TextStyle(
@@ -526,17 +510,14 @@ class LandingScreen extends StatelessWidget {
 
                   Text(
                     "",
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),
             ),
 
             IconButton(
-              icon:  const Icon(
+              icon: const Icon(
                 Icons.arrow_forward_ios,
                 color: Colors.white,
                 size: 16,
@@ -547,7 +528,7 @@ class LandingScreen extends StatelessWidget {
                   AppConstants.navigateToGpLogin,
                 );
               },
-            )
+            ),
           ],
         ),
       ),
@@ -563,37 +544,25 @@ class LandingScreen extends StatelessWidget {
 
       child: Container(
         height: 90,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
 
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
 
           gradient: const LinearGradient(
-            colors: [
-              Color(0xFF64B5F6),
-              Color(0xFF1E88E5),
-            ],
+            colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
 
-
           boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withOpacity(0.25),
-              blurRadius: 10,
-            ),
+            BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
           ],
         ),
 
         child: Row(
           children: [
-
-            const Icon(
-              Icons.app_registration,
-              color: Colors.white,
-              size: 28,
-            ),
+            const Icon(Icons.app_registration, color: Colors.white, size: 28),
 
             const SizedBox(width: 12),
 
@@ -602,7 +571,6 @@ class LandingScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(
                     "Register VWSC",
                     style: TextStyle(
@@ -616,10 +584,7 @@ class LandingScreen extends StatelessWidget {
 
                   Text(
                     "Register Village Committee",
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),
@@ -637,7 +602,7 @@ class LandingScreen extends StatelessWidget {
                   AppConstants.navigateToRegisterVwscScreen,
                 );
               },
-            )
+            ),
           ],
         ),
       ),
@@ -661,25 +626,22 @@ class LandingScreen extends StatelessWidget {
 
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-
-          color: Colors.white,
-
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-            ),
-          ],
+          gradient: const LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Color(0xFFF8FBFF), // very light (left)
+              Color(0xFFE3F2FD), // soft blue (middle)
+              Color(0xFFD0E8FF), // faded blue glow (right)
+            ],
+            stops: [0.0, 0.6, 1.0],
+          ),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
         ),
 
         child: Row(
           children: const [
-
-            Icon(
-              Icons.list_alt,
-              color: Color(0xFF1976D2),
-              size: 28,
-            ),
+            Icon(Icons.list_alt, color: Color(0xFF1976D2), size: 28),
 
             SizedBox(width: 12),
 
@@ -688,33 +650,22 @@ class LandingScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(
                     "List VWSC",
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
 
                   SizedBox(height: 4),
 
                   Text(
                     "View Registered Villages",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                 ],
               ),
             ),
 
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.grey,
-              size: 16,
-            ),
+            Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
           ],
         ),
       ),
@@ -725,25 +676,15 @@ class LandingScreen extends StatelessWidget {
   // HELPERS
   // =======================================================
 
-  Widget _infoRow(
-      String t1,
-      String v1,
-      String t2,
-      String v2,
-      ) {
+  Widget _infoRow(String t1, String v1, String t2, String v2) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
 
       child: Row(
         children: [
-
           Expanded(child: _infoItem(t1, v1)),
 
-          Container(
-            width: 1,
-            height: 28,
-            color: Colors.grey.shade300,
-          ),
+          Container(width: 1, height: 28, color: Colors.grey.shade300),
 
           Expanded(child: _infoItem(t2, v2)),
         ],
@@ -763,34 +704,26 @@ class LandingScreen extends StatelessWidget {
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
           colors: [
-            Color(0xFFF8FBFF),   // very light (left)
-            Color(0xFFE3F2FD),   // soft blue (middle)
-            Color(0xFFD0E8FF),   // faded blue glow (right)
+            Color(0xFFF8FBFF), // very light (left)
+            Color(0xFFE3F2FD), // soft blue (middle)
+            Color(0xFFD0E8FF), // faded blue glow (right)
           ],
           stops: [0.0, 0.6, 1.0],
         ),
 
-        border: Border.all(
-          color: Colors.blue.withOpacity(0.1),
-        ),
+        border: Border.all(color: Colors.blue.withOpacity(0.1)),
 
         boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.05),
-            blurRadius: 10,
-          ),
+          BoxShadow(color: Colors.blue.withOpacity(0.05), blurRadius: 10),
         ],
       ),
-
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           // ================= ROW 1 =================
           Row(
             children: [
-
               _locationItemWithIcon(
                 icon: Icons.account_balance,
                 color: Color(0xFF1976D2),
@@ -816,7 +749,6 @@ class LandingScreen extends StatelessWidget {
           // ================= ROW 2 =================
           Row(
             children: [
-
               _locationItemWithIcon(
                 icon: Icons.apartment,
                 color: Color(0xFF8D6E63),
@@ -843,11 +775,7 @@ class LandingScreen extends StatelessWidget {
 
           // ================= STATS =================
           Row(
-            children: const [
-
-              _statBox("Villages", "12"),
-              _statBox("VWSC", "4"),
-            ],
+            children: const [_statBox("Villages", "12"), _statBox("VWSC", "4")],
           ),
         ],
       ),
@@ -864,19 +792,13 @@ class LandingScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Icon(
-            icon,
-            color: color,
-            size: 22,
-          ),
+          Icon(icon, color: color, size: 22),
 
           const SizedBox(width: 8),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Text(
                 "${title}: ${value}",
                 style: TextStyle(
@@ -885,7 +807,6 @@ class LandingScreen extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-
             ],
           ),
         ],
@@ -907,7 +828,6 @@ class LandingScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildWelcomeCard() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(22),
@@ -921,10 +841,7 @@ class LandingScreen extends StatelessWidget {
 
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [
-                Color(0xFF2196F3),
-                Color(0xFF0D47A1),
-              ],
+              colors: [Color(0xFF2196F3), Color(0xFF0D47A1)],
             ),
             borderRadius: BorderRadius.circular(22),
           ),
@@ -932,18 +849,14 @@ class LandingScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
 
                 children: const [
-
                   Text(
                     "Welcome Back 👋",
-                    style: TextStyle(
-                      color: Colors.white70,
-                    ),
+                    style: TextStyle(color: Colors.white70),
                   ),
 
                   SizedBox(height: 6),
@@ -959,10 +872,17 @@ class LandingScreen extends StatelessWidget {
                 ],
               ),
 
-
-              Container( width: 100, height: 120, decoration:
-              const BoxDecoration( shape: BoxShape.circle,
-                image: DecorationImage( image: AssetImage('assets/icons/user_icon.png'), fit: BoxFit.cover, ),),),
+              Container(
+                width: 100,
+                height: 120,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage('assets/icons/user_icon.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
 
               /*   CircleAvatar(
                 radius: 32,
@@ -992,6 +912,7 @@ class LandingScreen extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10),
     );
   }
+
   Widget _horizontalDivider() {
     return Container(
       width: 150,
@@ -1001,40 +922,29 @@ class LandingScreen extends StatelessWidget {
     );
   }
 
-
   Widget _infoItem(String title, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Text(
           title,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey.shade600,
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
         ),
 
         const SizedBox(height: 2),
 
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
       ],
     );
   }
-
 }
 
 // =======================================================
 // STAT ITEM
 // =======================================================
-
-
 
 class _statBox extends StatelessWidget {
   final String title;
@@ -1047,7 +957,6 @@ class _statBox extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-
           Text(
             value,
             style: const TextStyle(
@@ -1061,10 +970,7 @@ class _statBox extends StatelessWidget {
 
           Text(
             title,
-            style: TextStyle(
-              fontSize: 11,
-              color: Colors.grey.shade700,
-            ),
+            style: TextStyle(fontSize: 11, color: Colors.grey.shade700),
           ),
         ],
       ),

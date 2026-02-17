@@ -2,8 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/master_provider.dart';
-import '../utils/app_constants.dart';
+import '../../providers/master_provider.dart';
+import '../../utils/app_constants.dart';
 
 class GpLoginDashboardScreen extends StatelessWidget {
   const GpLoginDashboardScreen({super.key});
