@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/screens/Dashboard.dart';
+import 'package:jal_sanchalan/screens/landing_screen.dart';
+import 'package:jal_sanchalan/screens/vwsc_registration.dart';
 
 
+import '../screens/gp_login.dart';
 import '../screens/login_screen.dart';
 import '../screens/splash_screen.dart';
 import 'app_constants.dart';
@@ -13,6 +16,9 @@ class AppRoutes {
       AppConstants.navigateToDashboardScreen: (context) => const DashboardScreen(),
       AppConstants.navigateToLoginScreen: (context) => const Loginscreen(),
       AppConstants.navigateToSplashScreen: (context) => const SplashScreen(),
+      AppConstants.navigateToGpLogin: (context) => const GpLoginDashboardScreen(),
+      AppConstants.navigateToLandingScreen: (context) => const LandingScreen(),
+      AppConstants.navigateToRegisterVwscScreen: (context) => const RegisterVwscScreen(),
 
  /*     //dwsmList
       AppConstants.navigateToDemonstrationScreen: (context) =>

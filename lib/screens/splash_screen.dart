@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }*/
     Navigator.pushReplacementNamed(
       context,
-      AppConstants.navigateToLoginScreen,
+      AppConstants.navigateToLandingScreen,
     );
   }
 
@@ -92,11 +92,11 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/icons/app_icon.png'),
+            image: AssetImage('assets/icons/splashscreen.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Text('Jal Ankalan'),
+        child: Text('Sujal Gaon'),
       ),
     );
   }

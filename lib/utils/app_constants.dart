@@ -29,6 +29,9 @@ class AppConstants {
   //auth
   static const String navigateToDashboardScreen = '/dashboardScreen';
   static const String navigateToLoginScreen = '/loginScreen ';
+  static const String navigateToGpLogin = '/gplogin ';
+  static const String navigateToLandingScreen = '/landingscreen ';
+  static const String navigateToRegisterVwscScreen = '/registrationvwsc ';
   static const String navigateToSplashScreen = '/ ';
 //////////////////////////////////////////////////////////////////////////
   static const String departmentalUser = 'Departmental User';
