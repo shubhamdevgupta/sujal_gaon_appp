@@ -49,12 +49,11 @@ class VwscLandingScreen extends StatelessWidget {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          gradient:  LinearGradient(
+          gradient: LinearGradient(
             colors: [Color(0xFF64B5F6), Colors.blue.shade50],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(10),
@@ -68,7 +67,7 @@ class VwscLandingScreen extends StatelessWidget {
 
               _buildWelcomeCard(),
 
-              SizedBox(height: 20,),
+              SizedBox(height: 20),
               // ================= DASHBOARD =================
               _dashboardCard(context),
 
@@ -82,7 +81,6 @@ class VwscLandingScreen extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _dashboardCard(BuildContext context) {
     return Column(
@@ -100,19 +98,19 @@ class VwscLandingScreen extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-        
+
               // Outer shadow
               boxShadow: [BoxShadow(color: Colors.white)],
             ),
-        
+
             child: ClipRRect(
               borderRadius: BorderRadius.circular(22),
-        
+
               child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8),
-        
+
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -124,9 +122,9 @@ class VwscLandingScreen extends StatelessWidget {
                               color: Colors.blue,
                               size: 26,
                             ),
-        
+
                             const SizedBox(width: 8),
-        
+
                             const Text(
                               "Dashboard",
                               style: TextStyle(
@@ -135,9 +133,9 @@ class VwscLandingScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-        
+
                             const Spacer(),
-        
+
                             IconButton(
                               icon: const Icon(
                                 Icons.arrow_forward_ios,
@@ -158,14 +156,14 @@ class VwscLandingScreen extends StatelessWidget {
                           "Overview Your VWSC Area",
                           style: TextStyle(color: Colors.black87, fontSize: 13),
                         ),
-        
+
                         const SizedBox(height: 8),
-        
+
                         // ================= INNER WHITE CARD =================
                         _buildLocationCard(),
 
-                        SizedBox(height: 20,),
-                        _registerCard(context)
+                        SizedBox(height: 20),
+                        _registerCard(context),
                       ],
                     ),
                   ),
@@ -178,13 +176,13 @@ class VwscLandingScreen extends StatelessWidget {
     );
   }
 
-
-
   Widget _registerCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(context,
-        // MaterialPageRoute(builder: (_) => RegisterVWSC()));
+        Navigator.pushReplacementNamed(
+          context,
+          AppConstants.navigateToRegisterNJMWSOScreen,
+        );
       },
 
       child: Container(
@@ -235,18 +233,13 @@ class VwscLandingScreen extends StatelessWidget {
               ),
             ),
 
-            IconButton(
-              icon: const Icon(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
                 Icons.arrow_forward_ios,
                 color: Colors.white,
                 size: 16,
               ),
-              onPressed: () {
-                Navigator.pushReplacementNamed(
-                  context,
-                  AppConstants.navigateToRegisterNJMWSOScreen,
-                );
-              },
             ),
           ],
         ),
@@ -526,7 +519,6 @@ class VwscLandingScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
@@ -572,9 +564,6 @@ class VwscLandingScreen extends StatelessWidget {
   }
 }
 
-// =======================================================
-// STAT ITEM
-// =======================================================
 
 class _statBox extends StatelessWidget {
   final String title;

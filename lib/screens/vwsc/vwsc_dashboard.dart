@@ -15,10 +15,6 @@ class VwscDashboard extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F8FC),
-
-      // ================= Bottom Bar =================
-      bottomNavigationBar: _buildBottomNav(),
-
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(18),
@@ -536,38 +532,6 @@ class VwscDashboard extends StatelessWidget {
     );
   }
 
-  // =================================================
-  // Bottom Navigation
-  // =================================================
-  Widget _buildBottomNav() {
-    return Container(
-      decoration: const BoxDecoration(
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
-      ),
-
-      child: BottomNavigationBar(
-        currentIndex: 0,
-
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-
-        type: BottomNavigationBarType.fixed,
-
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: "Reports",
-          ),
-
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
-    );
-  }
 
   // =================================================
   // Common Widgets
