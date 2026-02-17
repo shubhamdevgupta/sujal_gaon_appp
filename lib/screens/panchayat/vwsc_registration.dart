@@ -139,7 +139,7 @@ class RegisterVwscScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacementNamed(
                 context,
-                AppConstants.navigateToLandingScreen,
+                AppConstants.navigateToPanchayatLandingScreen,
               );
             },
 

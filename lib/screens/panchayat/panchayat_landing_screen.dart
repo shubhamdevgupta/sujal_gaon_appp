@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_constants.dart';
 
-class LandingScreen extends StatelessWidget {
-  const LandingScreen({super.key});
+class PanchayatLandingScreen extends StatelessWidget {
+  const PanchayatLandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

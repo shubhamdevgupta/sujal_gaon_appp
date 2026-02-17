@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }*/
     Navigator.pushReplacementNamed(
       context,
-      AppConstants.navigateToLandingScreen,
+      AppConstants.navigateToPreLoginScreen,
     );
   }
 

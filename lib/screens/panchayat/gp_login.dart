@@ -79,7 +79,7 @@ class GpLoginDashboardScreen extends StatelessWidget {
               onTap: () {
                 Navigator.pushReplacementNamed(
                   context,
-                  AppConstants.navigateToLandingScreen,
+                  AppConstants.navigateToPanchayatLandingScreen,
                 );
               },
 
@@ -575,7 +575,7 @@ class GpLoginDashboardScreen extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacementNamed(
           context,
-          AppConstants.navigateToLandingScreen,
+          AppConstants.navigateToPanchayatLandingScreen,
         );
       },
 

@@ -30,7 +30,8 @@ class AppConstants {
   static const String navigateToDashboardScreen = '/dashboardScreen';
   static const String navigateToLoginScreen = '/loginScreen ';
   static const String navigateToGpLogin = '/gplogin ';
-  static const String navigateToLandingScreen = '/landingscreen ';
+  static const String navigateToPanchayatLandingScreen = '/Panchayatlandingscreen ';
+  static const String navigateToVWSCLandingScreen = '/VWSClandingscreen ';
   static const String navigateToRegisterVwscScreen = '/registrationvwsc ';
   static const String navigateToPreLoginScreen = '/preLoginScreen ';
   static const String navigateToSplashScreen = '/ ';

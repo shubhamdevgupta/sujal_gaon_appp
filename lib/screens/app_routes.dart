@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/screens/panchayat/landing_screen.dart';
+import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
+
 import 'package:jal_sanchalan/screens/panchayat/vwsc_registration.dart';
 import 'package:jal_sanchalan/screens/pre_login_screen.dart';
 
-import '../screens/login_screen.dart';
-import '../screens/panchayat/dashboard.dart';
-import '../screens/panchayat/gp_login.dart';
-import '../screens/splash_screen.dart';
-import 'app_constants.dart';
+import '../utils/app_constants.dart';
+import 'login_screen.dart';
+import 'panchayat/dashboard.dart';
+import 'panchayat/gp_login.dart';
+import 'splash_screen.dart';
 
 class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
@@ -19,7 +20,8 @@ class AppRoutes {
       AppConstants.navigateToSplashScreen: (context) => const SplashScreen(),
       AppConstants.navigateToGpLogin: (context) =>
           const GpLoginDashboardScreen(),
-      AppConstants.navigateToLandingScreen: (context) => const LandingScreen(),
+      AppConstants.navigateToPanchayatLandingScreen: (context) => const PanchayatLandingScreen(),
+      AppConstants.navigateToVWSCLandingScreen: (context) => const PanchayatLandingScreen(),
       AppConstants.navigateToRegisterVwscScreen: (context) =>
           const RegisterVwscScreen(),
       AppConstants.navigateToPreLoginScreen: (context) =>
