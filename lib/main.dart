@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: AppConstants.navigateToPreLoginScreen,
+      initialRoute: AppConstants.navigateToSplashScreen,
       routes: AppRoutes.getRoutes(),
     );
   }
