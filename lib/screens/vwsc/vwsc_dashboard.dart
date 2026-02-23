@@ -1,12 +1,13 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/master_provider.dart';
 import '../../utils/app_constants.dart';
 
-class GpLoginDashboardScreen extends StatelessWidget {
-  const GpLoginDashboardScreen({super.key});
+class VwscDashboard extends StatelessWidget {
+  const VwscDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +15,12 @@ class GpLoginDashboardScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F8FC),
-
-      // ================= Bottom Bar =================
-      bottomNavigationBar: _buildBottomNav(),
-
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               _buildHeader(context),
 
               const SizedBox(height: 20),
@@ -37,24 +33,6 @@ class GpLoginDashboardScreen extends StatelessWidget {
 
               const SizedBox(height: 25),
 
-              _buildVillageSection(
-                "VWSC Formed Villages",
-                const [
-                  {"name": "Abhaudopura", "members": 2},
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              _buildVillageSection(
-                "Pani Samiti Formed Villages",
-                const [
-                  {"name": "Abhaudopura", "members": 2},
-                ],
-              ),
-
-              const SizedBox(height: 30),
-
               _buildRegisterButton(context),
 
               const SizedBox(height: 40),
@@ -65,9 +43,6 @@ class GpLoginDashboardScreen extends StatelessWidget {
     );
   }
 
-  // =================================================
-  // Header
-  // =================================================
   Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,11 +54,11 @@ class GpLoginDashboardScreen extends StatelessWidget {
               onTap: () {
                 Navigator.pushReplacementNamed(
                   context,
-                  AppConstants.navigateToLandingScreen,
+                  AppConstants.navigateToVWSCLandingScreen,
                 );
               },
 
-              borderRadius:  BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20),
 
               child: const Padding(
                 padding: EdgeInsets.all(4),
@@ -94,37 +69,28 @@ class GpLoginDashboardScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 10,),
+            SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
                   "Sujal Gaon",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
 
                 SizedBox(height: 2),
 
                 Text(
                   "Jal Jeevan Mission",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: Colors.grey, fontSize: 13),
                 ),
               ],
             ),
           ],
         ),
 
-
-
         Row(
           children: [
-
             _iconBadge(Icons.notifications, "2"),
 
             const SizedBox(width: 12),
@@ -153,13 +119,10 @@ class GpLoginDashboardScreen extends StatelessWidget {
             backgroundColor: Colors.red,
             child: Text(
               count,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 10),
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -180,10 +143,7 @@ class GpLoginDashboardScreen extends StatelessWidget {
 
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [
-                Color(0xFF2196F3),
-                Color(0xFF0D47A1),
-              ],
+              colors: [Color(0xFF2196F3), Color(0xFF0D47A1)],
             ),
             borderRadius: BorderRadius.circular(22),
           ),
@@ -191,24 +151,20 @@ class GpLoginDashboardScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
 
                 children: const [
-
                   Text(
                     "Welcome Back 👋",
-                    style: TextStyle(
-                      color: Colors.white70,
-                    ),
+                    style: TextStyle(color: Colors.white70),
                   ),
 
                   SizedBox(height: 6),
 
                   Text(
-                    "Panchayat User",
+                    "VWSC User",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -218,24 +174,17 @@ class GpLoginDashboardScreen extends StatelessWidget {
                 ],
               ),
 
-
-    Container( width: 100, height: 120, decoration:
-    const BoxDecoration( shape: BoxShape.circle,
-    image: DecorationImage( image: AssetImage('assets/icons/user_icon.png'), fit: BoxFit.cover, ),),),
-
-           /*   CircleAvatar(
-                radius: 32,
-                backgroundColor: Colors.white,
-                child: Container(
-                  decoration: BoxDecoration(shape: BoxShape.circle,image: DecorationImage(image: image)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Image.asset(
-                      "assets/icons/user_icon.png",
-                    ),
+              Container(
+                width: 100,
+                height: 120,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage('assets/icons/user_icon.png'),
+                    fit: BoxFit.cover,
                   ),
                 ),
-              )*/
+              ),
             ],
           ),
         ),
@@ -257,11 +206,9 @@ class GpLoginDashboardScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-
           // Header
           Row(
             children: const [
-
               CircleAvatar(
                 radius: 16,
                 backgroundColor: Color(0xFFE3F2FD),
@@ -277,10 +224,7 @@ class GpLoginDashboardScreen extends StatelessWidget {
 
               Text(
                 "Your Location",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -294,7 +238,6 @@ class GpLoginDashboardScreen extends StatelessWidget {
           // Row 1
           Row(
             children: [
-
               _locationItemWithIcon(
                 icon: Icons.account_balance,
                 color: Color(0xFF1976D2),
@@ -322,7 +265,6 @@ class GpLoginDashboardScreen extends StatelessWidget {
           // Row 2
           Row(
             children: [
-
               _locationItemWithIcon(
                 icon: Icons.apartment,
                 color: Color(0xFF8D6E63),
@@ -350,7 +292,6 @@ class GpLoginDashboardScreen extends StatelessWidget {
           // Row 3
           Row(
             children: [
-
               _locationItemWithIcon(
                 icon: Icons.holiday_village,
                 color: Colors.blue,
@@ -373,15 +314,11 @@ class GpLoginDashboardScreen extends StatelessWidget {
     );
   }
 
-
-
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),
-      border: Border.all(
-        color: Colors.grey.shade200,
-      ),
+      border: Border.all(color: Colors.grey.shade200),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.04),
@@ -409,7 +346,6 @@ class GpLoginDashboardScreen extends StatelessWidget {
     );
   }
 
-
   Widget _locationItemWithIcon({
     required IconData icon,
     required Color color,
@@ -420,19 +356,13 @@ class GpLoginDashboardScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Icon(
-            icon,
-            color: color,
-            size: 22,
-          ),
+          Icon(icon, color: color, size: 22),
 
           const SizedBox(width: 8),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Text(
                 title,
                 style: TextStyle(
@@ -456,21 +386,17 @@ class GpLoginDashboardScreen extends StatelessWidget {
         ],
       ),
     );
-  }  Widget _locationRow(String title, String value) {
+  }
+
+  Widget _locationRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
 
       child: Row(
         children: [
-
           SizedBox(
             width: 90,
-            child: Text(
-              title,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-              ),
-            ),
+            child: Text(title, style: TextStyle(color: Colors.grey.shade600)),
           ),
 
           const Text(":  "),
@@ -478,9 +404,7 @@ class GpLoginDashboardScreen extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -495,34 +419,25 @@ class GpLoginDashboardScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         _sectionTitle(title),
 
         const SizedBox(height: 10),
 
         if (data.isEmpty)
-
           _card(
             child: const Text(
               "No Records Found",
               style: TextStyle(color: Colors.red),
             ),
           )
-
         else
-
           ...data.map((v) {
-
             return _card(
               margin: const EdgeInsets.only(bottom: 10),
 
               child: Row(
                 children: [
-
-                  const Icon(
-                    Icons.location_city,
-                    color: Colors.blue,
-                  ),
+                  const Icon(Icons.location_city, color: Colors.blue),
 
                   const SizedBox(width: 12),
 
@@ -547,10 +462,7 @@ class GpLoginDashboardScreen extends StatelessWidget {
 
   Widget _chip(String text) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
 
       decoration: BoxDecoration(
         color: Colors.blue.withOpacity(.1),
@@ -559,10 +471,7 @@ class GpLoginDashboardScreen extends StatelessWidget {
 
       child: Text(
         text,
-        style: const TextStyle(
-          color: Colors.blue,
-          fontWeight: FontWeight.w600,
-        ),
+        style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -573,10 +482,10 @@ class GpLoginDashboardScreen extends StatelessWidget {
   Widget _buildRegisterButton(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushReplacementNamed(
+     /*   Navigator.pushReplacementNamed(
           context,
-          AppConstants.navigateToLandingScreen,
-        );
+          AppConstants.navigateToPanchayatLandingScreen,
+        );*/
       },
 
       child: Container(
@@ -585,10 +494,7 @@ class GpLoginDashboardScreen extends StatelessWidget {
 
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [
-              Color(0xFF1E88E5),
-              Color(0xFF0D47A1),
-            ],
+            colors: [Color(0xFF1E88E5), Color(0xFF0D47A1)],
           ),
 
           borderRadius: BorderRadius.circular(30),
@@ -598,7 +504,7 @@ class GpLoginDashboardScreen extends StatelessWidget {
               color: Colors.blue.withOpacity(.3),
               blurRadius: 15,
               offset: const Offset(0, 6),
-            )
+            ),
           ],
         ),
 
@@ -607,22 +513,18 @@ class GpLoginDashboardScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
 
             children: [
-
-              Icon(
-                Icons.water_drop,
-                color: Colors.white,
-              ),
+              Icon(Icons.water_drop, color: Colors.white),
 
               SizedBox(width: 10),
 
               Text(
-                "Register VWSC Member",
+                "Register NJM/WSO Member",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -630,53 +532,6 @@ class GpLoginDashboardScreen extends StatelessWidget {
     );
   }
 
-  // =================================================
-  // Bottom Navigation
-  // =================================================
-  Widget _buildBottomNav() {
-    return Container(
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-          )
-        ],
-      ),
-
-      child: BottomNavigationBar(
-        currentIndex: 0,
-
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-
-        type: BottomNavigationBarType.fixed,
-
-        items: const [
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: "History",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: "Reports",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
-        ],
-      ),
-    );
-  }
 
   // =================================================
   // Common Widgets
@@ -684,17 +539,11 @@ class GpLoginDashboardScreen extends StatelessWidget {
   Widget _sectionTitle(String title) {
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
+      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
     );
   }
 
-  Widget _card({
-    required Widget child,
-    EdgeInsets? margin,
-  }) {
+  Widget _card({required Widget child, EdgeInsets? margin}) {
     return Container(
       margin: margin,
 

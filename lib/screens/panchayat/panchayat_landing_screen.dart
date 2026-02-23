@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_constants.dart';
 
-class LandingScreen extends StatelessWidget {
-  const LandingScreen({super.key});
+class PanchayatLandingScreen extends StatelessWidget {
+  const PanchayatLandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +30,6 @@ class LandingScreen extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: "Reports"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
       ),
 
       body: Container(
@@ -231,58 +218,54 @@ class LandingScreen extends StatelessWidget {
   Widget _dashboardCard(BuildContext context) {
     return Column(
       children: [
-        GestureDetector(
-          onTap: () {
-            // Navigate to dashboard screen
-          },
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(22),
-              gradient: LinearGradient(
-                colors: [Colors.white, Colors.blue.shade200],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-        
-              // Outer shadow
-              boxShadow: [BoxShadow(color: Colors.white)],
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22),
+            gradient: LinearGradient(
+              colors: [Colors.white, Colors.blue.shade200],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-        
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(22),
-        
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-        
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Header
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.dashboard_customize,
-                              color: Colors.blue,
-                              size: 26,
+
+            // Outer shadow
+            boxShadow: [BoxShadow(color: Colors.white)],
+          ),
+
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.dashboard_customize,
+                            color: Colors.blue,
+                            size: 26,
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          const Text(
+                            "Dashboard",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
-        
-                            const SizedBox(width: 8),
-        
-                            const Text(
-                              "Dashboard",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-        
-                            const Spacer(),
-        
-                            IconButton(
+                          ),
+
+                          const Spacer(),
+
+                          /*     IconButton(
                               icon: const Icon(
                                 Icons.arrow_forward_ios,
                                 color: Colors.blue,
@@ -291,255 +274,44 @@ class LandingScreen extends StatelessWidget {
                               onPressed: () {
                                 Navigator.pushReplacementNamed(
                                   context,
-                                  AppConstants.navigateToGpLogin,
+                                  AppConstants.navigateToPanchayatDashboard,
                                 );
                               },
-                            ),
-                          ],
-                        ),
-
-                        const Text(
-                          "Overview Your Panchayat Area",
-                          style: TextStyle(color: Colors.black87, fontSize: 13),
-                        ),
-        
-                        const SizedBox(height: 8),
-        
-                        // ================= INNER WHITE CARD =================
-                        _buildLocationCard(),
-
-                        SizedBox(height: 20,),
-                        _registerCard(context)
-                      ],
-                    ),
-                  ),
-        
-                  /* Container(
-                    height: 90,
-                    padding: const EdgeInsets.all(16),
-        
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-        
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                            ),*/
+                        ],
                       ),
-        
-                      boxShadow: [
-                        BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
-                      ],
-                    ),
-        
-                    child: Row(
-                      children: [
-                        const Icon(Icons.app_registration, color: Colors.white, size: 28),
-        
-                        const SizedBox(width: 12),
-        
-                        const Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Register VWSC",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-        
-                              SizedBox(height: 4),
-        
-                              Text(
-                                "Register Village Committee",
-                                style: TextStyle(color: Colors.white70, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ),
-        
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              AppConstants.navigateToRegisterVwscScreen,
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  )*/
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+                      SizedBox(height: 10,),
 
-  Widget _buildSimpleAppBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      const Text(
+                        "Overview Your Panchayat Area",
+                        style: TextStyle(color: Colors.black87, fontSize: 13),
+                      ),
 
-      decoration: const BoxDecoration(
-        color: Color(0xFF1976D2), // Clean official blue
-      ),
+                      const SizedBox(height: 8),
 
-      child: SafeArea(
-        bottom: false,
+                      // ================= INNER WHITE CARD =================
+                      _buildLocationCard(),
 
-        child: Row(
-          children: [
-            // Logo
-            const Icon(Icons.water_drop, color: Colors.white, size: 22),
-
-            const SizedBox(width: 8),
-
-            // Title
-            const Text(
-              "Sujal Gaon App",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-
-            const Spacer(),
-
-            // Notification
-            Stack(
-              children: [
-                const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
-                  size: 22,
-                ),
-
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(3),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Text(
-                      "3",
-                      style: TextStyle(color: Colors.white, fontSize: 9),
-                    ),
+                      SizedBox(height: 20,),
+                      _registerCard(context)
+                    ],
                   ),
                 ),
               ],
             ),
-
-            const SizedBox(width: 14),
-
-            // Profile Image
-            const CircleAvatar(
-              radius: 14,
-              backgroundImage: AssetImage('assets/icons/user_icon.png'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // =======================================================
-  // REGISTER CARD
-  // =======================================================
-
-  Widget _dashboard(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Navigator.push(context,
-        // MaterialPageRoute(builder: (_) => RegisterVWSC()));
-      },
-
-      child: Container(
-        height: 90,
-        padding: const EdgeInsets.all(16),
-
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-
-          gradient: const LinearGradient(
-            colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
           ),
-
-          boxShadow: [
-            BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
-          ],
-        ),
-
-        child: Row(
-          children: [
-            const Icon(Icons.app_registration, color: Colors.white, size: 28),
-
-            const SizedBox(width: 12),
-
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Dashboard",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-
-                  SizedBox(height: 4),
-
-                  Text(
-                    "",
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
-                  ),
-                ],
-              ),
-            ),
-
-            IconButton(
-              icon: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-                size: 16,
-              ),
-              onPressed: () {
-                Navigator.pushReplacementNamed(
-                  context,
-                  AppConstants.navigateToGpLogin,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+        )
+      ],
     );
   }
 
   Widget _registerCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(context,
-        // MaterialPageRoute(builder: (_) => RegisterVWSC()));
+        Navigator.pushReplacementNamed(
+          context,
+          AppConstants.navigateToRegisterVwscScreen,
+        );
       },
 
       child: Container(
@@ -589,20 +361,14 @@ class LandingScreen extends StatelessWidget {
                 ],
               ),
             ),
-
-            IconButton(
-              icon: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-                size: 16,
-              ),
-              onPressed: () {
-                Navigator.pushReplacementNamed(
-                  context,
-                  AppConstants.navigateToRegisterVwscScreen,
-                );
-              },
-            ),
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: const Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.white,
+                  size: 16,
+                ),
+           ),
           ],
         ),
       ),
@@ -616,8 +382,10 @@ class LandingScreen extends StatelessWidget {
   Widget _listCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(context,
-        // MaterialPageRoute(builder: (_) => VWSCListScreen()));
+        Navigator.pushReplacementNamed(
+          context,
+          AppConstants.navigateToVWSCListScreen,
+        );
       },
 
       child: Container(

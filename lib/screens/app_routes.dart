@@ -1,13 +1,19 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/screens/panchayat/landing_screen.dart';
-import 'package:jal_sanchalan/screens/panchayat/vwsc_registration.dart';
-import 'package:jal_sanchalan/screens/pre_login_screen.dart';
+import 'package:jal_sanchalan/screens/panchayat/VwscListScreen.dart';
+import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 
-import '../screens/login_screen.dart';
-import '../screens/panchayat/dashboard.dart';
-import '../screens/panchayat/gp_login.dart';
-import '../screens/splash_screen.dart';
-import 'app_constants.dart';
+import 'package:jal_sanchalan/screens/panchayat/vwsc_registration.dart';
+import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
+import 'package:jal_sanchalan/screens/vwsc/njm_wso_registration.dart';
+import 'package:jal_sanchalan/screens/vwsc/njmwsoListScreen.dart';
+import 'package:jal_sanchalan/screens/vwsc/vwsc_dashboard.dart';
+import 'package:jal_sanchalan/screens/vwsc/vwsc_landing_screen.dart';
+
+import '../utils/app_constants.dart';
+import 'auth/login_screen.dart';
+import 'auth/splash_screen.dart';
+import 'panchayat/dashboard.dart';
+import 'panchayat/panchayat_dashboard.dart';
 
 class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
@@ -17,11 +23,15 @@ class AppRoutes {
           const DashboardScreen(),
       AppConstants.navigateToLoginScreen: (context) => const Loginscreen(),
       AppConstants.navigateToSplashScreen: (context) => const SplashScreen(),
-      AppConstants.navigateToGpLogin: (context) =>
-          const GpLoginDashboardScreen(),
-      AppConstants.navigateToLandingScreen: (context) => const LandingScreen(),
-      AppConstants.navigateToRegisterVwscScreen: (context) =>
-          const RegisterVwscScreen(),
+      AppConstants.navigateToPanchayatDashboard: (context) => const PanchayatDashboard(),
+      AppConstants.navigateToVWSCDashboard: (context) => const VwscDashboard(),
+      AppConstants.navigateToPanchayatLandingScreen: (context) => const PanchayatLandingScreen(),
+      AppConstants.navigateToVWSCLandingScreen: (context) => const VwscLandingScreen(),
+
+      AppConstants.navigateToRegisterVwscScreen: (context) => const RegisterVwscScreen(),
+      AppConstants.navigateToRegisterNJMWSOScreen: (context) => const NjmWsoRegistration(),
+      AppConstants.navigateToVWSCListScreen: (context) =>  VwscListScreen(),
+      AppConstants.navigateToNJMListScrenn: (context) =>  Njmwsolistscreen(),
       AppConstants.navigateToPreLoginScreen: (context) =>
           const PreLoginScreen(),
 

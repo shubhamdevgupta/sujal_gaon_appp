@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_constants.dart';
 
-class RegisterVwscScreen extends StatelessWidget {
-  const RegisterVwscScreen({super.key});
+class NjmWsoRegistration extends StatelessWidget {
+  const NjmWsoRegistration({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,7 @@ class RegisterVwscScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacementNamed(
                 context,
-                AppConstants.navigateToPanchayatLandingScreen,
+                AppConstants.navigateToVWSCLandingScreen,
               );
             },
 
@@ -168,7 +168,7 @@ class RegisterVwscScreen extends StatelessWidget {
 
           // Title
           const Text(
-            "Register VWSC Member",
+            "Register NJM/WSO",
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,

@@ -29,9 +29,21 @@ class AppConstants {
   //auth
   static const String navigateToDashboardScreen = '/dashboardScreen';
   static const String navigateToLoginScreen = '/loginScreen ';
-  static const String navigateToGpLogin = '/gplogin ';
-  static const String navigateToLandingScreen = '/landingscreen ';
+  //panchayat
+  static const String navigateToPanchayatDashboard = '/panchayatDashboard';
+  static const String navigateToPanchayatLandingScreen = '/Panchayatlandingscreen ';
+
+  //vwsc
+  static const String navigateToVWSCLandingScreen = '/VWSClandingscreen ';
+  static const String navigateToVWSCDashboard = '/vwscDashboard';
+
+
+
   static const String navigateToRegisterVwscScreen = '/registrationvwsc ';
+  static const String navigateToRegisterNJMWSOScreen = '/registrationnjmwso ';
+  static const String navigateToVWSCListScreen = '/listofvwsc ';
+  static const String navigateToNJMListScrenn = '/listofnjmwso ';
+
   static const String navigateToPreLoginScreen = '/preLoginScreen ';
   static const String navigateToSplashScreen = '/ ';
 //////////////////////////////////////////////////////////////////////////

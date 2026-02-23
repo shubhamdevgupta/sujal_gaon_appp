@@ -4,7 +4,7 @@ import 'package:jal_sanchalan/providers/master_provider.dart';
 import 'package:jal_sanchalan/service/local_storage_service.dart';
 import 'package:jal_sanchalan/utils/AppUtil.dart';
 import 'package:jal_sanchalan/utils/app_constants.dart';
-import 'package:jal_sanchalan/utils/app_routes.dart';
+import 'package:jal_sanchalan/screens/app_routes.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: AppConstants.navigateToPreLoginScreen,
+      initialRoute: AppConstants.navigateToSplashScreen,
       routes: AppRoutes.getRoutes(),
     );
   }

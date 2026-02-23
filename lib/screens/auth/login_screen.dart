@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/authentication_provider.dart';
-import '../utils/AppUtil.dart';
-import '../utils/app_color.dart';
-import '../utils/app_constants.dart';
-import '../utils/app_style.dart';
-import '../utils/toast_helper.dart';
+import '../../providers/authentication_provider.dart';
+import '../../utils/AppUtil.dart';
+import '../../utils/app_color.dart';
+import '../../utils/app_constants.dart';
+import '../../utils/app_style.dart';
+import '../../utils/toast_helper.dart';
 
 // Login Page
 class Loginscreen extends StatefulWidget {
