@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jal_sanchalan/screens/njm_wso/landingpage.dart';
 import 'package:jal_sanchalan/screens/panchayat/VwscListScreen.dart';
+import 'package:jal_sanchalan/screens/panchayat/gp_login.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 
 import 'package:jal_sanchalan/screens/panchayat/vwsc_registration.dart';
@@ -23,6 +25,7 @@ class AppRoutes {
           const DashboardScreen(),
       AppConstants.navigateToLoginScreen: (context) => const Loginscreen(),
       AppConstants.navigateToSplashScreen: (context) => const SplashScreen(),
+      AppConstants.navigateToGramPanchayatLogin: (context) => const PanchayatLogin(),
       AppConstants.navigateToPanchayatDashboard: (context) => const PanchayatDashboard(),
       AppConstants.navigateToVWSCDashboard: (context) => const VwscDashboard(),
       AppConstants.navigateToPanchayatLandingScreen: (context) => const PanchayatLandingScreen(),
@@ -32,8 +35,10 @@ class AppRoutes {
       AppConstants.navigateToRegisterNJMWSOScreen: (context) => const NjmWsoRegistration(),
       AppConstants.navigateToVWSCListScreen: (context) =>  VwscListScreen(),
       AppConstants.navigateToNJMListScrenn: (context) =>  Njmwsolistscreen(),
-      AppConstants.navigateToPreLoginScreen: (context) =>
-          const PreLoginScreen(),
+      AppConstants.navigateToNJMLandingScreen: (context) =>  NjmLandingScreen(),
+      AppConstants.navigateToPreLoginScreen: (context) => const PreLoginScreen(),
+
+
 
       /*     //dwsmList
       AppConstants.navigateToDemonstrationScreen: (context) =>

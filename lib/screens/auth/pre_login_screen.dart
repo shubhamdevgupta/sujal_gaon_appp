@@ -17,7 +17,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/icons/bg_location.jpeg"),
+            image: AssetImage("assets/icons/SJL_bg.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -34,7 +34,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Colors.blue,
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -46,7 +46,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white70,
+                      color: Colors.lightBlue,
                     ),
                   ),
 
@@ -59,7 +59,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                     onTap: () {
                       Navigator.pushNamed(
                         context,
-                        AppConstants.navigateToPanchayatLandingScreen,
+                        AppConstants.navigateToGramPanchayatLogin,
                       );
                     },
                   ),
@@ -85,7 +85,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                     onTap: () {
                       Navigator.pushNamed(
                         context,
-                        AppConstants.navigateToRegisterVwscScreen,
+                        AppConstants.navigateToNJMLandingScreen,
                       );
                     },
                   ),

@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_constants.dart';
 
-class NjmWsoRegistration extends StatelessWidget {
+
+
+class NjmWsoRegistration extends StatefulWidget {
   const NjmWsoRegistration({super.key});
+
+  @override
+  State<NjmWsoRegistration> createState() =>
+      _NjmWsoRegistrationState();
+}
+
+class _NjmWsoRegistrationState extends State<NjmWsoRegistration> {
+
+
+  String? trainingStatus;   // Yes / No
+  DateTime? trainingDate;
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +41,15 @@ class NjmWsoRegistration extends StatelessWidget {
                 title: "Member Details",
                 children: [
 
+                  _dropdown("Role"),
+
+
+                  _input("Mobile Number",
+                      keyboard: TextInputType.phone),
+
                   _input("Full Name"),
 
-                  _dropdown("Gender"),
 
-                  _dropdown("Category"),
-
-                  _input("Age", keyboard: TextInputType.number),
                 ],
               ),
 
@@ -47,7 +62,7 @@ class NjmWsoRegistration extends StatelessWidget {
 
                 children: [
 
-                  _dropdown("Designation"),
+                  _dropdown("Designation & affiliation, if any"),
 
                   _input("Functional Designation"),
                 ],
@@ -57,35 +72,30 @@ class NjmWsoRegistration extends StatelessWidget {
 
               // ================= TENURE =================
               _sectionCard(
-                icon: Icons.date_range,
-                title: "Tenure",
-
+                icon: Icons.school,
+                title: "FTK Training Status",
                 children: [
 
-                  _dropdown("From Month"),
-                  _dropdown("From Year"),
+                  _trainingStatusField(),
 
-                  _dropdown("To Month"),
-                  _dropdown("To Year"),
                 ],
               ),
 
               const SizedBox(height: 22),
 
               // ================= CONTACT =================
-              _sectionCard(
+         /*     _sectionCard(
                 icon: Icons.call,
                 title: "Contact Details",
 
                 children: [
 
-                  _input("Mobile Number",
-                      keyboard: TextInputType.phone),
+
 
                   _input("Email",
                       keyboard: TextInputType.emailAddress),
                 ],
-              ),
+              ),*/
 
               const SizedBox(height: 32),
 
@@ -316,9 +326,185 @@ class NjmWsoRegistration extends StatelessWidget {
     );
   }
 
+
+  Widget _trainingStatusField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        const Text(
+          "Training Done?",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        // Radio Buttons
+        Row(
+          children: [
+
+            _radioButton("Yes"),
+            const SizedBox(width: 20),
+            _radioButton("No"),
+
+          ],
+        ),
+
+        const SizedBox(height: 12),
+
+        // Show Date if Yes
+        if (trainingStatus == "Yes")
+          _datePickerBox(),
+      ],
+    );
+  }
+
+
+  Widget _radioButton(String value) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () {
+        setState(() {
+          trainingStatus = value;
+
+          // Clear date if No selected
+          if (value == "No") {
+            trainingDate = null;
+          }
+        });
+      },
+
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 8,
+        ),
+
+        decoration: BoxDecoration(
+          color: trainingStatus == value
+              ? const Color(0xFF1976D2).withOpacity(0.12)
+              : Colors.transparent,
+
+          borderRadius: BorderRadius.circular(8),
+
+          border: Border.all(
+            color: trainingStatus == value
+                ? const Color(0xFF1976D2)
+                : Colors.grey.shade400,
+          ),
+        ),
+
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+
+            Icon(
+              trainingStatus == value
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_unchecked,
+              size: 18,
+              color: const Color(0xFF1976D2),
+            ),
+
+            const SizedBox(width: 6),
+
+            Text(value),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _datePickerBox() {
+    return InkWell(
+      borderRadius: BorderRadius.circular(14),
+
+      onTap: () async {
+
+        DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: trainingDate ?? DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+        );
+
+        if (picked != null) {
+          setState(() {
+            trainingDate = picked;
+          });
+        }
+      },
+
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 14,
+        ),
+
+        decoration: BoxDecoration(
+          color: Colors.white,
+
+          borderRadius: BorderRadius.circular(14),
+
+          border: Border.all(
+            color: Colors.grey.shade300,
+          ),
+
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blue.withOpacity(0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+
+        child: Row(
+          children: [
+
+            const Icon(
+              Icons.date_range,
+              color: Color(0xFF1976D2),
+              size: 20,
+            ),
+
+            const SizedBox(width: 10),
+
+            Text(
+              trainingDate == null
+                  ? "Select Training Date"
+                  : _formatDate(trainingDate!),
+
+              style: TextStyle(
+                fontSize: 14,
+
+                color: trainingDate == null
+                    ? Colors.grey
+                    : Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.day.toString().padLeft(2, '0')}/"
+        "${date.month.toString().padLeft(2, '0')}/"
+        "${date.year}";
+  }
+
+
   // ====================================================
   // BUTTON
   // ====================================================
+
+
+
 
   Widget _saveButton() {
     return Container(
