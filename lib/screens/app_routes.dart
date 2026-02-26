@@ -6,8 +6,8 @@ import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 
 import 'package:jal_sanchalan/screens/panchayat/vwsc_registration.dart';
 import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
-import 'package:jal_sanchalan/screens/vwsc/njm_wso_registration.dart';
-import 'package:jal_sanchalan/screens/vwsc/njmwsoListScreen.dart';
+import 'package:jal_sanchalan/screens/vwsc/registration_njm_wso.dart';
+import 'package:jal_sanchalan/screens/vwsc/list_njm_wso.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_dashboard.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_landing_screen.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_login.dart';
