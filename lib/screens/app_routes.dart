@@ -19,6 +19,8 @@ import 'njm_wso/njm_login.dart';
 import 'njm_wso/njm_questionscategory.dart';
 import 'njm_wso/question_cat/basicdetails.dart';
 import 'njm_wso/question_cat/locationform.dart';
+import 'njm_wso/question_cat/monthlychargecollection.dart';
+import 'njm_wso/question_cat/saniSanitaryinspection.dart';
 import 'njm_wso/question_cat/watersampledataform.dart';
 import 'panchayat/dashboard.dart';
 import 'panchayat/panchayat_dashboard.dart';
@@ -45,9 +47,11 @@ class AppRoutes {
       AppConstants.navigateToNJMListScrenn: (context) =>  Njmwsolistscreen(),
       AppConstants.navigateToNJMLandingScreen: (context) =>  NjmLandingScreen(),
       AppConstants.navigateToNjmQuestionscategory: (context) =>  NjmQuestionscategory(),
-      AppConstants.navigateToBasicDetailsForm: (context) =>  BasicDetailsForm(),
+      AppConstants.navigateToBasicDetailsForm: (context) =>  Basicdetails(),
       AppConstants.navigateToLocationFormScreen: (context) =>  LocationFormScreen(),
       AppConstants.navigateToWaterSampleForm: (context) =>  WaterSampleForm(),
+      AppConstants.navigateToSanitaryInspectionForm: (context) =>  SanitaryInspectionForm(),
+      AppConstants.navigateToMonthlyChargeCollectionForm: (context) =>  MonthlyChargeCollectionForm(),
       AppConstants.navigateToPreLoginScreen: (context) => const PreLoginScreen(),
 
 

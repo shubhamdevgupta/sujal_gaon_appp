@@ -194,7 +194,6 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
   // ====================================================
   // SECTION CARD
   // ====================================================
-
   Widget _sectionCard({
     required IconData icon,
     required String title,
@@ -202,58 +201,56 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
   }) {
     return Container(
       padding: const EdgeInsets.all(20),
-
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.97),
-
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.97),
+            Colors.blue.shade50.withOpacity(0.9),
+          ],
+        ),
         borderRadius: BorderRadius.circular(22),
+
+        // 🔥 Added subtle border texture
+        border: Border.all(
+          color: Colors.blueGrey.shade200,
+          width: 1.2,
+        ),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.1),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
+            color: Colors.blue.withOpacity(0.18),
+            blurRadius: 22,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
 
           Row(
             children: [
-
-              Container(
-                padding: const EdgeInsets.all(8),
-
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1976D2).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-
-                child: Icon(
-                  icon,
-                  color: const Color(0xFF1976D2),
-                  size: 20,
-                ),
-              ),
-
+              Icon(icon, color: const Color(0xFF1976D2)),
               const SizedBox(width: 10),
-
               Text(
                 title,
                 style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1976D2),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 12),
+
+          // 🔵 Partition Line
+          Divider(
+            thickness: 1.2,
+            color: Colors.blueGrey.shade200,
+          ),
+
+          const SizedBox(height: 16),
 
           ...children.map(
                 (e) => Padding(
@@ -266,21 +263,55 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
     );
   }
 
-  // ====================================================
-  // INPUT
-  // ====================================================
-
-  Widget _input(String hint) {
+  Widget _input(
+      String hint, {
+        TextEditingController? controller,
+        TextInputType keyboard = TextInputType.text,
+        int maxLines = 1,
+        int? maxLength,
+        bool readOnly = false,
+        Function(String)? onChanged,
+      }) {
     return TextField(
+      controller: controller,
+      keyboardType: keyboard,
+      maxLines: maxLines,
+      maxLength: maxLength,
+      readOnly: readOnly,
+      onChanged: onChanged,
+
       decoration: InputDecoration(
         hintText: hint,
 
-        filled: true,
-        fillColor: const Color(0xFFF9FBFF),
+        prefixIcon: const Icon(
+          Icons.edit,
+          color: Color(0xFF1976D2),
+          size: 18,
+        ),
 
-        border: OutlineInputBorder(
+        filled: true,
+        fillColor: Colors.white,
+
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+
+        // 🔥 Darker textured border
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
+          ),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFF1976D2),
+            width: 1.8,
+          ),
         ),
       ),
     );
@@ -296,19 +327,57 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
         required List<String> items,
         required Function(String?) onChanged,
       }) {
-    return DropdownButtonFormField<String>(
+    final bool isDisabled = items.isEmpty;
 
+    return DropdownButtonFormField<String>(
       value: value,
+      icon: const Icon(
+        Icons.keyboard_arrow_down_rounded,
+        color: Color(0xFF1976D2),
+      ),
 
       decoration: InputDecoration(
         hintText: hint,
 
-        filled: true,
-        fillColor: const Color(0xFFF9FBFF),
+        prefixIcon: const Icon(
+          Icons.location_city,
+          color: Color(0xFF1976D2),
+          size: 18,
+        ),
 
-        border: OutlineInputBorder(
+        filled: true,
+        fillColor: isDisabled
+            ? Colors.grey.shade100
+            : Colors.white,
+
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+
+        // 🔥 Dark textured border
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
+          ),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFF1976D2),
+            width: 1.8,
+          ),
+        ),
+
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade200,
+            width: 1.0,
+          ),
         ),
       ),
 
@@ -316,14 +385,18 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
           .map(
             (e) => DropdownMenuItem(
           value: e,
-          child: Text(e),
+          child: Text(
+            e,
+            style: const TextStyle(fontSize: 14),
+          ),
         ),
       )
           .toList(),
 
-      onChanged: items.isEmpty ? null : onChanged,
+      onChanged: isDisabled ? null : onChanged,
     );
   }
+
 
   // ====================================================
   // BUTTON

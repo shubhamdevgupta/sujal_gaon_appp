@@ -331,32 +331,87 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
 
   Widget _photoBox() {
     return InkWell(
+      borderRadius: BorderRadius.circular(22),
       onTap: () {
         // TODO: Integrate Camera
       },
-
       child: Container(
-        height: 120,
-
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: const Color(0xFFF9FBFF),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade300),
+          color: Colors.white.withOpacity(0.97),
+          borderRadius: BorderRadius.circular(22),
+
+          // 🔵 Textured border
+          border: Border.all(
+            color: const Color(0xFFB0BEC5),
+            width: 1.4,
+          ),
+
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
+        child: Row(
+          children: [
 
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-
-            Icon(
-              Icons.camera_alt,
-              color: Color(0xFF1976D2),
-              size: 30,
+            // 📷 Camera Icon Container
+            Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                color: const Color(0xFF1976D2).withOpacity(0.08),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: const Color(0xFF1976D2),
+                  width: 1.3,
+                ),
+              ),
+              child: const Icon(
+                Icons.camera_alt_rounded,
+                size: 28,
+                color: Color(0xFF1976D2),
+              ),
             ),
 
-            SizedBox(height: 8),
+            const SizedBox(width: 18),
 
-            Text("Capture Sample Photo"),
+            // 📄 Text Section
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  const Text(
+                    "Capture Sample Photo",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  Text(
+                    "Tap to open camera and capture live image",
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16,
+              color: Colors.grey,
+            ),
           ],
         ),
       ),
@@ -403,20 +458,21 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
     required List<Widget> children,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(20),
-
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.95),
+            Colors.white.withOpacity(0.97),
             Colors.blue.shade50.withOpacity(0.9),
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
         ),
-
         borderRadius: BorderRadius.circular(22),
+
+        // 🔥 Added subtle border texture
+        border: Border.all(
+          color: Colors.blueGrey.shade200,
+          width: 1.2,
+        ),
 
         boxShadow: [
           BoxShadow(
@@ -425,66 +481,34 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
             offset: const Offset(0, 8),
           ),
         ],
-
-        border: Border.all(
-          color: Colors.white.withOpacity(0.4),
-        ),
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
 
-          /// Header
-          Container(
-            padding: const EdgeInsets.all(12),
-
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blue.shade600,
-                  Colors.blue.shade800,
-                ],
+          Row(
+            children: [
+              Icon(icon, color: const Color(0xFF1976D2)),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-
-              borderRadius: BorderRadius.circular(14),
-            ),
-
-            child: Row(
-              children: [
-
-                Container(
-                  height: 36,
-                  width: 36,
-
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-
-                const SizedBox(width: 12),
-
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+            ],
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
+
+          // 🔵 Partition Line
+          Divider(
+            thickness: 1.2,
+            color: Colors.blueGrey.shade200,
+          ),
+
+          const SizedBox(height: 16),
 
           ...children.map(
                 (e) => Padding(
@@ -496,50 +520,55 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
       ),
     );
   }
+
   Widget _input(
       String hint, {
         TextEditingController? controller,
         TextInputType keyboard = TextInputType.text,
         int maxLines = 1,
         int? maxLength,
+        bool readOnly = false,
         Function(String)? onChanged,
       }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.95),
-        borderRadius: BorderRadius.circular(14),
+    return TextField(
+      controller: controller,
+      keyboardType: keyboard,
+      maxLines: maxLines,
+      maxLength: maxLength,
+      readOnly: readOnly,
+      onChanged: onChanged,
 
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+      decoration: InputDecoration(
+        hintText: hint,
+
+        prefixIcon: const Icon(
+          Icons.edit,
+          color: Color(0xFF1976D2),
+          size: 18,
+        ),
+
+        filled: true,
+        fillColor: Colors.white,
+
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+
+        // 🔥 Darker textured border
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
           ),
-        ],
-      ),
+        ),
 
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboard,
-        maxLines: maxLines,
-        maxLength: maxLength,
-        onChanged: onChanged,
-
-        decoration: InputDecoration(
-          hintText: hint,
-
-          prefixIcon: const Icon(
-            Icons.edit,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
             color: Color(0xFF1976D2),
-            size: 18,
-          ),
-
-          filled: true,
-          fillColor: Colors.transparent,
-
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide.none,
+            width: 1.8,
           ),
         ),
       ),
