@@ -14,7 +14,7 @@ class BaseApiService {
 
   static const String ejalShakti = "https://ejalshakti.gov.in/WebAPI/";
   static const String _masterdic = "https://ejalshakti.gov.in/WebAPI/api/RPWSS/RPWSS_Result_Lsit_BY_Directory";
-  static const String egramswaraj = "https://egramswaraj.gov.in/covidWebService/";
+  static const String egramswaraj = "https://localhost:5000/api/SJL/";
   static const String github = "https://api.github.com/repos/";
 
 

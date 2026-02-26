@@ -1,30 +1,30 @@
 import 'dart:convert';
 
-import '../models/login_response.dart';
+import '../models/panchayat/login_response.dart';
+import '../models/panchayat/panchayat_login_response.dart';
 import '../service/base_api_service.dart';
 import '../utils/global_exception_handler.dart';
 
 class AuthenticaitonRepository {
   final BaseApiService _apiService = BaseApiService();
 
-  Future<LoginResponseModel> loginUser(
+  Future<PanchayatLoginResponse> loginUser(
     String username,
-    String password,
-    String appId,
+    String password
   ) async {
     try {
       // Call the POST method from BaseApiService
+     // https://localhost:5000/api/SJL/PanchayatLogin
       final response = await _apiService.post(
-        'LDAPLogin',
+        'PanchayatLogin',
         body: jsonEncode({
           'userName': username,
-          'password': password,
-          'applicationId': appId,
+          'password': password
         }),
         apiType: ApiType.egramswaraj,
       );
 
-      return LoginResponseModel.fromJson(response);
+      return PanchayatLoginResponse.fromJson(response);
     } catch (e, stackTrace) {
       GlobalExceptionHandler.handleException(
         e as Exception,

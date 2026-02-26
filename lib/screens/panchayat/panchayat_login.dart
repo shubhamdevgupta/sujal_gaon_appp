@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:jal_sanchalan/providers/authentication_provider.dart';
+import 'package:jal_sanchalan/utils/custom%20screen/app_text_field.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/app_constants.dart';
+import '../../utils/toast_helper.dart';
 
 class PanchayatLogin extends StatefulWidget {
   const PanchayatLogin({super.key});
 
   @override
-  State<PanchayatLogin> createState() => _GramPanchayatLoginState();
+  State<PanchayatLogin> createState() => _PanchayatLoginState();
 }
 
-class _GramPanchayatLoginState extends State<PanchayatLogin> {
+class _PanchayatLoginState extends State<PanchayatLogin> {
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  bool isPasswordVisible = false;
+  final TextEditingController captchaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<AuthenticationProvider>();
     return Scaffold(
       backgroundColor: const Color(0xFFEAF4FF),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1565C0),
-        title: const Text("Login",style: TextStyle(color: Colors.white),),
+        title: const Text("Login", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Container(
@@ -35,10 +39,9 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
         ),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             child: Column(
               children: [
-
                 const SizedBox(height: 30),
 
                 /// Logo
@@ -52,7 +55,7 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
                       BoxShadow(
                         color: Colors.blue.withOpacity(0.2),
                         blurRadius: 10,
-                      )
+                      ),
                     ],
                   ),
                   child: const Icon(
@@ -80,7 +83,8 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.42), // Transparency5
+                    color: Colors.white.withOpacity(0.42),
+                    // Transparency5
                     borderRadius: BorderRadius.circular(22),
 
                     boxShadow: [
@@ -93,19 +97,18 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
                     ],
 
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.4), // Glass border
+                      color: Colors.white.withOpacity(0.4),
+                      // Glass border
                       width: 1.2,
                     ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       /// Gram Panchayat Login
                       Row(
                         children: const [
-                          Icon(Icons.account_balance,
-                              color: Color(0xFF1565C0)),
+                          Icon(Icons.account_balance, color: Color(0xFF1565C0)),
                           SizedBox(width: 8),
                           Text(
                             "Gram Panchayat Login",
@@ -121,19 +124,17 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
 
                       /// Mobile Number
                       const Text(
-                        "Registered Mobile Number",
+                        "Registered Mobile/Username",
                         style: TextStyle(fontWeight: FontWeight.w500),
                       ),
 
                       const SizedBox(height: 6),
 
-                      TextField(
+                      AppTextField(
                         controller: mobileController,
-                        keyboardType: TextInputType.phone,
-                        maxLength: 10,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.phone),
-                          hintText: "Enter Mobile Number",
+                          hintText: "Enter Mobile Number or Username",
                           counterText: "",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -147,7 +148,7 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
                         ),
                       ),
 
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 10),
 
                       /// Password
                       const Text(
@@ -159,21 +160,18 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
 
                       TextField(
                         controller: passwordController,
-                        obscureText: !isPasswordVisible,
+                        obscureText: !provider.isShownPassword,
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.lock),
+                          prefixIcon: Icon(Icons.lock),
                           hintText: "Enter Password",
                           suffixIcon: IconButton(
                             icon: Icon(
-                              isPasswordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
+                              provider.isShownPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.blueGrey,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                isPasswordVisible = !isPasswordVisible;
-                              });
-                            },
+                            onPressed: provider.togglePasswordVisibility,
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -189,6 +187,43 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
 
                       const SizedBox(height: 25),
 
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 50,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF1F3F4),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                '${provider.randomOne} + ${provider.randomTwo} = ?',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'OpenSans',
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          InkWell(
+                            onTap: provider.generateCaptcha,
+                            borderRadius: BorderRadius.circular(30),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.blue.shade50,
+                              child: const Icon(
+                                Icons.refresh,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 25),
+
                       /// Login Button
                       SizedBox(
                         width: double.infinity,
@@ -200,13 +235,29 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                              provider.loginUser(
+                                mobileController.text,
+                                passwordController.text,
+                                () {
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    AppConstants.navigateToPanchayatDashboard,
+                                  );
+                                },
+                                (errorMessage) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(errorMessage)),
+                                  );
+                                  ToastHelper.showToastMessage(errorMessage);
+                                },
+                              );
+
+
                             Navigator.pushNamed(
                               context,
                               AppConstants.navigateToPanchayatLandingScreen,
                             );
-
-                            loginUser();
                           },
                           child: const Text(
                             "Login",
@@ -215,9 +266,7 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
                         ),
                       ),
 
-                      const SizedBox(height: 15),
-
-                      /// OR
+                      /*          /// OR
                       const Center(
                         child: Text(
                           "Or, Verify using OTP",
@@ -233,9 +282,7 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
                         height: 48,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
-                            side: const BorderSide(
-                              color: Color(0xFF1565C0),
-                            ),
+                            side: const BorderSide(color: Color(0xFF1565C0)),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -273,7 +320,7 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
                             ),
                           ),
                         ],
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
@@ -285,36 +332,21 @@ class _GramPanchayatLoginState extends State<PanchayatLogin> {
     );
   }
 
-  /// Login Method
-  void loginUser() {
-    String mobile = mobileController.text.trim();
+  bool validateLoginInput(AuthenticationProvider provider) {
     String password = passwordController.text.trim();
+    String captcha = captchaController.text.trim();
 
-    if (mobile.isEmpty || password.isEmpty) {
-      showMessage("Please enter all fields");
-      return;
-    }
+    int? enteredCaptcha = int.tryParse(captcha);
+    // Using a single if-else statement
+    provider.errorMsg = (password.isNotEmpty
+        ? (captcha.isNotEmpty &&
+                  enteredCaptcha ==
+                      provider
+                          .captchResult // Compare as int
+              ? ""
+              : "Please Enter Correct Captcha")
+        : "Please Enter Password");
 
-    // TODO: Call API here
-    showMessage("Login Clicked");
-  }
-
-  /// Send OTP Method
-  void sendOTP() {
-    String mobile = mobileController.text.trim();
-
-    if (mobile.isEmpty) {
-      showMessage("Enter mobile number first");
-      return;
-    }
-
-    // TODO: Send OTP API
-    showMessage("OTP Sent");
-  }
-
-  void showMessage(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg)),
-    );
+    return provider.errorMsg.isEmpty;
   }
 }

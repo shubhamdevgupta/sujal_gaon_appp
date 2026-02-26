@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/providers/login_provider.dart';
+import 'package:jal_sanchalan/providers/authentication_provider.dart';
 import 'package:jal_sanchalan/providers/master_provider.dart';
 import 'package:jal_sanchalan/service/local_storage_service.dart';
 import 'package:jal_sanchalan/utils/AppUtil.dart';
@@ -17,8 +17,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LoginProvider()),
-        ChangeNotifierProvider(create: (_) => MasterProvider()), // 👈 ADD THIS
+        ChangeNotifierProvider(create: (_) => MasterProvider()),
+        ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
       ],
       child: const MyApp(),
     ),

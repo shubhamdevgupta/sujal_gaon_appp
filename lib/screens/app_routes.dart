@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/screens/njm_wso/landingpage.dart';
 import 'package:jal_sanchalan/screens/panchayat/VwscListScreen.dart';
-import 'package:jal_sanchalan/screens/panchayat/gp_login.dart';
+import 'package:jal_sanchalan/screens/panchayat/panchayat_login.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 
 import 'package:jal_sanchalan/screens/panchayat/vwsc_registration.dart';

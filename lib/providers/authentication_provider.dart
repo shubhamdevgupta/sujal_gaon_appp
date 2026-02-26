@@ -4,7 +4,8 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 
-import '../models/login_response.dart';
+import '../models/panchayat/login_response.dart';
+import '../models/panchayat/panchayat_login_response.dart';
 import '../repository/authentication_repository.dart';
 import '../service/local_storage_service.dart';
 import '../utils/app_constants.dart';
@@ -26,11 +27,11 @@ class AuthenticationProvider extends ChangeNotifier {
 
   var randomOne = 0, randomTwo = 0, captchResult = 0;
 
-  LoginResponseModel? _loginResponse;
+  PanchayatLoginResponse? _loginResponse;
   bool _isLoading = false;
 
   // Getters
-  LoginResponseModel? get loginResponse => _loginResponse;
+  PanchayatLoginResponse? get loginResponse => _loginResponse;
 
   bool get isLoading => _isLoading;
 
@@ -75,14 +76,13 @@ class AuthenticationProvider extends ChangeNotifier {
     try {
       _loginResponse = await _authRepository.loginUser(
         userName,
-        hashPass,
-        "DWS_WS",
+        hashPass
       );
-      if (_loginResponse?.msgCode == 200) {
+      if (_loginResponse?.status == true) {
         onSuccess();
         generateCaptcha();
       } else {
-        errorMsg = _loginResponse!.msg!;
+        errorMsg = _loginResponse!.message;
         onFailure(errorMsg);
       }
     } catch (e, stackTrace) {
