@@ -23,6 +23,7 @@ class _VwscLogin extends State<VwscLogin> {
         backgroundColor: const Color(0xFF1565C0),
         title: const Text("Login", style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        automaticallyImplyLeading: false, // 🔥 This hides back button
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,

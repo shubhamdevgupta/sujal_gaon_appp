@@ -27,6 +27,7 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
         backgroundColor: const Color(0xFF1565C0),
         title: const Text("Login", style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -187,7 +188,7 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
 
                       const SizedBox(height: 25),
 
-                      Row(
+                /*      Row(
                         children: [
                           Expanded(
                             child: Container(
@@ -222,7 +223,7 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                         ],
                       ),
 
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 25),*/
 
                       /// Login Button
                       SizedBox(
@@ -236,7 +237,11 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                             ),
                           ),
                           onPressed: () async {
-                              provider.loginUser(
+                            Navigator.pushReplacementNamed(
+                              context,
+                              AppConstants.navigateToPanchayatDashboard,
+                            );
+                         /*     provider.loginUser(
                                 mobileController.text,
                                 passwordController.text,
                                 () {
@@ -251,7 +256,7 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                                   );
                                   ToastHelper.showToastMessage(errorMessage);
                                 },
-                              );
+                              );*/
 
 
                             Navigator.pushNamed(
