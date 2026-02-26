@@ -35,6 +35,7 @@ class AppConstants {
   static const String navigateToGramPanchayatLogin = '/panchayatlogin ';
 
   //vwsc
+  static const String navigateToVwscLogin = '/VwscLogin ';
   static const String navigateToVWSCLandingScreen = '/VWSClandingscreen ';
   static const String navigateToVWSCDashboard = '/vwscDashboard';
 
@@ -43,8 +44,16 @@ class AppConstants {
   static const String navigateToRegisterVwscScreen = '/registrationvwsc ';
   static const String navigateToRegisterNJMWSOScreen = '/registrationnjmwso ';
   static const String navigateToVWSCListScreen = '/listofvwsc ';
+
+  //NJM
+
+  static const String navigateToNjmLogin = '/NjmLogin ';
   static const String navigateToNJMListScrenn = '/listofnjmwso ';
   static const String navigateToNJMLandingScreen = '/njmlandingscreen ';
+  static const String navigateToNjmQuestionscategory = '/NjmQuestionscategory ';
+  static const String navigateToBasicDetailsForm = '/BasicDetailsForm ';
+  static const String navigateToLocationFormScreen = '/LocationFormScreen ';
+  static const String navigateToWaterSampleForm = '/WaterSampleForm ';
 
   static const String navigateToPreLoginScreen = '/preLoginScreen ';
   static const String navigateToSplashScreen = '/ ';

@@ -181,7 +181,7 @@ class NjmLandingScreen extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacementNamed(
           context,
-          AppConstants.navigateToRegisterNJMWSOScreen,
+          AppConstants.navigateToNjmQuestionscategory,
         );
       },
 
@@ -215,7 +215,7 @@ class NjmLandingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Register NJM/WSO",
+                    "Water Quality Monitoring ",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -226,7 +226,7 @@ class NjmLandingScreen extends StatelessWidget {
                   SizedBox(height: 4),
 
                   Text(
-                    "Register NJM/WSO Member",
+                    "Activity Log of SHG / FTK-trained Women",
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
