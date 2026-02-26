@@ -21,7 +21,7 @@ class _VwscLogin extends State<VwscLogin> {
       backgroundColor: const Color(0xFFEAF4FF),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1565C0),
-        title: const Text("Login",style: TextStyle(color: Colors.white),),
+        title: const Text("Login", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Container(
@@ -38,7 +38,6 @@ class _VwscLogin extends State<VwscLogin> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-
                 const SizedBox(height: 30),
 
                 /// Logo
@@ -52,7 +51,7 @@ class _VwscLogin extends State<VwscLogin> {
                       BoxShadow(
                         color: Colors.blue.withOpacity(0.2),
                         blurRadius: 10,
-                      )
+                      ),
                     ],
                   ),
                   child: const Icon(
@@ -100,12 +99,10 @@ class _VwscLogin extends State<VwscLogin> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       /// Gram Panchayat Login
                       Row(
                         children: const [
-                          Icon(Icons.account_balance,
-                              color: Color(0xFF1565C0)),
+                          Icon(Icons.account_balance, color: Color(0xFF1565C0)),
                           SizedBox(width: 8),
                           Text(
                             "VWSC User Login",
@@ -214,66 +211,6 @@ class _VwscLogin extends State<VwscLogin> {
                           ),
                         ),
                       ),
-
-                      const SizedBox(height: 15),
-
-                      /// OR
-                      const Center(
-                        child: Text(
-                          "Or, Verify using OTP",
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                      ),
-
-                      const SizedBox(height: 15),
-
-                      /// Send OTP
-                      SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(
-                              color: Color(0xFF1565C0),
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: () {
-                            sendOTP();
-                          },
-                          child: const Text(
-                            "Send OTP",
-                            style: TextStyle(
-                              color: Color(0xFF1565C0),
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      /// Register
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Don’t have an account? "),
-                          GestureDetector(
-                            onTap: () {
-                              // Navigate to Register Screen
-                            },
-                            child: const Text(
-                              "Register Now",
-                              style: TextStyle(
-                                color: Color(0xFF1565C0),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),
@@ -313,8 +250,6 @@ class _VwscLogin extends State<VwscLogin> {
   }
 
   void showMessage(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg)),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 }

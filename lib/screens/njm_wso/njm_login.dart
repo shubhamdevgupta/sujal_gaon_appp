@@ -214,66 +214,6 @@ class _NjmLogin extends State<NjmLogin> {
                           ),
                         ),
                       ),
-
-                      const SizedBox(height: 15),
-
-                      /// OR
-                      const Center(
-                        child: Text(
-                          "Or, Verify using OTP",
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                      ),
-
-                      const SizedBox(height: 15),
-
-                      /// Send OTP
-                      SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(
-                              color: Color(0xFF1565C0),
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: () {
-                            sendOTP();
-                          },
-                          child: const Text(
-                            "Send OTP",
-                            style: TextStyle(
-                              color: Color(0xFF1565C0),
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      /// Register
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Don’t have an account? "),
-                          GestureDetector(
-                            onTap: () {
-                              // Navigate to Register Screen
-                            },
-                            child: const Text(
-                              "Register Now",
-                              style: TextStyle(
-                                color: Color(0xFF1565C0),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),
