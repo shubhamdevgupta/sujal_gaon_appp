@@ -153,7 +153,7 @@ class _NjmQuestionscategory extends State<NjmQuestionscategory> {
                           title: "Sanitary Inspection",
                           subtitle: "Risk Assessment",
                           onTap: () {
-                            // TODO
+                          Navigator.pushNamed(context, AppConstants.navigateToSanitaryInspectionForm);
                           },
                         ),
 
@@ -162,7 +162,7 @@ class _NjmQuestionscategory extends State<NjmQuestionscategory> {
                           title: "Monthly Charge Collection",
                           subtitle: "Billing & Payment",
                           onTap: () {
-                            // TODO
+                           Navigator.pushNamed(context, AppConstants.navigateToMonthlyChargeCollectionForm);
                           },
                         ),
 

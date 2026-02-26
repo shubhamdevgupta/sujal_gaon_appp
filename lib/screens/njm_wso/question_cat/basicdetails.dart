@@ -1,113 +1,233 @@
 import 'package:flutter/material.dart';
-
 import '../../../utils/app_constants.dart';
 
-class BasicDetailsForm extends StatefulWidget {
-  const BasicDetailsForm({super.key});
+class Basicdetails extends StatefulWidget {
+  const Basicdetails({super.key});
 
   @override
-  State<BasicDetailsForm> createState() => _BasicDetailsForm();
+  State<Basicdetails> createState() => _Basicdetails();
 }
 
-class _BasicDetailsForm extends State<BasicDetailsForm> {
+class _Basicdetails extends State<Basicdetails> {
 
-  String? trainingStatus;
-  DateTime? trainingDate;
+  String? trainingLevel;
+  String? selectedVillage;
+  String? selectedHabitation;
 
-  String gpsLocation = "Not Captured";
-  String sampleDateTime = "";
+  DateTime? fromDate;
+  DateTime? toDate;
 
-  @override
-  void initState() {
-    super.initState();
+  // Demo auto values (Replace with API)
+  final String gpName = "Hooda Gram Panchayat";
+  final String gpLGD = "123456";
+  final String villageName = "Sujal Gaon";
+  final String villageLGD = "654321";
+  final String districtName = "Sonipat";
+  final String districtLGD = "111222";
+  final String stateName = "Haryana";
 
-    final now = DateTime.now();
+  final List<String> villages = [
+    "Sujal Gaon",
+    "Rampur",
+    "Khera",
+  ];
 
-    sampleDateTime =
-    "${now.day.toString().padLeft(2, '0')}/"
-        "${now.month.toString().padLeft(2, '0')}/"
-        "${now.year} "
-        "${now.hour.toString().padLeft(2, '0')}:"
-        "${now.minute.toString().padLeft(2, '0')}";
-  }
+  final Map<String, List<String>> habitations = {
+    "Sujal Gaon": ["Hab-1", "Hab-2"],
+    "Rampur": ["Hab-A", "Hab-B"],
+    "Khera": ["Hab-X", "Hab-Y"],
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F6FF),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1976D2),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text("Basic Details",style: TextStyle(color: Colors.white),),
+        centerTitle: true,
+      ),
 
-      body: SafeArea(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/icons/SJL_bg.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
 
           child: Column(
             children: [
 
-              // ================= HEADER =================
-              _buildHeader(context),
+
 
               const SizedBox(height: 26),
 
-              // ================= MEMBER =================
+              // ================= OPERATOR DETAILS =================
               _sectionCard(
                 icon: Icons.person,
-                title: "Member Details",
+                title: "Operator Details",
                 children: [
 
-                  _dropdown("Role"),
+                  _input("Name of Operator"),
 
                   _input(
-                    "Mobile Number",
+                    "Contact Number",
                     keyboard: TextInputType.phone,
                   ),
 
-                  _input("Full Name"),
+                  _input(
+                    "Complete Address",
+                    keyboard: TextInputType.multiline,
+                  ),
+
+                  _dropdown(
+                    "Level of Training",
+                    items: const [
+                      DropdownMenuItem(
+                        value: "Not Trained",
+                        child: Text("Not Trained"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Nal Jal Mitra",
+                        child: Text("Nal Jal Mitra (PMKVY-JJM)"),
+                      ),
+                      DropdownMenuItem(
+                        value: "State Programme",
+                        child: Text("Trained under State Programme"),
+                      ),
+                    ],
+                    onChanged: (v) {
+                      setState(() {
+                        trainingLevel = v;
+                      });
+                    },
+                  ),
                 ],
               ),
 
               const SizedBox(height: 22),
 
-              // ================= DESIGNATION =================
+              // ================= AUTO POPULATED =================
               _sectionCard(
-                icon: Icons.badge,
-                title: "Designation",
+                icon: Icons.account_balance,
+                title: "JJM IMIS Details",
                 children: [
 
-                  _dropdown("Designation & affiliation"),
+                  _readOnly("Gram Panchayat", gpName),
+                  _readOnly("GP LGD Code", gpLGD),
 
-                  _input("Functional Designation"),
+                  _readOnly("Village", villageName),
+                  _readOnly("Village LGD", villageLGD),
+
+                  _readOnly("District", districtName),
+                  _readOnly("District LGD", districtLGD),
+
+                  _readOnly("State", stateName),
                 ],
               ),
 
               const SizedBox(height: 22),
 
-              // ================= TRAINING =================
+              // ================= AUTHORITY =================
               _sectionCard(
-                icon: Icons.school,
-                title: "FTK Training Status",
+                icon: Icons.verified_user,
+                title: "Appointment Authority",
                 children: [
 
-                  _trainingStatusField(),
+                  _input(
+                    "Authority Name & Designation",
+                  ),
                 ],
               ),
 
               const SizedBox(height: 22),
 
-              // ================= LOCATION =================
+              // ================= AREA OF OPERATION =================
               _sectionCard(
-                icon: Icons.my_location,
-                title: "Location & Sampling Time",
+                icon: Icons.map,
+                title: "Area of Operation",
                 children: [
 
-                  _gpsField(),
+                  _dropdown(
+                    "Select Village",
+                    value: selectedVillage,
+                    items: villages
+                        .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ))
+                        .toList(),
+                    onChanged: (v) {
+                      setState(() {
+                        selectedVillage = v;
+                        selectedHabitation = null;
+                      });
+                    },
+                  ),
 
-                  _dateTimeField(),
+                  const SizedBox(height: 16),
+
+                  _dropdown(
+                    "Select Habitation",
+                    value: selectedHabitation,
+                    items: selectedVillage == null
+                        ? []
+                        : habitations[selectedVillage]!
+                        .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ))
+                        .toList(),
+                    onChanged: (v) {
+                      setState(() {
+                        selectedHabitation = v;
+                      });
+                    },
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 22),
+
+              // ================= VALIDATION PERIOD =================
+              _sectionCard(
+                icon: Icons.date_range,
+                title: "Validated For",
+                children: [
+
+                  _datePickerBox(
+                    label: "Valid From",
+                    date: fromDate,
+                    onSelect: (picked) {
+                      setState(() {
+                        fromDate = picked;
+                      });
+                    },
+                  ),
+
+                  _datePickerBox(
+                    label: "Valid To",
+                    date: toDate,
+                    onSelect: (picked) {
+                      setState(() {
+                        toDate = picked;
+                      });
+                    },
+                  ),
                 ],
               ),
 
               const SizedBox(height: 32),
 
-              // ================= BUTTON =================
               _saveButton(),
 
               const SizedBox(height: 40),
@@ -125,12 +245,10 @@ class _BasicDetailsForm extends State<BasicDetailsForm> {
   Widget _buildHeader(BuildContext context) {
     return Container(
       width: double.infinity,
-
       padding: const EdgeInsets.symmetric(
         vertical: 26,
         horizontal: 20,
       ),
-
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
@@ -138,47 +256,14 @@ class _BasicDetailsForm extends State<BasicDetailsForm> {
             Color(0xFF0D47A1),
           ],
         ),
-
         borderRadius: BorderRadius.circular(22),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.25),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
       ),
-
-      child: Row(
+      child: const Row(
         children: [
-
-          InkWell(
-            onTap: () {
-              Navigator.pushReplacementNamed(
-                context,
-                AppConstants.navigateToVWSCLandingScreen,
-              );
-            },
-
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-
-          const SizedBox(width: 8),
-
-          const Icon(
-            Icons.water_drop,
-            color: Colors.white,
-          ),
-
-          const SizedBox(width: 10),
-
-          const Text(
-            "Register NJM / WSO",
+          Icon(Icons.water_drop, color: Colors.white),
+          SizedBox(width: 10),
+          Text(
+            "NJMP Operator Registration",
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -201,58 +286,56 @@ class _BasicDetailsForm extends State<BasicDetailsForm> {
   }) {
     return Container(
       padding: const EdgeInsets.all(20),
-
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.97),
-
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.97),
+            Colors.blue.shade50.withOpacity(0.9),
+          ],
+        ),
         borderRadius: BorderRadius.circular(22),
+
+        // 🔥 Added subtle border texture
+        border: Border.all(
+          color: Colors.blueGrey.shade200,
+          width: 1.2,
+        ),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.1),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
+            color: Colors.blue.withOpacity(0.18),
+            blurRadius: 22,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
 
           Row(
             children: [
-
-              Container(
-                padding: const EdgeInsets.all(8),
-
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1976D2).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-
-                child: Icon(
-                  icon,
-                  color: const Color(0xFF1976D2),
-                  size: 20,
-                ),
-              ),
-
+              Icon(icon, color: const Color(0xFF1976D2)),
               const SizedBox(width: 10),
-
               Text(
                 title,
                 style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1976D2),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 12),
+
+          // 🔵 Partition Line
+          Divider(
+            thickness: 1.2,
+            color: Colors.blueGrey.shade200,
+          ),
+
+          const SizedBox(height: 16),
 
           ...children.map(
                 (e) => Padding(
@@ -265,320 +348,192 @@ class _BasicDetailsForm extends State<BasicDetailsForm> {
     );
   }
 
-  // ====================================================
-  // INPUT
-  // ====================================================
-
   Widget _input(
       String hint, {
+        TextEditingController? controller,
         TextInputType keyboard = TextInputType.text,
+        int maxLines = 1,
+        int? maxLength,
+        bool readOnly = false,
+        Function(String)? onChanged,
       }) {
     return TextField(
+      controller: controller,
       keyboardType: keyboard,
+      maxLines: maxLines,
+      maxLength: maxLength,
+      readOnly: readOnly,
+      onChanged: onChanged,
 
       decoration: InputDecoration(
         hintText: hint,
-
-        filled: true,
-        fillColor: const Color(0xFFF9FBFF),
 
         prefixIcon: const Icon(
           Icons.edit,
-          size: 18,
           color: Color(0xFF1976D2),
+          size: 18,
         ),
 
-        border: OutlineInputBorder(
+        filled: true,
+        fillColor: Colors.white,
+
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+
+        // 🔥 Darker textured border
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
+          ),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFF1976D2),
+            width: 1.8,
+          ),
         ),
       ),
     );
   }
 
-  // ====================================================
-  // DROPDOWN
-  // ====================================================
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      filled: true,
+      fillColor: const Color(0xFFF9FBFF),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide.none,
+      ),
+    );
+  }
 
-  Widget _dropdown(String hint) {
+  Widget _dropdown(
+      String hint, {
+        required List<DropdownMenuItem<String>> items,
+        required Function(String?) onChanged,
+        String? value,
+      }) {
     return DropdownButtonFormField<String>(
-
+      value: value,
+      icon: const Icon(
+        Icons.keyboard_arrow_down_rounded,
+        color: Color(0xFF1976D2),
+      ),
       decoration: InputDecoration(
         hintText: hint,
 
+        prefixIcon: const Icon(
+          Icons.arrow_drop_down_circle,
+          color: Color(0xFF1976D2),
+          size: 18,
+        ),
+
         filled: true,
-        fillColor: const Color(0xFFF9FBFF),
+        fillColor: Colors.white,
 
-        border: OutlineInputBorder(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+
+        // 🔥 Dark textured border (same as input)
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
+          ),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFF1976D2),
+            width: 1.8,
+          ),
         ),
       ),
-
-      items: const [
-        DropdownMenuItem(
-          value: "FTK",
-          child: Text("FTK User"),
-        ),
-        DropdownMenuItem(
-          value: "SC",
-          child: Text("Sample Collector"),
-        ),
-      ],
-
-      onChanged: (v) {},
+      items: items,
+      onChanged: onChanged,
     );
   }
 
-  // ====================================================
-  // TRAINING
-  // ====================================================
-
-  Widget _trainingStatusField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-
-        const Text(
-          "Training Done?",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-
-        const SizedBox(height: 10),
-
-        Row(
-          children: [
-
-            _radioButton("Yes"),
-
-            const SizedBox(width: 20),
-
-            _radioButton("No"),
-          ],
-        ),
-
-        const SizedBox(height: 12),
-
-        if (trainingStatus == "Yes")
-          _datePickerBox(),
-      ],
-    );
-  }
-
-  Widget _radioButton(String value) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          trainingStatus = value;
-
-          if (value == "No") {
-            trainingDate = null;
-          }
-        });
-      },
-
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 8,
-        ),
-
-        decoration: BoxDecoration(
-          color: trainingStatus == value
-              ? const Color(0xFF1976D2).withOpacity(0.12)
-              : Colors.transparent,
-
-          borderRadius: BorderRadius.circular(8),
-
-          border: Border.all(
-            color: trainingStatus == value
-                ? const Color(0xFF1976D2)
-                : Colors.grey.shade400,
-          ),
-        ),
-
-        child: Row(
-          children: [
-
-            Icon(
-              trainingStatus == value
-                  ? Icons.radio_button_checked
-                  : Icons.radio_button_unchecked,
-              size: 18,
-              color: const Color(0xFF1976D2),
+  Widget _readOnly(String label, String value) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Text("$label: ",
+              style:
+              const TextStyle(fontWeight: FontWeight.w600)),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold),
             ),
-
-            const SizedBox(width: 6),
-
-            Text(value),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _datePickerBox() {
+  Widget _datePickerBox({
+    required String label,
+    required DateTime? date,
+    required Function(DateTime) onSelect,
+  }) {
     return InkWell(
       onTap: () async {
-
         DateTime? picked = await showDatePicker(
           context: context,
-          initialDate: trainingDate ?? DateTime.now(),
+          initialDate: DateTime.now(),
           firstDate: DateTime(2000),
-          lastDate: DateTime.now(),
+          lastDate: DateTime(2100),
         );
 
         if (picked != null) {
-          setState(() {
-            trainingDate = picked;
-          });
+          onSelect(picked);
         }
       },
-
       child: Container(
         padding: const EdgeInsets.all(14),
-
         decoration: BoxDecoration(
           color: const Color(0xFFF9FBFF),
-
           borderRadius: BorderRadius.circular(14),
-
-          border: Border.all(
-            color: Colors.grey.shade300,
-          ),
         ),
-
         child: Row(
           children: [
-
-            const Icon(
-              Icons.date_range,
-              color: Color(0xFF1976D2),
-            ),
-
+            const Icon(Icons.calendar_today,
+                color: Color(0xFF1976D2)),
             const SizedBox(width: 10),
-
             Text(
-              trainingDate == null
-                  ? "Select Training Date"
-                  : _formatDate(trainingDate!),
-
-              style: TextStyle(
-                color: trainingDate == null
-                    ? Colors.grey
-                    : Colors.black,
-              ),
+              date == null
+                  ? label
+                  : "${date.day}/${date.month}/${date.year}",
             ),
           ],
         ),
       ),
     );
   }
-
-  String _formatDate(DateTime date) {
-    return "${date.day.toString().padLeft(2, '0')}/"
-        "${date.month.toString().padLeft(2, '0')}/"
-        "${date.year}";
-  }
-
-  // ====================================================
-  // GPS
-  // ====================================================
-
-  Widget _gpsField() {
-    return Container(
-      padding: const EdgeInsets.all(14),
-
-      decoration: BoxDecoration(
-        color: const Color(0xFFF9FBFF),
-
-        borderRadius: BorderRadius.circular(14),
-
-        border: Border.all(
-          color: Colors.grey.shade300,
-        ),
-      ),
-
-      child: Row(
-        children: [
-
-          const Icon(
-            Icons.location_on,
-            color: Color(0xFF1976D2),
-          ),
-
-          const SizedBox(width: 10),
-
-          Expanded(
-            child: Text(
-              gpsLocation,
-              style: TextStyle(
-                color: gpsLocation == "Not Captured"
-                    ? Colors.grey
-                    : Colors.black,
-              ),
-            ),
-          ),
-
-          TextButton(
-            onPressed: () {
-              setState(() {
-                gpsLocation = "28.7041° N, 77.1025° E";
-              });
-            },
-
-            child: const Text("Capture"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ====================================================
-  // DATE TIME
-  // ====================================================
-
-  Widget _dateTimeField() {
-    return Container(
-      padding: const EdgeInsets.all(14),
-
-      decoration: BoxDecoration(
-        color: const Color(0xFFF9FBFF),
-
-        borderRadius: BorderRadius.circular(14),
-
-        border: Border.all(
-          color: Colors.grey.shade300,
-        ),
-      ),
-
-      child: Row(
-        children: [
-
-          const Icon(
-            Icons.access_time,
-            color: Color(0xFF1976D2),
-          ),
-
-          const SizedBox(width: 10),
-
-          Text(sampleDateTime),
-        ],
-      ),
-    );
-  }
-
-  // ====================================================
-  // BUTTON
-  // ====================================================
 
   Widget _saveButton() {
     return Container(
       width: double.infinity,
       height: 56,
-
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
@@ -586,21 +541,11 @@ class _BasicDetailsForm extends State<BasicDetailsForm> {
             Color(0xFF0D47A1),
           ],
         ),
-
         borderRadius: BorderRadius.circular(30),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
       ),
-
       child: const Center(
         child: Text(
-          "Save Member",
+          "Submit Registration",
           style: TextStyle(
             color: Colors.white,
             fontSize: 17,
