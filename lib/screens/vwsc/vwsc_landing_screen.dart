@@ -31,20 +31,6 @@ class VwscLandingScreen extends StatelessWidget {
           ),
         ),
       ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: "Reports"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
-
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

@@ -10,10 +10,16 @@ import 'package:jal_sanchalan/screens/vwsc/njm_wso_registration.dart';
 import 'package:jal_sanchalan/screens/vwsc/njmwsoListScreen.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_dashboard.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_landing_screen.dart';
+import 'package:jal_sanchalan/screens/vwsc/vwsc_login.dart';
 
 import '../utils/app_constants.dart';
 import 'auth/login_screen.dart';
 import 'auth/splash_screen.dart';
+import 'njm_wso/njm_login.dart';
+import 'njm_wso/njm_questionscategory.dart';
+import 'njm_wso/question_cat/basicdetails.dart';
+import 'njm_wso/question_cat/locationform.dart';
+import 'njm_wso/question_cat/watersampledataform.dart';
 import 'panchayat/dashboard.dart';
 import 'panchayat/panchayat_dashboard.dart';
 
@@ -29,13 +35,19 @@ class AppRoutes {
       AppConstants.navigateToPanchayatDashboard: (context) => const PanchayatDashboard(),
       AppConstants.navigateToVWSCDashboard: (context) => const VwscDashboard(),
       AppConstants.navigateToPanchayatLandingScreen: (context) => const PanchayatLandingScreen(),
+      AppConstants.navigateToVwscLogin: (context) => const VwscLogin(),
       AppConstants.navigateToVWSCLandingScreen: (context) => const VwscLandingScreen(),
 
       AppConstants.navigateToRegisterVwscScreen: (context) => const RegisterVwscScreen(),
       AppConstants.navigateToRegisterNJMWSOScreen: (context) => const NjmWsoRegistration(),
       AppConstants.navigateToVWSCListScreen: (context) =>  VwscListScreen(),
+      AppConstants.navigateToNjmLogin: (context) =>  NjmLogin(),
       AppConstants.navigateToNJMListScrenn: (context) =>  Njmwsolistscreen(),
       AppConstants.navigateToNJMLandingScreen: (context) =>  NjmLandingScreen(),
+      AppConstants.navigateToNjmQuestionscategory: (context) =>  NjmQuestionscategory(),
+      AppConstants.navigateToBasicDetailsForm: (context) =>  BasicDetailsForm(),
+      AppConstants.navigateToLocationFormScreen: (context) =>  LocationFormScreen(),
+      AppConstants.navigateToWaterSampleForm: (context) =>  WaterSampleForm(),
       AppConstants.navigateToPreLoginScreen: (context) => const PreLoginScreen(),
 
 

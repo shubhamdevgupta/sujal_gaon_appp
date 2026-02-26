@@ -31,20 +31,6 @@ class NjmLandingScreen extends StatelessWidget {
           ),
         ),
       ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: "Reports"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
-
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -181,7 +167,7 @@ class NjmLandingScreen extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacementNamed(
           context,
-          AppConstants.navigateToRegisterNJMWSOScreen,
+          AppConstants.navigateToNjmQuestionscategory,
         );
       },
 
@@ -215,7 +201,7 @@ class NjmLandingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Register NJM/WSO",
+                    "Water Quality Monitoring ",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -226,7 +212,7 @@ class NjmLandingScreen extends StatelessWidget {
                   SizedBox(height: 4),
 
                   Text(
-                    "Register NJM/WSO Member",
+                    "Activity Log of SHG / FTK-trained Women",
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],

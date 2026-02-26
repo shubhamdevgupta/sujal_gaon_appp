@@ -71,7 +71,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                     onTap: () {
                       Navigator.pushNamed(
                         context,
-                        AppConstants.navigateToVWSCLandingScreen,
+                        AppConstants.navigateToVwscLogin,
                       );
                     },
                   ),
@@ -85,7 +85,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                     onTap: () {
                       Navigator.pushNamed(
                         context,
-                        AppConstants.navigateToNJMLandingScreen,
+                        AppConstants.navigateToNjmLogin,
                       );
                     },
                   ),
