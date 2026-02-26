@@ -15,7 +15,7 @@ class RegistrationFtk extends StatefulWidget {
 class _NjmWsoRegistrationState extends State<RegistrationFtk> {
 
 
-  String? trainingStatus;   // Yes / No
+  String? trainingStatus;
   DateTime? trainingDate;
 
   @override
