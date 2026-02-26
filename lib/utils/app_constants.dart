@@ -42,6 +42,9 @@ class AppConstants {
 
 
   static const String navigateToRegisterVwscScreen = '/registrationvwsc ';
+  static const String navigateToNJMPRegistrationForm = '/NJMPRegistrationForm ';
+  static const String navigateToSHGFTKRegistrationForm = '/SHGFTKRegistrationForm ';
+
   static const String navigateToRegisterNJMWSOScreen = '/registrationnjmwso ';
   static const String navigateToVWSCListScreen = '/listofvwsc ';
 

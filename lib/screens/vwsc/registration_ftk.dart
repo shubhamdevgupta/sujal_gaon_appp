@@ -1,106 +1,181 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/app_constants.dart';
-
-
-
-class RegistrationFtk extends StatefulWidget {
-  const RegistrationFtk({super.key});
+class SHGFTKRegistrationForm extends StatefulWidget {
+  const SHGFTKRegistrationForm({super.key});
 
   @override
-  State<RegistrationFtk> createState() =>
-      _NjmWsoRegistrationState();
+  State<SHGFTKRegistrationForm> createState() =>
+      _SHGFTKRegistrationFormState();
 }
 
-class _NjmWsoRegistrationState extends State<RegistrationFtk> {
+class _SHGFTKRegistrationFormState
+    extends State<SHGFTKRegistrationForm> {
 
+  String? selectedVillage;
+  String? selectedHabitation;
 
-  String? trainingStatus;
-  DateTime? trainingDate;
+  DateTime? fromDate;
+  DateTime? toDate;
+
+  // ===== Demo Auto Data (Replace with API) =====
+  final String gpName = "Hooda Gram Panchayat";
+  final String gpLGD = "123456";
+  final String villageName = "Sujal Gaon";
+  final String villageLGD = "654321";
+  final String districtName = "Sonipat";
+  final String districtLGD = "111222";
+  final String stateName = "Haryana";
+
+  final List<String> villages = [
+    "Sujal Gaon",
+    "Rampur",
+    "Khera",
+  ];
+
+  final Map<String, List<String>> habitations = {
+    "Sujal Gaon": ["Hab-1", "Hab-2"],
+    "Rampur": ["Hab-A", "Hab-B"],
+    "Khera": ["Hab-X", "Hab-Y"],
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F6FF),
+      backgroundColor: const Color(0xFFF4F7FB),
 
-      body: SafeArea(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1976D2),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          "SHGs / FTK Registration",
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+      ),
+
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/icons/SJL_bg.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-
           child: Column(
             children: [
 
-              // ================= HEADER =================
-              _buildHeader(context),
-
-              const SizedBox(height: 26),
-
-              // ================= MEMBER DETAILS =================
+              // ================= PERSONAL DETAILS =================
               _sectionCard(
                 icon: Icons.person,
-                title: "Member Details",
+                title: "Personal Details",
                 children: [
 
-                  _dropdown("Role"),
+                  _input("Name (First + Last Name)"),
 
+                  _input(
+                    "Contact Number",
+                    keyboard: TextInputType.phone,
+                  ),
 
-                  _input("Mobile Number",
-                      keyboard: TextInputType.phone),
-
-                  _input("Full Name"),
-
-
+                  _input(
+                    "Complete Address",
+                    maxLines: 3,
+                  ),
                 ],
               ),
 
               const SizedBox(height: 22),
 
-              // ================= DESIGNATION =================
+              // ================= JJM REGISTRY =================
               _sectionCard(
-                icon: Icons.badge,
-                title: "Designation",
-
+                icon: Icons.account_balance,
+                title: "JJM IMIS Registry Details",
                 children: [
 
-                  _dropdown("Designation & affiliation, if any"),
+                  _readOnly("Gram Panchayat", gpName),
+                  _readOnly("GP LGD Code", gpLGD),
 
-                  _input("Functional Designation"),
+                  _readOnly("Village", villageName),
+                  _readOnly("Village LGD Code", villageLGD),
+
+                  _readOnly("District", districtName),
+                  _readOnly("District LGD Code", districtLGD),
+
+                  _readOnly("State", stateName),
                 ],
               ),
 
               const SizedBox(height: 22),
 
-              // ================= TENURE =================
+              // ================= AREA OF OPERATION =================
               _sectionCard(
-                icon: Icons.school,
-                title: "FTK Training Status",
+                icon: Icons.map,
+                title: "Area of Operation",
                 children: [
 
-                  _trainingStatusField(),
+                  _dropdown(
+                    "Select Village",
+                    value: selectedVillage,
+                    items: villages,
+                    onChanged: (v) {
+                      setState(() {
+                        selectedVillage = v;
+                        selectedHabitation = null;
+                      });
+                    },
+                  ),
 
+                  _dropdown(
+                    "Select Habitation",
+                    value: selectedHabitation,
+                    items: selectedVillage == null
+                        ? []
+                        : habitations[selectedVillage] ?? [],
+                    onChanged: (v) {
+                      setState(() {
+                        selectedHabitation = v;
+                      });
+                    },
+                  ),
                 ],
               ),
 
               const SizedBox(height: 22),
 
-              // ================= CONTACT =================
-         /*     _sectionCard(
-                icon: Icons.call,
-                title: "Contact Details",
-
+              // ================= VALIDATION PERIOD =================
+              _sectionCard(
+                icon: Icons.date_range,
+                title: "Validated For",
                 children: [
 
+                  _datePickerBox(
+                    label: "Valid From",
+                    date: fromDate,
+                    onSelect: (picked) {
+                      setState(() {
+                        fromDate = picked;
+                      });
+                    },
+                  ),
 
-
-                  _input("Email",
-                      keyboard: TextInputType.emailAddress),
+                  _datePickerBox(
+                    label: "Valid To",
+                    date: toDate,
+                    onSelect: (picked) {
+                      setState(() {
+                        toDate = picked;
+                      });
+                    },
+                  ),
                 ],
-              ),*/
+              ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 30),
 
-              // ================= BUTTON =================
-              _saveButton(),
+              _submitButton(),
 
               const SizedBox(height: 40),
             ],
@@ -110,91 +185,6 @@ class _NjmWsoRegistrationState extends State<RegistrationFtk> {
     );
   }
 
-  // ====================================================
-  // HEADER
-  // ====================================================
-
-  Widget _buildHeader( BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        vertical: 26,
-        horizontal: 20,
-      ),
-
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF1E88E5),
-            Color(0xFF0D47A1),
-          ],
-        ),
-
-        borderRadius: BorderRadius.circular(22),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.25),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-
-      child: Row(
-        children: [
-
-          // 🔙 Back Button
-          InkWell(
-            onTap: () {
-              Navigator.pushReplacementNamed(
-                context,
-                AppConstants.navigateToVWSCLandingScreen,
-              );
-            },
-
-            borderRadius:  BorderRadius.circular(20),
-
-            child: const Padding(
-              padding: EdgeInsets.all(4),
-              child: Icon(
-                Icons.arrow_back_ios_new,
-                color: Colors.white,
-                size: 20,
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 6),
-
-          // App Icon
-          const Icon(
-            Icons.water_drop,
-            color: Colors.white,
-            size: 24,
-          ),
-
-          const SizedBox(width: 10),
-
-          // Title
-          const Text(
-            "Register NJM/WSO",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-
-    );
-  }
-
-  // ====================================================
-  // SECTION CARD
-  // ====================================================
-
   Widget _sectionCard({
     required IconData icon,
     required String title,
@@ -202,59 +192,56 @@ class _NjmWsoRegistrationState extends State<RegistrationFtk> {
   }) {
     return Container(
       padding: const EdgeInsets.all(20),
-
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.97),
-
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0.97),
+            Colors.blue.shade50.withOpacity(0.9),
+          ],
+        ),
         borderRadius: BorderRadius.circular(22),
+
+        // 🔥 Added subtle border texture
+        border: Border.all(
+          color: Colors.blueGrey.shade200,
+          width: 1.2,
+        ),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.1),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
+            color: Colors.blue.withOpacity(0.18),
+            blurRadius: 22,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
 
-          // Section Title
           Row(
             children: [
-
-              Container(
-                padding: const EdgeInsets.all(8),
-
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1976D2).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-
-                child: Icon(
-                  icon,
-                  color: const Color(0xFF1976D2),
-                  size: 20,
-                ),
-              ),
-
+              Icon(icon, color: const Color(0xFF1976D2)),
               const SizedBox(width: 10),
-
               Text(
                 title,
                 style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1976D2),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 12),
+
+          // 🔵 Partition Line
+          Divider(
+            thickness: 1.2,
+            color: Colors.blueGrey.shade200,
+          ),
+
+          const SizedBox(height: 16),
 
           ...children.map(
                 (e) => Padding(
@@ -267,224 +254,189 @@ class _NjmWsoRegistrationState extends State<RegistrationFtk> {
     );
   }
 
-  // ====================================================
-  // INPUT
-  // ====================================================
-
   Widget _input(
       String hint, {
+        TextEditingController? controller,
         TextInputType keyboard = TextInputType.text,
+        int maxLines = 1,
+        int? maxLength,
+        bool readOnly = false,
+        Function(String)? onChanged,
       }) {
     return TextField(
+      controller: controller,
       keyboardType: keyboard,
+      maxLines: maxLines,
+      maxLength: maxLength,
+      readOnly: readOnly,
+      onChanged: onChanged,
 
       decoration: InputDecoration(
         hintText: hint,
-
-        filled: true,
-        fillColor: const Color(0xFFF9FBFF),
 
         prefixIcon: const Icon(
           Icons.edit,
-          size: 18,
           color: Color(0xFF1976D2),
+          size: 18,
         ),
 
-        border: OutlineInputBorder(
+        filled: true,
+        fillColor: Colors.white,
+
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+
+        // 🔥 Darker textured border
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
+          ),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFF1976D2),
+            width: 1.8,
+          ),
         ),
       ),
     );
   }
 
-  // ====================================================
-  // DROPDOWN
-  // ====================================================
+  // ================= INPUT =================
 
-  Widget _dropdown(String hint) {
+
+  // ================= DROPDOWN =================
+
+  Widget _dropdown(
+      String hint, {
+        required String? value,
+        required List<String> items,
+        required Function(String?) onChanged,
+      }) {
     return DropdownButtonFormField<String>(
+      value: value,
 
       decoration: InputDecoration(
         hintText: hint,
 
+        prefixIcon: const Icon(
+          Icons.arrow_drop_down_circle,
+          color: Color(0xFF1976D2),
+          size: 18,
+        ),
+
         filled: true,
-        fillColor: const Color(0xFFF9FBFF),
+        fillColor: Colors.white,
 
-        border: OutlineInputBorder(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
+          ),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: Color(0xFF1976D2),
+            width: 1.8,
+          ),
         ),
       ),
 
-      items: const [
-        DropdownMenuItem(value: "1", child: Text("Option 1")),
-        DropdownMenuItem(value: "2", child: Text("Option 2")),
-      ],
+      items: items
+          .map(
+            (e) => DropdownMenuItem(
+          value: e,
+          child: Text(e),
+        ),
+      )
+          .toList(),
 
-      onChanged: (v) {},
+      onChanged: onChanged,
     );
   }
+  // ================= READ ONLY =================
 
-
-  Widget _trainingStatusField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-
-        const Text(
-          "Training Done?",
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+  Widget _readOnly(String label, String value) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF4F7FB),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.blueGrey.shade200),
+      ),
+      child: Row(
+        children: [
+          Text(
+            "$label: ",
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
-        ),
-
-        const SizedBox(height: 10),
-
-        // Radio Buttons
-        Row(
-          children: [
-
-            _radioButton("Yes"),
-            const SizedBox(width: 20),
-            _radioButton("No"),
-
-          ],
-        ),
-
-        const SizedBox(height: 12),
-
-        // Show Date if Yes
-        if (trainingStatus == "Yes")
-          _datePickerBox(),
-      ],
-    );
-  }
-
-
-  Widget _radioButton(String value) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: () {
-        setState(() {
-          trainingStatus = value;
-
-          // Clear date if No selected
-          if (value == "No") {
-            trainingDate = null;
-          }
-        });
-      },
-
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 8,
-        ),
-
-        decoration: BoxDecoration(
-          color: trainingStatus == value
-              ? const Color(0xFF1976D2).withOpacity(0.12)
-              : Colors.transparent,
-
-          borderRadius: BorderRadius.circular(8),
-
-          border: Border.all(
-            color: trainingStatus == value
-                ? const Color(0xFF1976D2)
-                : Colors.grey.shade400,
-          ),
-        ),
-
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-
-            Icon(
-              trainingStatus == value
-                  ? Icons.radio_button_checked
-                  : Icons.radio_button_unchecked,
-              size: 18,
-              color: const Color(0xFF1976D2),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                color: Color(0xFF1976D2),
+                fontWeight: FontWeight.w600,
+              ),
             ),
-
-            const SizedBox(width: 6),
-
-            Text(value),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _datePickerBox() {
+  // ================= DATE PICKER =================
+
+  Widget _datePickerBox({
+    required String label,
+    required DateTime? date,
+    required Function(DateTime) onSelect,
+  }) {
     return InkWell(
-      borderRadius: BorderRadius.circular(14),
-
       onTap: () async {
-
         DateTime? picked = await showDatePicker(
           context: context,
-          initialDate: trainingDate ?? DateTime.now(),
+          initialDate: DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime(2100),
         );
 
-        if (picked != null) {
-          setState(() {
-            trainingDate = picked;
-          });
-        }
+        if (picked != null) onSelect(picked);
       },
-
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
-        ),
-
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-
           borderRadius: BorderRadius.circular(14),
-
           border: Border.all(
-            color: Colors.grey.shade300,
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
           ),
-
-          boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withOpacity(0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
         ),
-
         child: Row(
           children: [
-
             const Icon(
-              Icons.date_range,
+              Icons.calendar_today,
               color: Color(0xFF1976D2),
-              size: 20,
             ),
-
-            const SizedBox(width: 10),
-
+            const SizedBox(width: 12),
             Text(
-              trainingDate == null
-                  ? "Select Training Date"
-                  : _formatDate(trainingDate!),
-
-              style: TextStyle(
-                fontSize: 14,
-
-                color: trainingDate == null
-                    ? Colors.grey
-                    : Colors.black,
-              ),
+              date == null
+                  ? label
+                  : "${date.day}/${date.month}/${date.year}",
             ),
           ],
         ),
@@ -492,52 +444,28 @@ class _NjmWsoRegistrationState extends State<RegistrationFtk> {
     );
   }
 
-  String _formatDate(DateTime date) {
-    return "${date.day.toString().padLeft(2, '0')}/"
-        "${date.month.toString().padLeft(2, '0')}/"
-        "${date.year}";
-  }
+  // ================= SUBMIT BUTTON =================
 
-
-  // ====================================================
-  // BUTTON
-  // ====================================================
-
-
-
-
-  Widget _saveButton() {
+  Widget _submitButton() {
     return Container(
       width: double.infinity,
       height: 56,
-
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
             Color(0xFF1E88E5),
-            Color(0xFF0D47A1),
+            Color(0xFF1565C0),
           ],
         ),
-
         borderRadius: BorderRadius.circular(30),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
       ),
-
       child: const Center(
         child: Text(
-          "Save Member",
+          "Submit Registration",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.5,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

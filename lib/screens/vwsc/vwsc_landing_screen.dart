@@ -58,6 +58,8 @@ class VwscLandingScreen extends StatelessWidget {
               _dashboardCard(context),
 
               const SizedBox(height: 16),
+              _registerOptions(context),
+              const SizedBox(height: 16),
               /*   InkWell(onTap: () { Navigator.pushReplacementNamed(
                   context,AppConstants.navigateToGpLogin);},child: _dashboard(context)),*/
               _listCard(context),
@@ -149,7 +151,7 @@ class VwscLandingScreen extends StatelessWidget {
                         _buildLocationCard(),
 
                         SizedBox(height: 20),
-                        _registerCard(context),
+
                       ],
                     ),
                   ),
@@ -162,77 +164,188 @@ class VwscLandingScreen extends StatelessWidget {
     );
   }
 
-  Widget _registerCard(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushReplacementNamed(
-          context,
-          AppConstants.navigateToRegisterNJMWSOScreen,
-        );
-      },
-
-      child: Container(
-        height: 90,
-        padding: const EdgeInsets.all(8),
-
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-
-          gradient: const LinearGradient(
-            colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-
-          boxShadow: [
-            BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
-          ],
-        ),
-
+  Widget _registerRow({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
         child: Row(
           children: [
-            const Icon(Icons.app_registration, color: Colors.white, size: 28),
 
-            const SizedBox(width: 12),
+            Container(
+              height: 44,
+              width: 44,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.18),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                color: Colors.white,
+                size: 24,
+              ),
+            ),
 
-            const Expanded(
+            const SizedBox(width: 16),
+
+            Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Register NJM/WSO",
-                    style: TextStyle(
+                    title,
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-
-                  SizedBox(height: 4),
-
+                  const SizedBox(height: 4),
                   Text(
-                    "Register NJM/WSO Member",
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                    ),
                   ),
                 ],
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-                size: 16,
-              ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.white,
+              size: 16,
             ),
           ],
         ),
       ),
     );
   }
+  Widget _registerOptions(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
 
+        border: Border.all(
+          color: Colors.blueGrey.shade200,
+          width: 1.2,
+        ),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+
+          _registerRowProfessional(
+            icon: Icons.water_drop,
+            title: "Register NJMP",
+            subtitle: "Nal Jal Mitra Registration",
+            onTap: () {
+
+              Navigator.pushNamed(context, AppConstants.navigateToNJMPRegistrationForm);
+            },
+          ),
+
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Colors.blueGrey.shade100,
+          ),
+
+          _registerRowProfessional(
+            icon: Icons.groups_rounded,
+            title: "SHGs / FTK Trained Women",
+            subtitle: "Self Help Group Registration",
+            onTap: () {  Navigator.pushNamed(context, AppConstants.navigateToSHGFTKRegistrationForm);},
+
+
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _registerRowProfessional({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 20,
+          horizontal: 20,
+        ),
+        child: Row(
+          children: [
+
+            Container(
+              height: 46,
+              width: 46,
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E88E5).withOpacity(0.12),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(
+                icon,
+                color: const Color(0xFF1565C0),
+                size: 24,
+              ),
+            ),
+
+            const SizedBox(width: 18),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF0F172A),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.blueGrey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Color(0xFF1565C0),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   Widget _listCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
