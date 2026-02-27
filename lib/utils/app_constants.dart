@@ -49,15 +49,16 @@ class AppConstants {
   static const String navigateToVWSCListScreen = '/listofvwsc ';
 
   ///////////////     NJM / WSO
-  static const String navigateToFTKLogin = '/FtkLogin ';
-  static const String navigateToFTKListScrenn = '/listofftkwso ';
-  static const String navigateToFTKLandingScreen = '/ftklandingscreen ';
-  static const String navigateToFTKQuestionscategory = '/FtkQuestionscategory ';
+
   static const String navigateToBasicDetailsForm = '/BasicDetailsForm ';
   static const String navigateToLocationFormScreen = '/LocationFormScreen ';
   static const String navigateToWaterSampleForm = '/WaterSampleForm ';
   static const String navigateToSanitaryInspectionForm = '/SanitaryInspectionForm ';
   static const String navigateToMonthlyChargeCollectionForm = '/MonthlyChargeCollectionForm ';
+  static const String navigateToNjmCategory = '/NjmCategory ';
+  static const String navigateToGroundWaterPumpForm = '/GroundWaterPumpForm ';
+  static const String navigateToPumpsForm = '/PumpsForm ';
+  static const String navigateToOHSRForm = '/OHSRForm ';
 
   static const String navigateToPreLoginScreen = '/preLoginScreen ';
   static const String navigateToSplashScreen = '/ ';
@@ -88,7 +89,10 @@ class AppConstants {
   static const String totalSamplestestedtoday = 'Total no. of sample tested by you today';
   static const String totalSamplestestedtilldate = 'Total no. of samples tested by you till date';
   static const String addftk= 'Add New Sample ';
-
+  static const String navigateToFTKLogin = '/FtkLogin ';
+  static const String navigateToFTKListScrenn = '/listofftkwso ';
+  static const String navigateToFTKLandingScreen = '/ftklandingscreen ';
+  static const String navigateToFTKQuestionscategory = '/FtkQuestionscategory ';
 
   static const String navigateToftkSampleInfoScreen = '/ftksampleinfoScreen';
 

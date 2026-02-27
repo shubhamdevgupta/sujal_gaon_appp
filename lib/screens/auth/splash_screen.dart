@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     }*/
        Navigator.pushReplacementNamed(
       context,
-      AppConstants.navigateToPreLoginScreen,
+      AppConstants.navigateToNjmCategory,
     );
   }
   @override

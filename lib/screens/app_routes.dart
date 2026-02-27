@@ -23,6 +23,10 @@ import 'ftk_shg/question_cat/locationform.dart';
 import 'ftk_shg/question_cat/monthlychargecollection.dart';
 import 'ftk_shg/question_cat/saniSanitaryinspection.dart';
 import 'ftk_shg/question_cat/watersampledataform.dart';
+import 'njm_wso/njm_cat_type/groundwatersourcetube_form.dart';
+import 'njm_wso/njm_cat_type/njm_cat.dart';
+import 'njm_wso/njm_cat_type/overhead_service.dart';
+import 'njm_wso/njm_cat_type/pumps_form.dart';
 import 'panchayat/dashboard.dart';
 import 'panchayat/panchayat_dashboard.dart';
 
@@ -64,8 +68,11 @@ class AppRoutes {
           SanitaryInspectionForm(),
       AppConstants.navigateToMonthlyChargeCollectionForm: (context) =>
           MonthlyChargeCollectionForm(),
-      AppConstants.navigateToPreLoginScreen: (context) =>
-          const PreLoginScreen(),
+      AppConstants.navigateToPreLoginScreen: (context) => const PreLoginScreen(),
+      AppConstants.navigateToNjmCategory: (context) => const NjmCategory(),
+      AppConstants.navigateToGroundWaterPumpForm: (context) => const GroundWaterPumpForm(),
+      AppConstants.navigateToPumpsForm: (context) => const PumpsForm(),
+      AppConstants.navigateToOHSRForm: (context) => const OHSRForm(),
 
       /*     //dwsmList
       AppConstants.navigateToDemonstrationScreen: (context) =>
