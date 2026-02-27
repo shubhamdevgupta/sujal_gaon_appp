@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_constants.dart';
 
-class NjmLogin extends StatefulWidget {
-  const NjmLogin({super.key});
+class FtkShgLogin extends StatefulWidget {
+  const FtkShgLogin({super.key});
 
   @override
-  State<NjmLogin> createState() => _NjmLogin();
+  State<FtkShgLogin> createState() => _NjmLogin();
 }
 
-class _NjmLogin extends State<NjmLogin> {
+class _NjmLogin extends State<FtkShgLogin> {
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -208,7 +208,7 @@ class _NjmLogin extends State<NjmLogin> {
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
-                              AppConstants.navigateToNJMLandingScreen,
+                              AppConstants.navigateToFTKLandingScreen,
                             );
 
                             loginUser();

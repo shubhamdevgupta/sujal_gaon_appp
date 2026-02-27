@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/screens/njm_wso/landingpage.dart';
+import 'package:jal_sanchalan/screens/ftk_shg/ftk_landingpage.dart';
 import 'package:jal_sanchalan/screens/panchayat/VwscListScreen.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_login.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
@@ -7,8 +7,8 @@ import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 import 'package:jal_sanchalan/screens/panchayat/vwsc_registration.dart';
 import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
 import 'package:jal_sanchalan/screens/vwsc/registration_ftk.dart';
-import 'package:jal_sanchalan/screens/vwsc/registration_njm_wso.dart';
-import 'package:jal_sanchalan/screens/vwsc/list_njm_wso.dart';
+import 'package:jal_sanchalan/screens/vwsc/registration_njmp.dart';
+import 'package:jal_sanchalan/screens/vwsc/list_ftk_sgh.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_dashboard.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_landing_screen.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_login.dart';
@@ -16,13 +16,13 @@ import 'package:jal_sanchalan/screens/vwsc/vwsc_login.dart';
 import '../utils/app_constants.dart';
 import 'auth/login_screen.dart';
 import 'auth/splash_screen.dart';
-import 'njm_wso/njm_login.dart';
-import 'njm_wso/njm_questionscategory.dart';
-import 'njm_wso/question_cat/basicdetails.dart';
-import 'njm_wso/question_cat/locationform.dart';
-import 'njm_wso/question_cat/monthlychargecollection.dart';
-import 'njm_wso/question_cat/saniSanitaryinspection.dart';
-import 'njm_wso/question_cat/watersampledataform.dart';
+import 'ftk_shg/ftk_questionscategory.dart';
+import 'ftk_shg/ftk_shg_login.dart';
+import 'ftk_shg/question_cat/basicdetails.dart';
+import 'ftk_shg/question_cat/locationform.dart';
+import 'ftk_shg/question_cat/monthlychargecollection.dart';
+import 'ftk_shg/question_cat/saniSanitaryinspection.dart';
+import 'ftk_shg/question_cat/watersampledataform.dart';
 import 'panchayat/dashboard.dart';
 import 'panchayat/panchayat_dashboard.dart';
 
@@ -34,29 +34,38 @@ class AppRoutes {
           const DashboardScreen(),
       AppConstants.navigateToLoginScreen: (context) => const Loginscreen(),
       AppConstants.navigateToSplashScreen: (context) => const SplashScreen(),
-      AppConstants.navigateToGramPanchayatLogin: (context) => const PanchayatLogin(),
-      AppConstants.navigateToPanchayatDashboard: (context) => const PanchayatDashboard(),
+      AppConstants.navigateToGramPanchayatLogin: (context) =>
+          const PanchayatLogin(),
+      AppConstants.navigateToPanchayatDashboard: (context) =>
+          const PanchayatDashboard(),
       AppConstants.navigateToVWSCDashboard: (context) => const VwscDashboard(),
-      AppConstants.navigateToPanchayatLandingScreen: (context) => const PanchayatLandingScreen(),
+      AppConstants.navigateToPanchayatLandingScreen: (context) =>
+          const PanchayatLandingScreen(),
       AppConstants.navigateToVwscLogin: (context) => const VwscLogin(),
-      AppConstants.navigateToVWSCLandingScreen: (context) => const VwscLandingScreen(),
+      AppConstants.navigateToVWSCLandingScreen: (context) =>
+          const VwscLandingScreen(),
 
-      AppConstants.navigateToRegisterVwscScreen: (context) => const RegisterVwscScreen(),
-      AppConstants.navigateToNJMPRegistrationForm: (context) => const NJMPRegistrationForm(),
-      AppConstants.navigateToSHGFTKRegistrationForm: (context) => const SHGFTKRegistrationForm(),
-      AppConstants.navigateToVWSCListScreen: (context) =>  VwscListScreen(),
-      AppConstants.navigateToNjmLogin: (context) =>  NjmLogin(),
-      AppConstants.navigateToNJMListScrenn: (context) =>  Njmwsolistscreen(),
-      AppConstants.navigateToNJMLandingScreen: (context) =>  NjmLandingScreen(),
-      AppConstants.navigateToNjmQuestionscategory: (context) =>  NjmQuestionscategory(),
-      AppConstants.navigateToBasicDetailsForm: (context) =>  Basicdetails(),
-      AppConstants.navigateToLocationFormScreen: (context) =>  LocationFormScreen(),
-      AppConstants.navigateToWaterSampleForm: (context) =>  WaterSampleForm(),
-      AppConstants.navigateToSanitaryInspectionForm: (context) =>  SanitaryInspectionForm(),
-      AppConstants.navigateToMonthlyChargeCollectionForm: (context) =>  MonthlyChargeCollectionForm(),
-      AppConstants.navigateToPreLoginScreen: (context) => const PreLoginScreen(),
-
-
+      AppConstants.navigateToRegisterVwscScreen: (context) =>
+          const RegisterVwscScreen(),
+      AppConstants.navigateToNJMPRegistrationForm: (context) =>
+          const NJMPRegistrationForm(),
+      AppConstants.navigateToSHGFTKRegistrationForm: (context) =>
+          const SHGFTKRegistrationForm(),
+      AppConstants.navigateToVWSCListScreen: (context) => VwscListScreen(),
+      AppConstants.navigateToFTKLogin: (context) => FtkShgLogin(),
+      AppConstants.navigateToFTKListScrenn: (context) => ListFtkSgh(),
+      AppConstants.navigateToFTKQuestionscategory: (context) =>
+          FtkQuestionscategory(),
+      AppConstants.navigateToBasicDetailsForm: (context) => Basicdetails(),
+      AppConstants.navigateToLocationFormScreen: (context) =>
+          LocationFormScreen(),
+      AppConstants.navigateToWaterSampleForm: (context) => WaterSampleForm(),
+      AppConstants.navigateToSanitaryInspectionForm: (context) =>
+          SanitaryInspectionForm(),
+      AppConstants.navigateToMonthlyChargeCollectionForm: (context) =>
+          MonthlyChargeCollectionForm(),
+      AppConstants.navigateToPreLoginScreen: (context) =>
+          const PreLoginScreen(),
 
       /*     //dwsmList
       AppConstants.navigateToDemonstrationScreen: (context) =>

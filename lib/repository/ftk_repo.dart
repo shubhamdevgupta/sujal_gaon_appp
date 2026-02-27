@@ -1,14 +1,14 @@
 import 'dart:convert';
+import 'package:jal_sanchalan/models/ftk_sgh/FTKUserList.dart';
+import 'package:jal_sanchalan/models/ftk_sgh/FtkRegistrationResponse.dart';
 
-import '../models/njm_wso/NJMRegistrationResponse.dart';
-import '../models/njm_wso/NJMUserList.dart';
 import '../service/base_api_service.dart';
 import '../utils/global_exception_handler.dart';
 
-class NjmRepo {
+class FtkRepo {
   final BaseApiService _apiService = BaseApiService();
 
-  Future<Njmregistrationresponse> registerNJMWSO(
+  Future<Ftkregistrationresponse> registerNJMWSO(
     String username,
     int userId,
     String firstName,
@@ -48,7 +48,7 @@ class NjmRepo {
         apiType: ApiType.egramswaraj,
       );
 
-      return Njmregistrationresponse.fromJson(response);
+      return Ftkregistrationresponse.fromJson(response);
     } catch (e, stackTrace) {
       GlobalExceptionHandler.handleException(
         e as Exception,
@@ -58,7 +58,7 @@ class NjmRepo {
     }
   }
 
-  Future<Njmuserlist> fetchNJMUser(
+  Future<Ftkuserlist> fetchNJMUser(
     int userTypeId,
     int userId,
     int stateId,
@@ -68,7 +68,7 @@ class NjmRepo {
         '/apimaster/getblock?UsertypeId=$userTypeId&UserId=$userId&StateId=$stateId',
       );
 
-      return Njmuserlist.fromJson(response);
+      return Ftkuserlist.fromJson(response);
     } catch (e, stackTrace) {
       GlobalExceptionHandler.handleException(
         e as Exception,

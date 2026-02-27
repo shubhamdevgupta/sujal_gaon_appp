@@ -48,12 +48,11 @@ class AppConstants {
   static const String navigateToRegisterNJMWSOScreen = '/registrationnjmwso ';
   static const String navigateToVWSCListScreen = '/listofvwsc ';
 
-  //NJM
-
-  static const String navigateToNjmLogin = '/NjmLogin ';
-  static const String navigateToNJMListScrenn = '/listofnjmwso ';
-  static const String navigateToNJMLandingScreen = '/njmlandingscreen ';
-  static const String navigateToNjmQuestionscategory = '/NjmQuestionscategory ';
+  ///////////////     NJM / WSO
+  static const String navigateToFTKLogin = '/FtkLogin ';
+  static const String navigateToFTKListScrenn = '/listofftkwso ';
+  static const String navigateToFTKLandingScreen = '/ftklandingscreen ';
+  static const String navigateToFTKQuestionscategory = '/FtkQuestionscategory ';
   static const String navigateToBasicDetailsForm = '/BasicDetailsForm ';
   static const String navigateToLocationFormScreen = '/LocationFormScreen ';
   static const String navigateToWaterSampleForm = '/WaterSampleForm ';

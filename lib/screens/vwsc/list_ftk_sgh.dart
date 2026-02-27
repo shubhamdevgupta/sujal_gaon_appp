@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Njmwsolistscreen extends StatelessWidget {
-  Njmwsolistscreen({super.key});
+class ListFtkSgh extends StatelessWidget {
+  ListFtkSgh({super.key});
 
   final List<Map<String, String>> dummyUsers = [
     {

@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import '../../utils/app_constants.dart';
 
 
-class NjmQuestionscategory extends StatefulWidget {
-  const NjmQuestionscategory({super.key});
+class FtkQuestionscategory extends StatefulWidget {
+  const FtkQuestionscategory({super.key});
 
   @override
-  State<NjmQuestionscategory> createState() => _NjmQuestionscategory();
+  State<FtkQuestionscategory> createState() => _NjmQuestionscategory();
 }
 
-class _NjmQuestionscategory extends State<NjmQuestionscategory> {
+class _NjmQuestionscategory extends State<FtkQuestionscategory> {
 
 
   @override
