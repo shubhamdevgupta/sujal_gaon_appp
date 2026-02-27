@@ -56,11 +56,16 @@ class AppConstants {
   static const String navigateToSanitaryInspectionForm = '/SanitaryInspectionForm ';
   static const String navigateToMonthlyChargeCollectionForm = '/MonthlyChargeCollectionForm ';
   static const String navigateToNjmCategory = '/NjmCategory ';
+  static const String navigateToWscCategory = '/WscCategory ';
   static const String navigateToGroundWaterPumpForm = '/GroundWaterPumpForm ';
   static const String navigateToPumpsForm = '/PumpsForm ';
   static const String navigateToOHSRForm = '/OHSRForm ';
   static const String navigateToGSRForm = '/GSRForm ';
   static const String navigateToSpringWaterForm = '/SpringWaterForm ';
+  static const String navigateToDistributionSupplyForm = '/DistributionSupplyForm ';
+  static const String navigateToDisinfectionForm = '/DisinfectionForm ';
+  static const String navigateToNonSupplyForm = '/NonSupplyForm ';
+  static const String navigateToEscalationAlertsScreen = '/EscalationAlertsScreen ';
 
   static const String navigateToPreLoginScreen = '/preLoginScreen ';
   static const String navigateToSplashScreen = '/ ';

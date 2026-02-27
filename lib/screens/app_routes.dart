@@ -23,6 +23,11 @@ import 'ftk_shg/question_cat/locationform.dart';
 import 'ftk_shg/question_cat/monthlychargecollection.dart';
 import 'ftk_shg/question_cat/saniSanitaryinspection.dart';
 import 'ftk_shg/question_cat/watersampledataform.dart';
+import 'njm_wso/njm_wso_cat/disinfection_chlorination.dart';
+import 'njm_wso/njm_wso_cat/distribution_supply.dart';
+import 'njm_wso/njm_wso_cat/escaltion_alters.dart';
+import 'njm_wso/njm_wso_cat/njm _category.dart';
+import 'njm_wso/njm_wso_cat/nonsupply_distruptions.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/gls_reservoir.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/groundwatersourcetube_form.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/wsc_category.dart';
@@ -72,11 +77,16 @@ class AppRoutes {
           MonthlyChargeCollectionForm(),
       AppConstants.navigateToPreLoginScreen: (context) => const PreLoginScreen(),
       AppConstants.navigateToNjmCategory: (context) => const NjmCategory(),
+      AppConstants.navigateToWscCategory: (context) => const WscCategory(),
       AppConstants.navigateToGroundWaterPumpForm: (context) => const GroundWaterPumpForm(),
       AppConstants.navigateToPumpsForm: (context) => const PumpsForm(),
       AppConstants.navigateToOHSRForm: (context) => const OHSRForm(),
       AppConstants.navigateToGSRForm: (context) => const GSRForm(),
       AppConstants.navigateToSpringWaterForm: (context) => const SpringWaterForm(),
+      AppConstants.navigateToDistributionSupplyForm: (context) => const DistributionSupplyForm(),
+      AppConstants.navigateToDisinfectionForm: (context) => const DisinfectionForm(),
+      AppConstants.navigateToNonSupplyForm: (context) => const NonSupplyForm(),
+      AppConstants.navigateToEscalationAlertsScreen: (context) => const EscalationAlertsScreen(),
 
       /*     //dwsmList
       AppConstants.navigateToDemonstrationScreen: (context) =>

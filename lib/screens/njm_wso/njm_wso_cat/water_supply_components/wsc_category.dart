@@ -8,14 +8,14 @@ import '../../../../utils/app_constants.dart';
 
 
 
-class NjmCategory extends StatefulWidget {
-  const NjmCategory({super.key});
+class WscCategory extends StatefulWidget {
+  const WscCategory({super.key});
 
   @override
-  State<NjmCategory> createState() => _NjmCategory();
+  State<WscCategory> createState() => _NjmCategory();
 }
 
-class _NjmCategory extends State<NjmCategory> {
+class _NjmCategory extends State<WscCategory> {
 
 
   @override
