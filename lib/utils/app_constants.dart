@@ -3,7 +3,6 @@ class AppConstants {
 
   /////////////////////   Preference Data  //////////////////////////////////
 
-
   static const String prefIsLoggedIn = 'isLoggedIn';
   static const String prefToken = 'token';
   static const String prefRoleId = 'roleId';
@@ -14,7 +13,7 @@ class AppConstants {
   static const String prefStateId = 'prefStateId';
   static const String prefDistrictId = 'prefDistrictId';
   static const String prefBlockId = 'prefBlockId';
-  static const String prefPanchayatId= 'prefPanchayatId';
+  static const String prefPanchayatId = 'prefPanchayatId';
   static const String prefVillageId = 'prefVillageId';
 
   static const String prefStateName = 'stateName';
@@ -29,26 +28,24 @@ class AppConstants {
   //auth
   static const String navigateToDashboardScreen = '/dashboardScreen';
   static const String navigateToLoginScreen = '/loginScreen ';
+  static const String navigateToPreLoginScreen = '/preLoginScreen ';
+  static const String navigateToSplashScreen = '/ ';
+
   //panchayat
-  static const String navigateToPanchayatDashboard = '/panchayatDashboard';
-  static const String navigateToPanchayatLandingScreen = '/Panchayatlandingscreen ';
+  static const String navigateToPanchayatLandingScreen =
+      '/Panchayatlandingscreen ';
   static const String navigateToGramPanchayatLogin = '/panchayatlogin ';
+  static const String navigateToVWSCListScreen = '/listofvwsc ';
 
   //vwsc
   static const String navigateToVwscLogin = '/VwscLogin ';
   static const String navigateToVWSCLandingScreen = '/VWSClandingscreen ';
   static const String navigateToVWSCDashboard = '/vwscDashboard';
-
-
-
-  static const String navigateToRegisterVwscScreen = '/registrationvwsc ';
   static const String navigateToNJMPRegistrationForm = '/NJMPRegistrationForm ';
-  static const String navigateToSHGFTKRegistrationForm = '/SHGFTKRegistrationForm ';
+  static const String navigateToSHGFTKRegistrationForm =
+      '/SHGFTKRegistrationForm ';
 
-  static const String navigateToRegisterNJMWSOScreen = '/registrationnjmwso ';
-  static const String navigateToVWSCListScreen = '/listofvwsc ';
-
-  ///////////////     NJM / WSO
+  ///////////////     FTK / SGH
   static const String navigateToFTKLogin = '/FtkLogin ';
   static const String navigateToFTKListScrenn = '/listofftkwso ';
   static const String navigateToFtkLandingpage = '/FtkLandingpage ';
@@ -56,12 +53,16 @@ class AppConstants {
   static const String navigateToBasicDetailsForm = '/BasicDetailsForm ';
   static const String navigateToLocationFormScreen = '/LocationFormScreen ';
   static const String navigateToWaterSampleForm = '/WaterSampleForm ';
-  static const String navigateToSanitaryInspectionForm = '/SanitaryInspectionForm ';
-  static const String navigateToMonthlyChargeCollectionForm = '/MonthlyChargeCollectionForm ';
+  static const String navigateToSanitaryInspectionForm =
+      '/SanitaryInspectionForm ';
+  static const String navigateToMonthlyChargeCollectionForm =
+      '/MonthlyChargeCollectionForm ';
 
-  static const String navigateToPreLoginScreen = '/preLoginScreen ';
-  static const String navigateToSplashScreen = '/ ';
-//////////////////////////////////////////////////////////////////////////
+  ////////// NJM WSO
+  static const String navigateToNJMLogin = '/NJMLogin ';
+  static const String navigateToNJMWSOLandingPage = '/NjmWsoLandingPage';
+
+  //////////////////////////////////////////////////////////////////////////
   static const String departmentalUser = 'Departmental User';
   static const String dashboard = 'Dashboard';
   static const String submitSample = 'Submit';
@@ -74,21 +75,21 @@ class AppConstants {
   static const String dwsmDashboardOverview = 'DWSM Dashboard';
   static const String welcome = 'Welcome';
   static const String totalSamplesSubmitted = 'New Samples Registered';
-  static const String  knowyoursampledetail =  "Know your sample";
+  static const String knowyoursampledetail = "Know your sample";
   static const String totalPhysicalSubmitted = 'Physically Received Samples';
   static const String totalSampleTested = 'Total Samples Tested';
   static const String totalRetest = 'Total Retest';
-  static const String addSchool= 'Select Village';
-  static const String addSample= 'Add Sample';
-
+  static const String addSchool = 'Select Village';
+  static const String addSample = 'Add Sample';
 
   ////////////////////////ftk Dashboard//////////
   static const String ftkUser = 'FTK User';
   static const String totalSamplesalreadytested = 'Total no. of samples tested';
-  static const String totalSamplestestedtoday = 'Total no. of sample tested by you today';
-  static const String totalSamplestestedtilldate = 'Total no. of samples tested by you till date';
-  static const String addftk= 'Add New Sample ';
-
+  static const String totalSamplestestedtoday =
+      'Total no. of sample tested by you today';
+  static const String totalSamplestestedtilldate =
+      'Total no. of samples tested by you till date';
+  static const String addftk = 'Add New Sample ';
 
   static const String navigateToftkSampleInfoScreen = '/ftksampleinfoScreen';
 

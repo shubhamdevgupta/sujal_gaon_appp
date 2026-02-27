@@ -239,7 +239,7 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                           onPressed: () async {
                             Navigator.pushReplacementNamed(
                               context,
-                              AppConstants.navigateToPanchayatDashboard,
+                              AppConstants.navigateToPanchayatLandingScreen,
                             );
                          /*     provider.loginUser(
                                 mobileController.text,

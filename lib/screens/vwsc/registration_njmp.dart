@@ -75,12 +75,6 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                   _input("Name of the Operator"),
                   _input("Contact Number", keyboard: TextInputType.phone),
                   _input("Complete Address", maxLines: 3),
-
-
-
-
-
-
                   _dropdown(
                     "Level of Training",
                     value: trainingLevel,
@@ -102,7 +96,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
               const SizedBox(height: 22),
 
               // ================= JJM DETAILS =================
-              _sectionCard(
+   /*           _sectionCard(
                 icon: Icons.account_balance,
                 title: "JJM IMIS Registry Details",
                 children: [
@@ -118,9 +112,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
 
                   _readOnly("State", stateName),
                 ],
-              ),
-
-              const SizedBox(height: 22),
+              ),*/
 
               // ================= AUTHORITY & AREA =================
               _sectionCard(

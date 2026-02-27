@@ -305,6 +305,7 @@ class PanchayatLandingScreen extends StatelessWidget {
     );
   }
 
+/*
   Widget _registerCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -374,6 +375,7 @@ class PanchayatLandingScreen extends StatelessWidget {
       ),
     );
   }
+*/
 
   // =======================================================
   // LIST CARD
@@ -419,7 +421,7 @@ class PanchayatLandingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "List VWSC",
+                    "List VWSC Members",
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
 
@@ -543,7 +545,7 @@ class PanchayatLandingScreen extends StatelessWidget {
 
           // ================= STATS =================
           Row(
-            children: const [_statBox("Villages", "12"), _statBox("VWSC", "4")],
+            children: const [_statBox("Villages", "12"), _statBox("Villages where VWSC/pani samiti formed", "4")],
           ),
         ],
       ),
