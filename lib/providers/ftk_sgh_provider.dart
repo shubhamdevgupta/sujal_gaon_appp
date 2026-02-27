@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/repository/njm_repo.dart';
+import 'package:jal_sanchalan/repository/ftk_repo.dart';
 
-class NjmWsoProvider extends ChangeNotifier {
-  final NjmRepo _njmRepo = NjmRepo();
+class FtkSghProvider extends ChangeNotifier {
+  final FtkRepo _njmRepo = FtkRepo();
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;

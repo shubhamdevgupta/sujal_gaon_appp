@@ -85,7 +85,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                     onTap: () {
                       Navigator.pushNamed(
                         context,
-                        AppConstants.navigateToNjmLogin,
+                        AppConstants.navigateToFTKLogin,
                       );
                     },
                   ),

@@ -1,11 +1,11 @@
-class Njmuserlist {
+class Ftkuserlist {
   final int? userId;
   final bool status;
   final String? message;
   final String? token;
   final List<SJLRegistration> registrationList;
 
-  Njmuserlist({
+  Ftkuserlist({
     this.userId,
     required this.status,
     this.message,
@@ -13,8 +13,8 @@ class Njmuserlist {
     required this.registrationList,
   });
 
-  factory Njmuserlist.fromJson(Map<String, dynamic> json) {
-    return Njmuserlist(
+  factory Ftkuserlist.fromJson(Map<String, dynamic> json) {
+    return Ftkuserlist(
       userId: json['UserId'],
       status: json['Status'] ?? false,
       message: json['msg'],

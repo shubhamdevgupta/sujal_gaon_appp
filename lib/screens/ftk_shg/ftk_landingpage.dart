@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_constants.dart';
 
-class NjmLandingScreen extends StatelessWidget {
-  const NjmLandingScreen({super.key});
+class FtkLandingpage extends StatelessWidget {
+  const FtkLandingpage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +167,7 @@ class NjmLandingScreen extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacementNamed(
           context,
-          AppConstants.navigateToNjmQuestionscategory,
+          AppConstants.navigateToFTKQuestionscategory,
         );
       },
 
@@ -238,7 +238,7 @@ class NjmLandingScreen extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacementNamed(
           context,
-          AppConstants.navigateToNJMListScrenn,
+          AppConstants.navigateToFTKListScrenn,
         );
       },
 
