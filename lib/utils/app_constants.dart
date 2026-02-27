@@ -59,6 +59,8 @@ class AppConstants {
   static const String navigateToGroundWaterPumpForm = '/GroundWaterPumpForm ';
   static const String navigateToPumpsForm = '/PumpsForm ';
   static const String navigateToOHSRForm = '/OHSRForm ';
+  static const String navigateToGSRForm = '/GSRForm ';
+  static const String navigateToSpringWaterForm = '/SpringWaterForm ';
 
   static const String navigateToPreLoginScreen = '/preLoginScreen ';
   static const String navigateToSplashScreen = '/ ';

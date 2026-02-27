@@ -23,10 +23,12 @@ import 'ftk_shg/question_cat/locationform.dart';
 import 'ftk_shg/question_cat/monthlychargecollection.dart';
 import 'ftk_shg/question_cat/saniSanitaryinspection.dart';
 import 'ftk_shg/question_cat/watersampledataform.dart';
-import 'njm_wso/njm_cat_type/groundwatersourcetube_form.dart';
-import 'njm_wso/njm_cat_type/njm_cat.dart';
-import 'njm_wso/njm_cat_type/overhead_service.dart';
-import 'njm_wso/njm_cat_type/pumps_form.dart';
+import 'njm_wso/njm_wso_cat/water_supply_components/gls_reservoir.dart';
+import 'njm_wso/njm_wso_cat/water_supply_components/groundwatersourcetube_form.dart';
+import 'njm_wso/njm_wso_cat/water_supply_components/wsc_category.dart';
+import 'njm_wso/njm_wso_cat/water_supply_components/overhead_service.dart';
+import 'njm_wso/njm_wso_cat/water_supply_components/pumps_form.dart';
+import 'njm_wso/njm_wso_cat/water_supply_components/spring_water.dart';
 import 'panchayat/dashboard.dart';
 import 'panchayat/panchayat_dashboard.dart';
 
@@ -73,6 +75,8 @@ class AppRoutes {
       AppConstants.navigateToGroundWaterPumpForm: (context) => const GroundWaterPumpForm(),
       AppConstants.navigateToPumpsForm: (context) => const PumpsForm(),
       AppConstants.navigateToOHSRForm: (context) => const OHSRForm(),
+      AppConstants.navigateToGSRForm: (context) => const GSRForm(),
+      AppConstants.navigateToSpringWaterForm: (context) => const SpringWaterForm(),
 
       /*     //dwsmList
       AppConstants.navigateToDemonstrationScreen: (context) =>

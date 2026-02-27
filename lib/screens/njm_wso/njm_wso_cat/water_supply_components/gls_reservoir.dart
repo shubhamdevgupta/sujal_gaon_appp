@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class OHSRForm extends StatefulWidget {
-  const OHSRForm({super.key});
+class GSRForm extends StatefulWidget {
+  const GSRForm({super.key});
 
   @override
-  State<OHSRForm> createState() => _OHSRFormState();
+  State<GSRForm> createState() => _GSRFormState();
 }
 
-class _OHSRFormState extends State<OHSRForm> {
+class _GSRFormState extends State<GSRForm> {
 
   // ================= VARIABLES =================
 
@@ -15,8 +15,16 @@ class _OHSRFormState extends State<OHSRForm> {
   String? flowMeterInstalled;
   String? fillType;
 
-  final capacityController = TextEditingController(text: "100"); // auto
-  final numberOfReservoirsController = TextEditingController();
+  bool showNoSupplyMessage = false;
+
+  final reservoirTypeController =
+  TextEditingController(text: "GSR");
+
+  final numberOfReservoirsController =
+  TextEditingController();
+
+  final capacityController =
+  TextEditingController(text: "100");
 
   final inletStartController = TextEditingController();
   final inletStopController = TextEditingController();
@@ -24,66 +32,34 @@ class _OHSRFormState extends State<OHSRForm> {
   final fillStartController = TextEditingController();
   final fillEndController = TextEditingController();
 
-  final observedLevelController = TextEditingController();
-  final numberOfFillsController = TextEditingController();
+  final observedLevelController =
+  TextEditingController();
 
-  final volumeFilledController = TextEditingController();
+  final numberOfFillsController =
+  TextEditingController(text: "1");
 
-  final outletOpenController = TextEditingController();
-  final outletCloseController = TextEditingController();
-  final supplyDurationController = TextEditingController();
+  final volumeFilledController =
+  TextEditingController();
 
-  final outletStartController = TextEditingController();
-  final outletStopController = TextEditingController();
-  final totalSuppliedController = TextEditingController();
+  final outletOpenController =
+  TextEditingController();
 
+  final outletCloseController =
+  TextEditingController();
 
-  bool showNoSupplyMessage = false;
+  final supplyDurationController =
+  TextEditingController();
+
+  final outletStartController =
+  TextEditingController();
+
+  final outletStopController =
+  TextEditingController();
+
+  final totalSuppliedController =
+  TextEditingController();
 
   // ================= CALCULATIONS =================
-
-// ONLY showing core logic improvements section-by-section
-// Integrate inside your existing UI structure
-
-// ================= ADD THESE CONTROLLERS =================
-
-  final fillStartTimeController = TextEditingController();
-  final fillEndTimeController = TextEditingController();
-
-  int fillCount = 0;
-
-// ================= TIME PARSER =================
-
-  DateTime _parseTime(String input) {
-    final parts = input.split(":");
-    return DateTime(
-        2024,
-        1,
-        1,
-        int.parse(parts[0]),
-        int.parse(parts[1]));
-  }
-
-// ================= CALCULATE NUMBER OF FILLS =================
-
-  void _calculateFills() {
-    if (fillStartTimeController.text.isEmpty ||
-        fillEndTimeController.text.isEmpty) return;
-
-    final start = _parseTime(fillStartTimeController.text);
-    final end = _parseTime(fillEndTimeController.text);
-
-    if (end.isAfter(start)) {
-      fillCount = 1; // per entry
-      numberOfFillsController.text = fillCount.toString();
-    } else {
-      numberOfFillsController.text = "";
-    }
-
-    _calculateVolumeFilled();
-  }
-
-// ================= VOLUME FILLED =================
 
   void _calculateVolumeFilled() {
     double capacity =
@@ -94,9 +70,7 @@ class _OHSRFormState extends State<OHSRForm> {
 
     double volume = 0;
 
-    // Case 1 – Flow meter installed
     if (flowMeterInstalled == "Yes") {
-
       double start =
           double.tryParse(inletStartController.text) ?? 0;
 
@@ -104,19 +78,12 @@ class _OHSRFormState extends State<OHSRForm> {
           double.tryParse(inletStopController.text) ?? 0;
 
       volume = start - stop;
-
-      if (volume < 0) volume = 0;
-
     } else {
-
-      // Case 2 – Manual logic
-
       if (fillType == "Full") {
         volume = fills * capacity;
       }
 
       if (fillType == "Partial") {
-
         double level =
             double.tryParse(observedLevelController.text) ?? 0;
 
@@ -128,8 +95,6 @@ class _OHSRFormState extends State<OHSRForm> {
         volume.toStringAsFixed(2);
   }
 
-// ================= SUPPLY DURATION =================
-
   void _calculateSupplyDuration() {
     if (outletOpenController.text.isEmpty ||
         outletCloseController.text.isEmpty) return;
@@ -139,16 +104,14 @@ class _OHSRFormState extends State<OHSRForm> {
 
     if (close.isAfter(open)) {
       final diff =
-          close.difference(open).inMinutes / 60;
+          close
+              .difference(open)
+              .inMinutes / 60;
 
       supplyDurationController.text =
           diff.toStringAsFixed(2);
-    } else {
-      supplyDurationController.text = "";
     }
   }
-
-// ================= OUTLET VOLUME =================
 
   void _calculateOutletVolume() {
     double start =
@@ -157,12 +120,19 @@ class _OHSRFormState extends State<OHSRForm> {
     double stop =
         double.tryParse(outletStopController.text) ?? 0;
 
-    double volume = start - stop;
-
-    if (volume < 0) volume = 0;
-
     totalSuppliedController.text =
-        volume.toStringAsFixed(2);
+        (start - stop).toStringAsFixed(2);
+  }
+
+  DateTime _parseTime(String input) {
+    final parts = input.split(":");
+    return DateTime(
+      2024,
+      1,
+      1,
+      int.parse(parts[0]),
+      int.parse(parts[1]),
+    );
   }
 
   // ================= UI =================
@@ -173,30 +143,25 @@ class _OHSRFormState extends State<OHSRForm> {
       backgroundColor: const Color(0xFFF2F6FF),
 
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1976D2),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: const Color(0xFF1976D2),
-        title: const Text("OHSR / Overhead Tank",
-            style: TextStyle(color: Colors.white)),
+        title: const Text(
+          "Ground Level Service Reservoir (GSR)",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
 
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/icons/SJL_bg.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
+        padding: const EdgeInsets.all(16),
+
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
 
-              // ================= WATER RECEIVED =================
+              // ================= WATER RECEIPT =================
 
               _sectionCard(
                 icon: Icons.water,
@@ -208,76 +173,45 @@ class _OHSRFormState extends State<OHSRForm> {
                     value: waterReceived,
                     items: const [
                       DropdownMenuItem(
-                        value: "Yes",
-                        child: Text("Yes"),
-                      ),
+                          value: "Yes",
+                          child: Text("Yes")),
                       DropdownMenuItem(
-                        value: "No",
-                        child: Text("No"),
-                      ),
+                          value: "No",
+                          child: Text("No")),
                     ],
                     onChanged: (v) {
                       setState(() {
                         waterReceived = v;
-                        showNoSupplyMessage = (v == "No");
+                        showNoSupplyMessage =
+                        (v == "No");
                       });
                     },
                   ),
 
                   if (showNoSupplyMessage)
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade50,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.red),
-                      ),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.warning, color: Colors.red),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              "No-supply received. Automatic notification sent to VWSC & GP.",
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    _redAlertBox(
+                        "No-supply received. Automatic notification sent to VWSC & GP."),
+
+                  _input("Reservoir Type",
+                      controller:
+                      reservoirTypeController,
+                      readOnly: true),
+
+                  _input("Number of Reservoirs",
+                      controller:
+                      numberOfReservoirsController,
+                      keyboard: TextInputType.number),
+
+                  _input("Capacity (KL)",
+                      controller: capacityController,
+                      readOnly: true),
                 ],
               ),
+
               const SizedBox(height: 20),
 
-              _sectionCard(
-                icon: Icons.storage,
-                title: "Reservoir Information",
-                children: [
+              // ================= INLET =================
 
-                  _input(
-                    "Reservoir Type",
-                    controller: TextEditingController(text: "OHSR"),
-                    readOnly: true,
-                  ),
-
-                  _input(
-                    "Number of Reservoirs",
-                    controller: numberOfReservoirsController,
-                    keyboard: TextInputType.number,
-                  ),
-
-                  _input(
-                    "Capacity (KL)",
-                    controller: capacityController,
-                    readOnly: true,
-                  ),
-                ],
-              ),
-              // ================= INLET FLOW =================
-              const SizedBox(height: 20),
               _sectionCard(
                 icon: Icons.speed,
                 title: "Inlet Flow Details",
@@ -295,22 +229,37 @@ class _OHSRFormState extends State<OHSRForm> {
                           child: Text("No")),
                     ],
                     onChanged: (v) =>
-                        setState(() => flowMeterInstalled = v),
+                        setState(() =>
+                        flowMeterInstalled = v),
                   ),
 
                   if (flowMeterInstalled == "Yes") ...[
                     _input("Inlet Reading Start",
-                        controller: inletStartController,
-                        keyboard: TextInputType.number,
+                        controller:
+                        inletStartController,
+                        keyboard:
+                        TextInputType.number,
                         onChanged: (_) =>
                             _calculateVolumeFilled()),
 
                     _input("Inlet Reading Stop",
-                        controller: inletStopController,
-                        keyboard: TextInputType.number,
+                        controller:
+                        inletStopController,
+                        keyboard:
+                        TextInputType.number,
                         onChanged: (_) =>
                             _calculateVolumeFilled()),
                   ],
+
+                  _timePickerField(
+                    "Fill Start Time",
+                    controller: fillStartController,
+                  ),
+
+                  _timePickerField(
+                    "Fill End Time",
+                    controller: fillEndController,
+                  ),
                 ],
               ),
 
@@ -320,7 +269,7 @@ class _OHSRFormState extends State<OHSRForm> {
 
               _sectionCard(
                 icon: Icons.water_drop,
-                title: "Filling Details",
+                title: "Fill Details",
                 children: [
 
                   _dropdown(
@@ -335,46 +284,56 @@ class _OHSRFormState extends State<OHSRForm> {
                           child: Text("Partial")),
                     ],
                     onChanged: (v) =>
-                        setState(() => fillType = v),
+                        setState(() =>
+                        fillType = v),
                   ),
 
                   if (fillType == "Partial")
                     _input("Observed Level (%)",
                         controller:
                         observedLevelController,
-                        keyboard: TextInputType.number,
+                        keyboard:
+                        TextInputType.number,
                         onChanged: (_) =>
                             _calculateVolumeFilled()),
 
                   _input("Number of Fills",
                       controller:
                       numberOfFillsController,
-                      keyboard: TextInputType.number,
+                      keyboard:
+                      TextInputType.number,
                       onChanged: (_) =>
                           _calculateVolumeFilled()),
 
                   _input("Volume Filled (Auto)",
-                      controller: volumeFilledController,
+                      controller:
+                      volumeFilledController,
                       readOnly: true),
                 ],
               ),
 
               const SizedBox(height: 20),
 
-              // ================= OUTLET SUPPLY =================
+              // ================= OUTLET =================
 
               _sectionCard(
                 icon: Icons.outbond,
                 title: "Outlet Supply",
                 children: [
 
-                  _input("Outlet Valve Open Time",
-                      controller: outletOpenController),
+                  _timePickerField(
+                    "Outlet Valve Open Time",
+                    controller:
+                    outletOpenController,
+                  ),
 
-                  _input("Outlet Valve Close Time",
-                      controller: outletCloseController,
-                      onChanged: (_) =>
-                          _calculateSupplyDuration()),
+                  _timePickerField(
+                    "Outlet Valve Close Time",
+                    controller:
+                    outletCloseController,
+                    onTimeSelected:
+                    _calculateSupplyDuration,
+                  ),
 
                   _input("Supply Duration (hrs)",
                       controller:
@@ -384,24 +343,126 @@ class _OHSRFormState extends State<OHSRForm> {
                   _input("Outlet Flow Start Reading",
                       controller:
                       outletStartController,
-                      keyboard: TextInputType.number,
+                      keyboard:
+                      TextInputType.number,
                       onChanged: (_) =>
                           _calculateOutletVolume()),
 
                   _input("Outlet Flow Stop Reading",
                       controller:
                       outletStopController,
-                      keyboard: TextInputType.number,
+                      keyboard:
+                      TextInputType.number,
                       onChanged: (_) =>
                           _calculateOutletVolume()),
 
-                  _input("Total Volume Supplied",
+                  _input("Total Volume Supplied (m³)",
                       controller:
                       totalSuppliedController,
                       readOnly: true),
                 ],
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _redAlertBox(String message) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.red.shade50,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: Colors.red.shade400,
+          width: 1.3,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.red,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.w600,
+                fontSize: 13.5,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _timePickerField(
+      String label, {
+        required TextEditingController controller,
+        Function()? onTimeSelected,
+      }) {
+    return TextField(
+      controller: controller,
+      readOnly: true, // 👈 Prevent manual typing
+      onTap: () async {
+        TimeOfDay? picked = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.now(),
+        );
+
+        if (picked != null) {
+          final formatted =
+              "${picked.hour.toString().padLeft(2, '0')}:"
+              "${picked.minute.toString().padLeft(2, '0')}";
+
+          controller.text = formatted;
+
+          if (onTimeSelected != null) {
+            onTimeSelected();
+          }
+        }
+      },
+      decoration: InputDecoration(
+        hintText: label,
+
+        prefixIcon: const Icon(
+          Icons.schedule,
+          color: Color(0xFF1976D2),
+          size: 18,
+        ),
+
+        suffixIcon: const Icon(
+          Icons.access_time_rounded,
+          color: Color(0xFF1976D2),
+        ),
+
+        filled: true,
+        fillColor: Colors.white,
+
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
+          ),
+        ),
+
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14)),
+          borderSide: BorderSide(
+            color: Color(0xFF1976D2),
+            width: 1.8,
           ),
         ),
       ),
@@ -467,23 +528,23 @@ class _OHSRFormState extends State<OHSRForm> {
           const SizedBox(height: 16),
 
           ...children.map(
-                (e) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: e,
-            ),
+                (e) =>
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: e,
+                ),
           ),
         ],
       ),
     );
   }
 
-  Widget _input(
-      String label, {
-        TextEditingController? controller,
-        TextInputType keyboard = TextInputType.text,
-        bool readOnly = false,
-        Function(String)? onChanged,
-      }) {
+  Widget _input(String label, {
+    TextEditingController? controller,
+    TextInputType keyboard = TextInputType.text,
+    bool readOnly = false,
+    Function(String)? onChanged,
+  }) {
     return TextField(
       controller: controller,
       keyboardType: keyboard,
@@ -526,12 +587,11 @@ class _OHSRFormState extends State<OHSRForm> {
   }
 
 
-  Widget _dropdown(
-      String label, {
-        required List<DropdownMenuItem<String>> items,
-        required Function(String?) onChanged,
-        String? value,
-      }) {
+  Widget _dropdown(String label, {
+    required List<DropdownMenuItem<String>> items,
+    required Function(String?) onChanged,
+    String? value,
+  }) {
     return DropdownButtonFormField<String>(
       value: value,
       icon: const Icon(

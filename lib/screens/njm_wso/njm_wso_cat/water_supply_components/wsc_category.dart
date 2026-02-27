@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../../../utils/app_constants.dart';
+import '../../../../utils/app_constants.dart';
+
 
 
 
@@ -164,7 +165,7 @@ class _NjmCategory extends State<NjmCategory> {
                           title: "Ground level Service Reservoir / Sump ",
                           subtitle: "Billing & Payment",
                           onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToMonthlyChargeCollectionForm);
+                            Navigator.pushNamed(context, AppConstants.navigateToGSRForm);
                           },
                         ),
 
@@ -173,7 +174,7 @@ class _NjmCategory extends State<NjmCategory> {
                           title: "Spring water",
                           subtitle: "Billing & Payment",
                           onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToMonthlyChargeCollectionForm);
+                            Navigator.pushNamed(context, AppConstants.navigateToSpringWaterForm);
                           },
                         ),
 
