@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _controller.forward();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await session.sanitizePrefs(); // await clear
+   //   await session.sanitizePrefs(); // await clear
       await session.init(); // await init after clearing
       await _checkForUpdateAndNavigate(); // navigate after setup
     });

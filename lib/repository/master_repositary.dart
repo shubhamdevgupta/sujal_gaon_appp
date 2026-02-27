@@ -3,13 +3,13 @@
 import 'package:flutter/cupertino.dart';
 
 import '../models/base_response.dart';
-import '../models/block_model.dart';
-import '../models/dictorey_model.dart';
-import '../models/district_model.dart';
-import '../models/gp_model.dart';
-import '../models/habitaion_model.dart';
-import '../models/state_model.dart';
-import '../models/village_mdoel.dart';
+import '../models/master_directory/block_model.dart';
+import '../models/master_directory/dictorey_model.dart';
+import '../models/master_directory/district_model.dart';
+import '../models/master_directory/gp_model.dart';
+import '../models/master_directory/habitaion_model.dart';
+import '../models/master_directory/state_model.dart';
+import '../models/master_directory/village_mdoel.dart';
 import '../service/base_api_service.dart';
 import '../utils/custom screen/global_exception_handler.dart';
 

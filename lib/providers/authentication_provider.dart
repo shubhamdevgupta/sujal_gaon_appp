@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 
-import '../models/panchayat/login_response.dart';
 import '../models/panchayat/panchayat_login_response.dart';
 import '../repository/authentication_repository.dart';
 import '../service/local_storage_service.dart';
@@ -17,10 +15,6 @@ class AuthenticationProvider extends ChangeNotifier {
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
 
-  AuthenticationProvider() {
-    generateCaptcha();
-  }
-
   bool _isLoggedIn = false;
 
   bool get isLoggedIn => _isLoggedIn;
@@ -28,25 +22,16 @@ class AuthenticationProvider extends ChangeNotifier {
   var randomOne = 0, randomTwo = 0, captchResult = 0;
 
   PanchayatLoginResponse? _loginResponse;
-  bool _isLoading = false;
 
-  // Getters
   PanchayatLoginResponse? get loginResponse => _loginResponse;
 
+  bool _isLoading = false;
   bool get isLoading => _isLoading;
 
   bool _isShownPassword = false;
-
   bool get isShownPassword => _isShownPassword;
 
-  String errorMsg = '';
-
-  double? _currentLatitude;
-  double? _currentLongitude;
-
-  double? get currentLatitude => _currentLatitude;
-
-  double? get currentLongitude => _currentLongitude;
+  String? errorMsg = '';
 
   Future<void> checkLoginStatus() async {
     _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
@@ -66,6 +51,7 @@ class AuthenticationProvider extends ChangeNotifier {
   Future<void> loginUser(
     userName,
     password,
+    userTypeId,
     Function() onSuccess,
     Function onFailure,
   ) async {
@@ -76,17 +62,24 @@ class AuthenticationProvider extends ChangeNotifier {
     try {
       _loginResponse = await _authRepository.loginUser(
         userName,
-        hashPass
+        hashPass,
+        userTypeId,
       );
       if (_loginResponse?.status == true) {
         onSuccess();
-        generateCaptcha();
+        _localStorage.saveString(
+          AppConstants.prefToken,
+          _loginResponse!.token.toString(),
+        );
+        _localStorage.saveInt(
+          AppConstants.prefUserId,
+          _loginResponse!.userId ?? 0,
+        );
       } else {
-        errorMsg = _loginResponse!.message;
+        errorMsg = _loginResponse?.message;
         onFailure(errorMsg);
       }
     } catch (e, stackTrace) {
-      print("exception in auth provider--->>>  $e");
       GlobalExceptionHandler.handleException(
         e as Exception,
         stackTrace: stackTrace,
@@ -97,47 +90,6 @@ class AuthenticationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  /*
-  Future<void> fetchLocation() async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      debugPrint('Requesting location permission...');
-      bool permissionGranted = await LocationUtils.requestLocationPermission();
-
-      if (permissionGranted) {
-        debugPrint('Permission granted. Fetching location...');
-        final locationData = await LocationUtils.getCurrentLocation();
-
-        if (locationData != null) {
-          _currentLatitude = locationData['latitude'];
-          _currentLongitude = locationData['longitude'];
-
-          // 🔥 Set global current location
-          CurrentLocation.setLocation(
-            lat: _currentLatitude!,
-            lng: _currentLongitude!,
-          );
-
-          debugPrint(
-            'Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude',
-          );
-        } else {
-          debugPrint("Location fetch failed (locationData is null)");
-        }
-      } else {
-        debugPrint("Permission denied. Cannot fetch location.");
-      }
-    } catch (e) {
-      debugPrint("Error during fetchLocation(): $e");
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-*/
 
   String trim(String value) => value.trim();
 
@@ -153,39 +105,23 @@ class AuthenticationProvider extends ChangeNotifier {
     return hash2;
   }
 
-  /// Generates a random salt of the given length
-  String generateSalt({int length = 16}) {
-    final Random random = Random.secure();
-    final List<int> saltBytes = List<int>.generate(
-      length,
-      (_) => random.nextInt(256),
-    );
-    return base64Encode(saltBytes);
-  }
-
   String generatePasswordHash(String password) {
-    // Step 1: Convert password to bytes
     final passwordBytes = utf8.encode(password);
-
-    // Step 2: MD5 hash
     final md5Hash = md5.convert(passwordBytes).toString();
-
-    // Step 3: SHA256 of MD5 result
     final sha256Hash = sha256.convert(utf8.encode(md5Hash)).toString();
 
     return sha256Hash;
   }
 
-  int generateCaptcha() {
+  /*  int generateCaptcha() {
     int max = 15;
     randomOne = Random().nextInt(max);
     randomTwo = Random().nextInt(max);
     captchResult = randomOne + randomTwo;
     notifyListeners();
     return captchResult;
-  }
+  }*/
 
-  // Toggle Password Visibility
   void togglePasswordVisibility() {
     _isShownPassword = !_isShownPassword;
     notifyListeners();

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/repository/ftk_repo.dart';
+import 'package:jal_sanchalan/repository/ftk_shg/ftk_shg_repo.dart';
 
 class FtkSghProvider extends ChangeNotifier {
   final FtkRepo _njmRepo = FtkRepo();
@@ -28,7 +28,7 @@ class FtkSghProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawBlock = await _njmRepo.registerNJMWSO(
+      final rawResponse = await _njmRepo.registerNjmFTK(
         username,
         userId,
         firstName,
@@ -63,7 +63,7 @@ class FtkSghProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawBlock = await _njmRepo.fetchNJMUser(
+      final rawResponse = await _njmRepo.fetchNjmFtkUser(
         userTypeId,
         userId,
         stateId,

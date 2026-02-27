@@ -1,38 +1,44 @@
-import 'dart:convert';
-
-/// 🔹 Root Model
 class PanchayatLoginResponse {
   final bool status;
-  final String message;
+  final int? userId;
+  final String? message;
+  final String? token;
   final PanchayatResult? result;
 
   PanchayatLoginResponse({
     required this.status,
-    required this.message,
+    this.userId,
+    this.message,
+    this.token,
     this.result,
   });
 
   factory PanchayatLoginResponse.fromJson(Map<String, dynamic> json) {
     return PanchayatLoginResponse(
       status: json['Status'] ?? false,
-      message: json['Message'] ?? '',
+      userId: json['UserId'],
+      message: json['Message'],
+      token: json['Token'],
       result: json['Result'] != null
           ? PanchayatResult.fromJson(json['Result'])
           : null,
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'Status': status,
-    'Message': message,
-    'Result': result?.toJson(),
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'Status': status,
+      'UserId': userId,
+      'Message': message,
+      'Token': token,
+      'Result': result?.toJson(),
+    };
+  }
 }
 
-/// 🔹 Result Model
 class PanchayatResult {
   final LoginResult? loginResult;
-  final List<Village> villages;
+  final List<JJMVillage> villages;
 
   PanchayatResult({
     this.loginResult,
@@ -45,20 +51,21 @@ class PanchayatResult {
           ? LoginResult.fromJson(json['LoginResult'])
           : null,
       villages: json['JJM_Villages'] != null
-          ? List<Village>.from(
-          json['JJM_Villages'].map((x) => Village.fromJson(x)))
+          ? List<JJMVillage>.from(
+          json['JJM_Villages']
+              .map((x) => JJMVillage.fromJson(x)))
           : [],
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'LoginResult': loginResult?.toJson(),
-    'JJM_Villages':
-    villages.map((e) => e.toJson()).toList(),
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'LoginResult': loginResult?.toJson(),
+      'JJM_Villages': villages.map((e) => e.toJson()).toList(),
+    };
+  }
 }
 
-/// 🔹 Login Result Model
 class LoginResult {
   final String? stateId;
   final String? stateName;
@@ -93,37 +100,40 @@ class LoginResult {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'StateId': stateId,
-    'StateName': stateName,
-    'DistrictId': districtId,
-    'DistrictName': districtName,
-    'BlockId': blockId,
-    'BlockName': blockName,
-    'PanchayatId': panchayatId,
-    'PanchayatName': panchayatName,
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'StateId': stateId,
+      'StateName': stateName,
+      'DistrictId': districtId,
+      'DistrictName': districtName,
+      'BlockId': blockId,
+      'BlockName': blockName,
+      'PanchayatId': panchayatId,
+      'PanchayatName': panchayatName,
+    };
+  }
 }
 
-/// 🔹 Village Model
-class Village {
+class JJMVillage {
   final int? villageId;
   final String? villageName;
 
-  Village({
+  JJMVillage({
     this.villageId,
     this.villageName,
   });
 
-  factory Village.fromJson(Map<String, dynamic> json) {
-    return Village(
+  factory JJMVillage.fromJson(Map<String, dynamic> json) {
+    return JJMVillage(
       villageId: json['JJM_VillageId'],
       villageName: json['JJM_VillageName'],
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'JJM_VillageId': villageId,
-    'JJM_VillageName': villageName,
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'JJM_VillageId': villageId,
+      'JJM_VillageName': villageName,
+    };
+  }
 }

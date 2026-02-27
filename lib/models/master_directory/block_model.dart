@@ -2,12 +2,6 @@
 //
 //     final blockmodel = blockmodelFromJson(jsonString);
 
-import 'dart:convert';
-
-Blockmodel blockmodelFromJson(String str) => Blockmodel.fromJson(json.decode(str));
-
-String blockmodelToJson(Blockmodel data) => json.encode(data.toJson());
-
 class Blockmodel {
   bool status;
   String message;

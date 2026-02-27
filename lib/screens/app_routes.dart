@@ -12,7 +12,6 @@ import 'package:jal_sanchalan/screens/vwsc/vwsc_landing_screen.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_login.dart';
 
 import '../utils/app_constants.dart';
-import 'auth/login_screen.dart';
 import 'auth/splash_screen.dart';
 import 'ftk_shg/ftk_questionscategory.dart';
 import 'ftk_shg/ftk_shg_login.dart';
@@ -23,14 +22,11 @@ import 'ftk_shg/question_cat/saniSanitaryinspection.dart';
 import 'ftk_shg/question_cat/watersampledataform.dart';
 import 'njm_wso/njm_wso_landingpage.dart';
 import 'njm_wso/njm_wso_login.dart';
-import 'panchayat/dashboard.dart';
 
 class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
     return {
       //auth
-      AppConstants.navigateToDashboardScreen: (context) => const DashboardScreen(),
-      AppConstants.navigateToLoginScreen: (context) => const Loginscreen(),
       AppConstants.navigateToSplashScreen: (context) => const SplashScreen(),
       AppConstants.navigateToPreLoginScreen: (context) => const PreLoginScreen(),
 

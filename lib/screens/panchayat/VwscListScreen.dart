@@ -1,44 +1,38 @@
 import 'package:flutter/material.dart';
 
-class VwscListScreen extends StatelessWidget {
-  VwscListScreen({super.key});
+import '../../models/vwsc/vwsc_member_list.dart';
 
-  final List<Map<String, String>> dummyUsers = [
-    {
-      "name": "Amit Sharma",
-      "mobile": "9876543210",
-      "email": "amit.sharma@gmail.com"
-    },
-    {
-      "name": "Rohit Verma",
-      "mobile": "9123456780",
-      "email": "rohit.verma@gmail.com"
-    },
-    {
-      "name": "Priya Singh",
-      "mobile": "9988776655",
-      "email": "priya.singh@gmail.com"
-    },
-    {
-      "name": "Suresh Yadav",
-      "mobile": "9012345678",
-      "email": "suresh.yadav@gmail.com"
-    },
-  ];
+class VwscListScreen extends StatefulWidget {
+  const VwscListScreen({super.key});
+  @override
+  State<VwscListScreen> createState() => _VwscListScreenState();
+}
+
+class _VwscListScreenState extends State<VwscListScreen> {
+  late List<VwscMember> members;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Receive arguments safely
+    final args =
+    ModalRoute.of(context)!.settings.arguments as List<VwscMember>;
+    members = args;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEAF3FB),
       appBar: AppBar(
-        title: const Text("List of VWSC Member",style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "List of VWSC Member",
+          style: TextStyle(color: Colors.white),
+        ),
+        automaticallyImplyLeading: false, // 🔥 This hides back button
         centerTitle: true,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -49,11 +43,16 @@ class VwscListScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: ListView.builder(
+
+      body: members.isEmpty
+          ? const Center(
+        child: Text("No Members Found"),
+      )
+          : ListView.builder(
         padding: const EdgeInsets.all(16),
-        itemCount: dummyUsers.length,
+        itemCount: members.length,
         itemBuilder: (context, index) {
-          final user = dummyUsers[index];
+          final user = members[index];
 
           return Container(
             margin: const EdgeInsets.only(bottom: 16),
@@ -76,16 +75,17 @@ class VwscListScreen extends StatelessWidget {
             child: Row(
               children: [
 
-                // Avatar Circle
+                /// Avatar
                 Container(
                   height: 55,
                   width: 55,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFF64B5F6),
+                        Color(0xFF1E88E5)
+                      ],
                     ),
                   ),
                   child: const Icon(
@@ -97,50 +97,55 @@ class VwscListScreen extends StatelessWidget {
 
                 const SizedBox(width: 16),
 
-                // User Details
+                /// Details
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
                     children: [
+
+                      /// Name
                       Text(
-                        user["name"]!,
+                        user.name ?? "N/A",
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
                         ),
                       ),
+
                       const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          const Icon(Icons.phone,
-                              size: 16, color: Colors.blueGrey),
-                          const SizedBox(width: 6),
-                          Text(
-                            user["mobile"]!,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
+
+                      /// Email
+                      Text(
+                        user.mobile?.isNotEmpty == true
+                            ? user.mobile!
+                            : "Mobile No",
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black54,
+                        ),
                       ),
+                      /// Email
+                      Text(
+                        user.functionalDesignation?.isNotEmpty == true
+                            ? user.functionalDesignation!
+                            : "No Email",
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black54,
+                        ),
+                      ),
+
                       const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(Icons.email,
-                              size: 16, color: Colors.blueGrey),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Text(
-                              user["email"]!,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ),
-                        ],
+
+                      /// Village
+                      Text(
+                        "Village: ${user.villageName ?? 'N/A'}",
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black54,
+                        ),
                       ),
                     ],
                   ),
