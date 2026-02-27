@@ -20,6 +20,10 @@ class _VwscLogin extends State<VwscLogin> {
     return Scaffold(
       backgroundColor: const Color(0xFFEAF4FF),
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: const Color(0xFF1565C0),
         title: const Text("Login", style: TextStyle(color: Colors.white)),
         centerTitle: true,

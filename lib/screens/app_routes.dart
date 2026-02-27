@@ -6,6 +6,7 @@ import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 
 import 'package:jal_sanchalan/screens/panchayat/vwsc_registration.dart';
 import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
+import 'package:jal_sanchalan/screens/vwsc/registration_ftk.dart';
 import 'package:jal_sanchalan/screens/vwsc/registration_njm_wso.dart';
 import 'package:jal_sanchalan/screens/vwsc/list_njm_wso.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_dashboard.dart';
@@ -41,7 +42,8 @@ class AppRoutes {
       AppConstants.navigateToVWSCLandingScreen: (context) => const VwscLandingScreen(),
 
       AppConstants.navigateToRegisterVwscScreen: (context) => const RegisterVwscScreen(),
-      AppConstants.navigateToRegisterNJMWSOScreen: (context) => const NjmWsoRegistration(),
+      AppConstants.navigateToNJMPRegistrationForm: (context) => const NJMPRegistrationForm(),
+      AppConstants.navigateToSHGFTKRegistrationForm: (context) => const SHGFTKRegistrationForm(),
       AppConstants.navigateToVWSCListScreen: (context) =>  VwscListScreen(),
       AppConstants.navigateToNjmLogin: (context) =>  NjmLogin(),
       AppConstants.navigateToNJMListScrenn: (context) =>  Njmwsolistscreen(),

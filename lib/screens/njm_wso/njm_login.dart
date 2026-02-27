@@ -21,6 +21,10 @@ class _NjmLogin extends State<NjmLogin> {
       backgroundColor: const Color(0xFFEAF4FF),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1565C0),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text("Login",style: TextStyle(color: Colors.white),),
         centerTitle: true,
         automaticallyImplyLeading: false, // 🔥 This hides back button
