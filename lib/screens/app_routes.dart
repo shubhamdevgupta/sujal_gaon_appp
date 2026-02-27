@@ -53,6 +53,7 @@ class AppRoutes {
           const SHGFTKRegistrationForm(),
       AppConstants.navigateToVWSCListScreen: (context) => VwscListScreen(),
       AppConstants.navigateToFTKLogin: (context) => FtkShgLogin(),
+      AppConstants.navigateToFtkLandingpage: (context) => FtkLandingpage(),
       AppConstants.navigateToFTKListScrenn: (context) => ListFtkSgh(),
       AppConstants.navigateToFTKQuestionscategory: (context) =>
           FtkQuestionscategory(),

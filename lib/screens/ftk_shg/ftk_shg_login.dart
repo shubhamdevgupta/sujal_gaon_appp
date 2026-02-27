@@ -208,7 +208,7 @@ class _NjmLogin extends State<FtkShgLogin> {
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
-                              AppConstants.navigateToFTKLandingScreen,
+                              AppConstants.navigateToFtkLandingpage,
                             );
 
                             loginUser();

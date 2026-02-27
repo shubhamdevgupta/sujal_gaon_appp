@@ -51,7 +51,7 @@ class AppConstants {
   ///////////////     NJM / WSO
   static const String navigateToFTKLogin = '/FtkLogin ';
   static const String navigateToFTKListScrenn = '/listofftkwso ';
-  static const String navigateToFTKLandingScreen = '/ftklandingscreen ';
+  static const String navigateToFtkLandingpage = '/FtkLandingpage ';
   static const String navigateToFTKQuestionscategory = '/FtkQuestionscategory ';
   static const String navigateToBasicDetailsForm = '/BasicDetailsForm ';
   static const String navigateToLocationFormScreen = '/LocationFormScreen ';
