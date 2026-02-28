@@ -1,12 +1,3 @@
-// To parse this JSON data, do
-//
-//     final habitaionmodel = habitaionmodelFromJson(jsonString);
-
-import 'dart:convert';
-
-Habitaionmodel habitaionmodelFromJson(String str) => Habitaionmodel.fromJson(json.decode(str));
-
-String habitaionmodelToJson(Habitaionmodel data) => json.encode(data.toJson());
 
 class Habitaionmodel {
   bool status;

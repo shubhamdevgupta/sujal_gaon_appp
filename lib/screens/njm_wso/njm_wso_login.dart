@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_constants.dart';
 
-class VwscLogin extends StatefulWidget {
-  const VwscLogin({super.key});
+class NjmWsoLogin extends StatefulWidget {
+  const NjmWsoLogin({super.key});
 
   @override
-  State<VwscLogin> createState() => _VwscLogin();
+  State<NjmWsoLogin> createState() => _NjmLogin();
 }
 
-class _VwscLogin extends State<VwscLogin> {
+class _NjmLogin extends State<NjmWsoLogin> {
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -21,7 +21,7 @@ class _VwscLogin extends State<VwscLogin> {
       backgroundColor: const Color(0xFFEAF4FF),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1565C0),
-        title: const Text("Login", style: TextStyle(color: Colors.white)),
+        title: const Text("Login",style: TextStyle(color: Colors.white),),
         centerTitle: true,
         automaticallyImplyLeading: false, // 🔥 This hides back button
       ),
@@ -39,6 +39,7 @@ class _VwscLogin extends State<VwscLogin> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+
                 const SizedBox(height: 30),
 
                 /// Logo
@@ -52,7 +53,7 @@ class _VwscLogin extends State<VwscLogin> {
                       BoxShadow(
                         color: Colors.blue.withOpacity(0.2),
                         blurRadius: 10,
-                      ),
+                      )
                     ],
                   ),
                   child: const Icon(
@@ -100,13 +101,15 @@ class _VwscLogin extends State<VwscLogin> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// Gram Panchayat Login
+
+                      ///NJM User Login
                       Row(
                         children: const [
-                          Icon(Icons.account_balance, color: Color(0xFF1565C0)),
+                          Icon(Icons.account_balance,
+                              color: Color(0xFF1565C0)),
                           SizedBox(width: 8),
                           Text(
-                            "VWSC Member Login",
+                            "NJM/WSO User Login",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -201,7 +204,7 @@ class _VwscLogin extends State<VwscLogin> {
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
-                              AppConstants.navigateToVWSCLandingScreen,
+                              AppConstants.navigateToNJMWSOLandingPage,
                             );
 
                             loginUser();
@@ -251,6 +254,8 @@ class _VwscLogin extends State<VwscLogin> {
   }
 
   void showMessage(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg)),
+    );
   }
 }

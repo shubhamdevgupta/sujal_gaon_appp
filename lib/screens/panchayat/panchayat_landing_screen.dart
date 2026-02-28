@@ -1,14 +1,44 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:jal_sanchalan/providers/panchayat/panchayat_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/app_constants.dart';
+import '../../utils/auth/user_session_manager.dart';
 
-class PanchayatLandingScreen extends StatelessWidget {
+class PanchayatLandingScreen extends StatefulWidget {
   const PanchayatLandingScreen({super.key});
 
   @override
+  State<PanchayatLandingScreen> createState() => _PanchayatLandingScreenState();
+}
+
+class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
+  final session = UserSessionManager();
+
+  //late PanchayatProvider provider;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      session.init();
+      // provider = context.read<PanchayatProvider>();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final provider = context.watch<PanchayatProvider>();
+
+    int stateId = args["stateId"] as int;
+    int panchayatId = args["panchayatId"] as int;
+
+    print("--------- $stateId  &&&&&& $panchayatId");
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -36,12 +66,11 @@ class PanchayatLandingScreen extends StatelessWidget {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          gradient:  LinearGradient(
+          gradient: LinearGradient(
             colors: [Color(0xFF64B5F6), Colors.blue.shade50],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(10),
@@ -55,165 +84,18 @@ class PanchayatLandingScreen extends StatelessWidget {
 
               _buildWelcomeCard(),
 
-              SizedBox(height: 20,),
+              SizedBox(height: 20),
               // ================= DASHBOARD =================
               _dashboardCard(context),
 
               const SizedBox(height: 16),
-              /*   InkWell(onTap: () { Navigator.pushReplacementNamed(
-                  context,AppConstants.navigateToGpLogin);},child: _dashboard(context)),*/
-              _listCard(context),
+              _listCard(context, provider, stateId, panchayatId),
             ],
           ),
         ),
       ),
     );
   }
-
-  Widget _buildCustomHeader() {
-    return Container(
-      margin: const EdgeInsets.only(top: 30),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22), // ✅ All sides rounded
-
-        gradient: const LinearGradient(
-          colors: [
-            Colors.blue, // soft red
-            Color(0xFF1E5DB8), // deep blue
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.2),
-            blurRadius: 12,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-
-      child: Column(
-        mainAxisSize: MainAxisSize.min, // ✅ Prevent extra height
-        children: [
-          // ================= TOP BAR =================
-          Padding(
-            padding: const EdgeInsets.fromLTRB(14, 1, 14, 6),
-
-            // ✅ Reduced height
-            child: SafeArea(
-              bottom: false,
-
-              child: Row(
-                children: [
-                  // Logo
-                  Container(
-                    padding: const EdgeInsets.all(6),
-
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-
-                    child: const Icon(
-                      Icons.water_drop,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  // Title
-                  const Text(
-                    "Sujal Gaon App",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-
-                  const Spacer(),
-
-                  // Notification
-                  Stack(
-                    children: [
-                      const Icon(
-                        Icons.notifications,
-                        color: Colors.white,
-                        size: 22,
-                      ),
-
-                      Positioned(
-                        right: 0,
-                        top: 0,
-
-                        child: Container(
-                          padding: const EdgeInsets.all(3),
-
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-
-                          child: const Text(
-                            "3",
-                            style: TextStyle(color: Colors.white, fontSize: 9),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(width: 12),
-
-                  // ================= PROFILE IMAGE =================
-                  CircleAvatar(
-                    radius: 13,
-                    backgroundColor: Colors.white,
-
-                    backgroundImage: const AssetImage(
-                      'assets/icons/user_icon.png',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // ================= WELCOME STRIP =================
-          Container(
-            width: double.infinity,
-
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 10, // ✅ Reduced height
-            ),
-
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.96),
-
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(22),
-                bottomRight: Radius.circular(22),
-              ),
-            ),
-
-            child: const Text(
-              "Welcome Panchayat User",
-              style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // =======================================================
-  // DASHBOARD CARD
-  // =======================================================
 
   Widget _dashboardCard(BuildContext context) {
     return Column(
@@ -264,23 +146,9 @@ class PanchayatLandingScreen extends StatelessWidget {
                           ),
 
                           const Spacer(),
-
-                          /*     IconButton(
-                              icon: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.blue,
-                                size: 16,
-                              ),
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  AppConstants.navigateToPanchayatDashboard,
-                                );
-                              },
-                            ),*/
                         ],
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(height: 10),
 
                       const Text(
                         "Overview Your Panchayat Area",
@@ -291,103 +159,33 @@ class PanchayatLandingScreen extends StatelessWidget {
 
                       // ================= INNER WHITE CARD =================
                       _buildLocationCard(),
-
-                 /*     SizedBox(height: 20,),*/
-                   /*   _registerCard(context)*/
                     ],
                   ),
                 ),
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
 
-  Widget _registerCard(BuildContext context) {
+  Widget _listCard(
+    BuildContext context,
+    PanchayatProvider provider,
+    int stateId,
+    int panchayatId,
+  ) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushReplacementNamed(
-          context,
-          AppConstants.navigateToRegisterVwscScreen,
-        );
+      onTap: () async{
+       await provider.fetchVwscMemberList(session.userId, stateId, panchayatId);
+
+       Navigator.pushReplacementNamed(
+         context,
+         AppConstants.navigateToVWSCListScreen,
+         arguments: provider.vwscMember, // pass list directly
+       );
       },
-
-      child: Container(
-        height: 90,
-        padding: const EdgeInsets.all(8),
-
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-
-          gradient: const LinearGradient(
-            colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-
-          boxShadow: [
-            BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
-          ],
-        ),
-
-        child: Row(
-          children: [
-            const Icon(Icons.app_registration, color: Colors.white, size: 28),
-
-            const SizedBox(width: 12),
-
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Register VWSC",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-
-                  SizedBox(height: 4),
-
-                  Text(
-                    "Register Village Committee",
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
-                  ),
-                ],
-              ),
-            ),
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: const Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.white,
-                  size: 16,
-                ),
-           ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // =======================================================
-  // LIST CARD
-  // =======================================================
-
-  Widget _listCard(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushReplacementNamed(
-          context,
-          AppConstants.navigateToVWSCListScreen,
-        );
-      },
-
       child: Container(
         height: 90,
         padding: const EdgeInsets.all(16),
@@ -419,7 +217,7 @@ class PanchayatLandingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "List VWSC",
+                    "List VWSC Members",
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
 
@@ -436,26 +234,6 @@ class PanchayatLandingScreen extends StatelessWidget {
             Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
           ],
         ),
-      ),
-    );
-  }
-
-  // =======================================================
-  // HELPERS
-  // =======================================================
-
-  Widget _infoRow(String t1, String v1, String t2, String v2) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-
-      child: Row(
-        children: [
-          Expanded(child: _infoItem(t1, v1)),
-
-          Container(width: 1, height: 28, color: Colors.grey.shade300),
-
-          Expanded(child: _infoItem(t2, v2)),
-        ],
       ),
     );
   }
@@ -543,7 +321,10 @@ class PanchayatLandingScreen extends StatelessWidget {
 
           // ================= STATS =================
           Row(
-            children: const [_statBox("Villages", "12"), _statBox("VWSC", "4")],
+            children: const [
+              _statBox("Villages", "12"),
+              _statBox("Villages where VWSC/pani samiti formed", "4"),
+            ],
           ),
         ],
       ),
@@ -579,20 +360,6 @@ class PanchayatLandingScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  BoxDecoration _cardDecoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.05),
-          blurRadius: 10,
-          offset: const Offset(0, 4),
-        ),
-      ],
     );
   }
 
@@ -678,34 +445,6 @@ class PanchayatLandingScreen extends StatelessWidget {
       height: 40,
       color: Colors.grey.shade300,
       margin: const EdgeInsets.symmetric(horizontal: 10),
-    );
-  }
-
-  Widget _horizontalDivider() {
-    return Container(
-      width: 150,
-      height: 1,
-      color: Colors.grey.shade300,
-      margin: const EdgeInsets.symmetric(horizontal: 0),
-    );
-  }
-
-  Widget _infoItem(String title, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-        ),
-
-        const SizedBox(height: 2),
-
-        Text(
-          value,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        ),
-      ],
     );
   }
 }

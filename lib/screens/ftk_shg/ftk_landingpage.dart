@@ -12,11 +12,8 @@ class FtkLandingpage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-
         elevation: 0,
-
         backgroundColor: const Color(0xFF1565C0),
-
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -58,9 +55,8 @@ class FtkLandingpage extends StatelessWidget {
               _dashboardCard(context),
 
               const SizedBox(height: 16),
-              /*   InkWell(onTap: () { Navigator.pushReplacementNamed(
-                  context,AppConstants.navigateToGpLogin);},child: _dashboard(context)),*/
-              _listCard(context),
+
+              //_listCard(context),
             ],
           ),
         ),
@@ -120,26 +116,12 @@ class FtkLandingpage extends StatelessWidget {
                               ),
                             ),
 
-                            const Spacer(),
-
-                            IconButton(
-                              icon: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.blue,
-                                size: 16,
-                              ),
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  AppConstants.navigateToVWSCDashboard,
-                                );
-                              },
-                            ),
                           ],
                         ),
+                        const SizedBox(height: 8),
 
                         const Text(
-                          "Overview Your VWSC Area",
+                          "Overview Your FTK Area",
                           style: TextStyle(color: Colors.black87, fontSize: 13),
                         ),
 
@@ -233,87 +215,6 @@ class FtkLandingpage extends StatelessWidget {
     );
   }
 
-  Widget _listCard(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushReplacementNamed(
-          context,
-          AppConstants.navigateToFTKListScrenn,
-        );
-      },
-
-      child: Container(
-        height: 90,
-        padding: const EdgeInsets.all(16),
-
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: const LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: [
-              Color(0xFFF8FBFF), // very light (left)
-              Color(0xFFE3F2FD), // soft blue (middle)
-              Color(0xFFD0E8FF), // faded blue glow (right)
-            ],
-            stops: [0.0, 0.6, 1.0],
-          ),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
-        ),
-
-        child: Row(
-          children: const [
-            Icon(Icons.list_alt, color: Color(0xFF1976D2), size: 28),
-
-            SizedBox(width: 12),
-
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "List of NJM/WSO",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-                  ),
-
-                  SizedBox(height: 4),
-
-                  Text(
-                    "View RegisteredNJM/WSO Members",
-                    style: TextStyle(fontSize: 12, color: Colors.black54),
-                  ),
-                ],
-              ),
-            ),
-
-            Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // =======================================================
-  // HELPERS
-  // =======================================================
-
-  Widget _infoRow(String t1, String v1, String t2, String v2) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-
-      child: Row(
-        children: [
-          Expanded(child: _infoItem(t1, v1)),
-
-          Container(width: 1, height: 28, color: Colors.grey.shade300),
-
-          Expanded(child: _infoItem(t2, v2)),
-        ],
-      ),
-    );
-  }
-
   Widget _buildLocationCard() {
     return Container(
       margin: const EdgeInsets.only(top: 10),
@@ -360,6 +261,8 @@ class FtkLandingpage extends StatelessWidget {
                 color: Color(0xFFE53935),
                 title: "District",
                 value: "Sonipat",
+                subTitle: "LGD Code",
+                subTitleValue: "54557",
               ),
             ],
           ),
@@ -376,6 +279,8 @@ class FtkLandingpage extends StatelessWidget {
                 color: Color(0xFF8D6E63),
                 title: "Block",
                 value: "Gohana",
+                subTitle: "LGD Code",
+                subTitleValue: "54557",
               ),
 
               _verticalDivider(),
@@ -385,6 +290,8 @@ class FtkLandingpage extends StatelessWidget {
                 color: Color(0xFF00796B),
                 title: "GP",
                 value: "Hooda",
+                subTitle: "LGD Code",
+                subTitleValue: "54557",
               ),
             ],
           ),
@@ -404,11 +311,14 @@ class FtkLandingpage extends StatelessWidget {
     );
   }
 
+
   Widget _locationItemWithIcon({
     required IconData icon,
     required Color color,
     required String title,
     required String value,
+    String? subTitle,
+    String? subTitleValue,
   }) {
     return Expanded(
       child: Row(
@@ -422,31 +332,30 @@ class FtkLandingpage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${title}: ${value}",
+                "$title: $value",
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.grey.shade600,
                   fontWeight: FontWeight.w500,
                 ),
               ),
+
+              /// 🔥 Show only if subtitle exists
+              if (subTitle != null &&
+                  subTitleValue != null &&
+                  subTitleValue.isNotEmpty)
+                Text(
+                  "$subTitle: $subTitleValue",
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
             ],
           ),
         ],
       ),
-    );
-  }
-
-  BoxDecoration _cardDecoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.05),
-          blurRadius: 10,
-          offset: const Offset(0, 4),
-        ),
-      ],
     );
   }
 
@@ -484,7 +393,7 @@ class FtkLandingpage extends StatelessWidget {
                   SizedBox(height: 6),
 
                   Text(
-                    "NJM User",
+                    "FTK/SHG User",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -518,34 +427,6 @@ class FtkLandingpage extends StatelessWidget {
       height: 40,
       color: Colors.grey.shade300,
       margin: const EdgeInsets.symmetric(horizontal: 10),
-    );
-  }
-
-  Widget _horizontalDivider() {
-    return Container(
-      width: 150,
-      height: 1,
-      color: Colors.grey.shade300,
-      margin: const EdgeInsets.symmetric(horizontal: 0),
-    );
-  }
-
-  Widget _infoItem(String title, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-        ),
-
-        const SizedBox(height: 2),
-
-        Text(
-          value,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        ),
-      ],
     );
   }
 }

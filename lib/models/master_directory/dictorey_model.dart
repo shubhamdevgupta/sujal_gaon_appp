@@ -2,12 +2,6 @@
 //
 //     final rpwssDirectorymodel = rpwssDirectorymodelFromJson(jsonString);
 
-import 'dart:convert';
-
-RpwssDirectorymodel rpwssDirectorymodelFromJson(String str) => RpwssDirectorymodel.fromJson(json.decode(str));
-
-String rpwssDirectorymodelToJson(RpwssDirectorymodel data) => json.encode(data.toJson());
-
 class RpwssDirectorymodel {
   bool status;
   String message;

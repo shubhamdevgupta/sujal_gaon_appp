@@ -21,10 +21,6 @@ class _NjmLogin extends State<FtkShgLogin> {
       backgroundColor: const Color(0xFFEAF4FF),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1565C0),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: const Text("Login",style: TextStyle(color: Colors.white),),
         centerTitle: true,
         automaticallyImplyLeading: false, // 🔥 This hides back button
@@ -113,7 +109,7 @@ class _NjmLogin extends State<FtkShgLogin> {
                               color: Color(0xFF1565C0)),
                           SizedBox(width: 8),
                           Text(
-                            "NJM User Login",
+                            "FTK User Login",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -208,7 +204,7 @@ class _NjmLogin extends State<FtkShgLogin> {
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
-                              AppConstants.navigateToFTKLandingScreen,
+                              AppConstants.navigateToFtkLandingpage,
                             );
 
                             loginUser();

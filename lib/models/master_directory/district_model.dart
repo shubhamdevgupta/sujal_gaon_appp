@@ -1,13 +1,3 @@
-// To parse this JSON data, do
-//
-//     final districtmodel = districtmodelFromJson(jsonString);
-
-import 'dart:convert';
-
-Districtmodel districtmodelFromJson(String str) => Districtmodel.fromJson(json.decode(str));
-
-String districtmodelToJson(Districtmodel data) => json.encode(data.toJson());
-
 class Districtmodel {
   bool status;
   String message;
