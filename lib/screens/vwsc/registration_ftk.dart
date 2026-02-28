@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/master_provider.dart';
+import '../../utils/custom screen/custom_dropdown.dart';
 
 class SHGFTKRegistrationForm extends StatefulWidget {
   const SHGFTKRegistrationForm({super.key});
 
   @override
-  State<SHGFTKRegistrationForm> createState() =>
-      _SHGFTKRegistrationFormState();
+  State<SHGFTKRegistrationForm> createState() => _SHGFTKRegistrationFormState();
 }
 
-class _SHGFTKRegistrationFormState
-    extends State<SHGFTKRegistrationForm> {
-
+class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
   String? selectedVillage;
   String? selectedHabitation;
 
@@ -26,11 +27,7 @@ class _SHGFTKRegistrationFormState
   final String districtLGD = "111222";
   final String stateName = "Haryana";
 
-  final List<String> villages = [
-    "Sujal Gaon",
-    "Rampur",
-    "Khera",
-  ];
+  final List<String> villages = ["Sujal Gaon", "Rampur", "Khera"];
 
   final Map<String, List<String>> habitations = {
     "Sujal Gaon": ["Hab-1", "Hab-2"],
@@ -39,10 +36,23 @@ class _SHGFTKRegistrationFormState
   };
 
   @override
+  void initState() {
+    super.initState();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    final masterProvider = Provider.of<MasterProvider>(context, listen: false);
+
+    await masterProvider.fetchVillage("252219");
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final masterProvider = context.watch<MasterProvider>();
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
-
       appBar: AppBar(
         backgroundColor: const Color(0xFF1976D2),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -66,30 +76,137 @@ class _SHGFTKRegistrationFormState
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _sectionCard(
+                    icon: Icons.location_city,
+                    title: "Village & Habitation Selection",
+                    children: [
+                      /// ===============================
+                      /// VILLAGE DROPDOWN
+                      /// ===============================
+                      CustomDropdown(
+                        value: masterProvider.selectedVillageId,
+                        items: masterProvider.villages.map((village) {
+                          return DropdownMenuItem<String>(
+                            value: village.villageId.toString(),
+                            child: Text(
+                              village.villageName,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        }).toList(),
+                        title: "Village *",
+                        onChanged: (value) {
+                          masterProvider.setSelectedVillage(value);
 
+                          if (value != null && value.isNotEmpty) {
+                            masterProvider.fetchHabitation(value);
+                          }
+                        },
+                        appBarTitle: "Select Village",
+                      ),
+
+                      /// ===============================
+                      /// HABITATION SECTION
+                      /// ===============================
+                      if (masterProvider.selectedVillageId != null) ...[
+                        if (masterProvider.isLoading)
+                          const Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+
+                        if (!masterProvider.isLoading &&
+                            masterProvider.habitations.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Text("No Habitations Found"),
+                          ),
+
+                        if (masterProvider.habitations.isNotEmpty) ...[
+                          const Text(
+                            "Select Habitations",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: masterProvider.habitations.map((hab) {
+                              final habId = hab.habitationId.toString();
+
+                              final isSelected = masterProvider
+                                  .selectedHabitationIds
+                                  .contains(habId);
+
+                              return FilterChip(
+                                label: Text(
+                                  hab.habitationName,
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black87,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+
+                                selected: isSelected,
+
+                                onSelected: (_) {
+                                  masterProvider.toggleHabitation(habId);
+                                },
+
+                                selectedColor: Colors.blue,
+
+                                // 🔵 Blue when selected
+                                backgroundColor: Colors.grey.shade100,
+
+                                checkmarkColor: Colors.white,
+
+                                elevation: isSelected ? 4 : 0,
+
+                                shadowColor: Colors.blue.withOpacity(0.4),
+
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                  side: BorderSide(
+                                    color: isSelected
+                                        ? Colors.blue
+                                        : Colors.grey.shade300,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 22,),
               // ================= PERSONAL DETAILS =================
               _sectionCard(
                 icon: Icons.person,
                 title: "Personal Details",
                 children: [
-
                   _input("Name (First + Last Name)"),
 
-                  _input(
-                    "Contact Number",
-                    keyboard: TextInputType.phone,
-                  ),
+                  _input("Contact Number", keyboard: TextInputType.phone),
 
-                  _input(
-                    "Complete Address",
-                    maxLines: 3,
-                  ),
+                  _input("Complete Address", maxLines: 3),
                 ],
               ),
 
               const SizedBox(height: 22),
 
-/*              // ================= JJM REGISTRY =================
+              /*              // ================= JJM REGISTRY =================
               _sectionCard(
                 icon: Icons.account_balance,
                 title: "JJM IMIS Registry Details",
@@ -115,7 +232,6 @@ class _SHGFTKRegistrationFormState
                 icon: Icons.map,
                 title: "Area of Operation",
                 children: [
-
                   _dropdown(
                     "Select Village",
                     value: selectedVillage,
@@ -150,7 +266,6 @@ class _SHGFTKRegistrationFormState
                 icon: Icons.date_range,
                 title: "Validated For",
                 children: [
-
                   _datePickerBox(
                     label: "Valid From",
                     date: fromDate,
@@ -202,10 +317,7 @@ class _SHGFTKRegistrationFormState
         borderRadius: BorderRadius.circular(22),
 
         // 🔥 Added subtle border texture
-        border: Border.all(
-          color: Colors.blueGrey.shade200,
-          width: 1.2,
-        ),
+        border: Border.all(color: Colors.blueGrey.shade200, width: 1.2),
 
         boxShadow: [
           BoxShadow(
@@ -218,7 +330,6 @@ class _SHGFTKRegistrationFormState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Row(
             children: [
               Icon(icon, color: const Color(0xFF1976D2)),
@@ -236,18 +347,13 @@ class _SHGFTKRegistrationFormState
           const SizedBox(height: 12),
 
           // 🔵 Partition Line
-          Divider(
-            thickness: 1.2,
-            color: Colors.blueGrey.shade200,
-          ),
+          Divider(thickness: 1.2, color: Colors.blueGrey.shade200),
 
           const SizedBox(height: 16),
 
           ...children.map(
-                (e) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: e,
-            ),
+            (e) =>
+                Padding(padding: const EdgeInsets.only(bottom: 16), child: e),
           ),
         ],
       ),
@@ -255,14 +361,14 @@ class _SHGFTKRegistrationFormState
   }
 
   Widget _input(
-      String hint, {
-        TextEditingController? controller,
-        TextInputType keyboard = TextInputType.text,
-        int maxLines = 1,
-        int? maxLength,
-        bool readOnly = false,
-        Function(String)? onChanged,
-      }) {
+    String hint, {
+    TextEditingController? controller,
+    TextInputType keyboard = TextInputType.text,
+    int maxLines = 1,
+    int? maxLength,
+    bool readOnly = false,
+    Function(String)? onChanged,
+  }) {
     return TextField(
       controller: controller,
       keyboardType: keyboard,
@@ -274,11 +380,7 @@ class _SHGFTKRegistrationFormState
       decoration: InputDecoration(
         hintText: hint,
 
-        prefixIcon: const Icon(
-          Icons.edit,
-          color: Color(0xFF1976D2),
-          size: 18,
-        ),
+        prefixIcon: const Icon(Icons.edit, color: Color(0xFF1976D2), size: 18),
 
         filled: true,
         fillColor: Colors.white,
@@ -291,18 +393,12 @@ class _SHGFTKRegistrationFormState
         // 🔥 Darker textured border
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(
-            color: Colors.blueGrey.shade400,
-            width: 1.3,
-          ),
+          borderSide: BorderSide(color: Colors.blueGrey.shade400, width: 1.3),
         ),
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: Color(0xFF1976D2),
-            width: 1.8,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF1976D2), width: 1.8),
         ),
       ),
     );
@@ -310,15 +406,14 @@ class _SHGFTKRegistrationFormState
 
   // ================= INPUT =================
 
-
   // ================= DROPDOWN =================
 
   Widget _dropdown(
-      String hint, {
-        required String? value,
-        required List<String> items,
-        required Function(String?) onChanged,
-      }) {
+    String hint, {
+    required String? value,
+    required List<String> items,
+    required Function(String?) onChanged,
+  }) {
     return DropdownButtonFormField<String>(
       value: value,
 
@@ -341,33 +436,23 @@ class _SHGFTKRegistrationFormState
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(
-            color: Colors.blueGrey.shade400,
-            width: 1.3,
-          ),
+          borderSide: BorderSide(color: Colors.blueGrey.shade400, width: 1.3),
         ),
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: Color(0xFF1976D2),
-            width: 1.8,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF1976D2), width: 1.8),
         ),
       ),
 
       items: items
-          .map(
-            (e) => DropdownMenuItem(
-          value: e,
-          child: Text(e),
-        ),
-      )
+          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
           .toList(),
 
       onChanged: onChanged,
     );
   }
+
   // ================= READ ONLY =================
 
   Widget _readOnly(String label, String value) {
@@ -380,10 +465,7 @@ class _SHGFTKRegistrationFormState
       ),
       child: Row(
         children: [
-          Text(
-            "$label: ",
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
+          Text("$label: ", style: const TextStyle(fontWeight: FontWeight.w600)),
           Expanded(
             child: Text(
               value,
@@ -421,22 +503,14 @@ class _SHGFTKRegistrationFormState
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: Colors.blueGrey.shade400,
-            width: 1.3,
-          ),
+          border: Border.all(color: Colors.blueGrey.shade400, width: 1.3),
         ),
         child: Row(
           children: [
-            const Icon(
-              Icons.calendar_today,
-              color: Color(0xFF1976D2),
-            ),
+            const Icon(Icons.calendar_today, color: Color(0xFF1976D2)),
             const SizedBox(width: 12),
             Text(
-              date == null
-                  ? label
-                  : "${date.day}/${date.month}/${date.year}",
+              date == null ? label : "${date.day}/${date.month}/${date.year}",
             ),
           ],
         ),
@@ -452,10 +526,7 @@ class _SHGFTKRegistrationFormState
       height: 56,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFF1E88E5),
-            Color(0xFF1565C0),
-          ],
+          colors: [Color(0xFF1E88E5), Color(0xFF1565C0)],
         ),
         borderRadius: BorderRadius.circular(30),
       ),
