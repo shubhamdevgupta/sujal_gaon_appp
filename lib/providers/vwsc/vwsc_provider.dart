@@ -16,6 +16,7 @@ class VwscProvider extends ChangeNotifier {
     int userTypeId,
     int userId,
     int stateId,
+    int regId,
   ) async {
     _isLoading = true;
     notifyListeners();
@@ -25,6 +26,7 @@ class VwscProvider extends ChangeNotifier {
         userTypeId,
         userId,
         stateId,
+        regId
       );
       if(rawResponse.status==true){
         njmFtkUsers=rawResponse.registrationList;

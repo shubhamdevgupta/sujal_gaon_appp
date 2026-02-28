@@ -33,11 +33,14 @@ class AuthenticationProvider extends ChangeNotifier {
 
   String? errorMsg = '';
 
+/*
   Future<void> checkLoginStatus() async {
     _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
     notifyListeners();
   }
+*/
 
+/*
   Future<void> logoutUser() async {
     _isLoggedIn = false;
 
@@ -46,6 +49,7 @@ class AuthenticationProvider extends ChangeNotifier {
     await session.clearPref();
     notifyListeners();
   }
+*/
 
   // Method to login user
   Future<void> loginUser(

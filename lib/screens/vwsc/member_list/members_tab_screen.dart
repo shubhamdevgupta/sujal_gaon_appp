@@ -28,9 +28,9 @@ class _MembersTabScreenState extends State<MembersTabScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       session.init();
       context.read<VwscProvider>().fetchNjmFtkUser(
-        UserType.njmp.id,
-        907392,
-        31,
+        UserType.njmp.id,907392,
+        21,
+        0
       );
     });
 
@@ -41,15 +41,15 @@ class _MembersTabScreenState extends State<MembersTabScreen>
 
       if (_tabController.index == 0) {
         provider.fetchNjmFtkUser(
-          UserType.njmp.id,
-          907392,
-          31,
+          UserType.njmp.id, 907392,
+          21,
+          0
         );
       } else {
         provider.fetchNjmFtkUser(
-          UserType.ftk.id,
-          907392,
+          UserType.ftk.id, 907392,
           31,
+          0
         );
       }
     });

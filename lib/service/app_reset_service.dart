@@ -13,7 +13,7 @@ class AppResetService {
     await prefs.clear(); // Clears all stored values
 */
     // 2. Reset All Providers
-    Provider.of<AuthenticationProvider>(context, listen: false).logoutUser();
+  ///  Provider.of<AuthenticationProvider>(context, listen: false).logoutUser();
   //  Provider.of<MasterProvider>(context, listen: false).clearData();
     // Add other providers here if needed
 

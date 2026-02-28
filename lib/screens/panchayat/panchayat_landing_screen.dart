@@ -91,7 +91,11 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
 
               _registerOptions(context),
               const SizedBox(height: 16),
+
+              _listCardNJMFTK(context),
+              const SizedBox(height: 16),
               _listCard(context, provider, stateId, panchayatId),
+
             ],
           ),
         ),
@@ -169,6 +173,66 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
           ),
         ),
       ],
+    );
+  }
+  Widget _listCardNJMFTK(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushReplacementNamed(
+          context,
+          AppConstants.navigateToVWSCMemberScrenn,
+        );
+      },
+
+      child: Container(
+        height: 90,
+        padding: const EdgeInsets.all(16),
+
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: const LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Color(0xFFF8FBFF), // very light (left)
+              Color(0xFFE3F2FD), // soft blue (middle)
+              Color(0xFFD0E8FF), // faded blue glow (right)
+            ],
+            stops: [0.0, 0.6, 1.0],
+          ),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
+        ),
+
+        child: Row(
+          children: const [
+            Icon(Icons.list_alt, color: Color(0xFF1976D2), size: 28),
+
+            SizedBox(width: 12),
+
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "NJM/WSO & FTK/SGH Members",
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                  ),
+
+                  SizedBox(height: 4),
+
+                  Text(
+                    "View Registered NJM/WSO & FTK/SGH Members",
+                    style: TextStyle(fontSize: 12, color: Colors.black54),
+                  ),
+                ],
+              ),
+            ),
+
+            Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+          ],
+        ),
+      ),
     );
   }
 

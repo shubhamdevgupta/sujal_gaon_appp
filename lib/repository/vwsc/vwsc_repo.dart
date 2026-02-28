@@ -61,10 +61,11 @@ class VwscRepo {
       int userTypeId,
       int userId,
       int stateId,
+      int regId,
       ) async {
     try {
       final response = await _apiService.get(
-        '/SJL_GetRegistration_list?UsertypeId=$userTypeId&UserId=$userId&StateId=$stateId',
+        'SJL_GetRegistration_list?UsertypeId=$userTypeId&UserId=$userId&StateId=$stateId&RedId=$regId',
       );
 
       return NjmFtkMemberlist.fromJson(response);
