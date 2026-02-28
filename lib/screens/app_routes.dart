@@ -47,23 +47,26 @@ class AppRoutes {
       AppConstants.navigateToVWSCListScreen: (context) => VwscListScreen(),
 
       //vwsc
-      AppConstants.navigateToVWSCDashboard: (context) => const VwscDashboard(),
       AppConstants.navigateToVwscLogin: (context) => const VwscLogin(),
       AppConstants.navigateToVWSCLandingScreen: (context) => const VwscLandingScreen(),
       AppConstants.navigateToNJMPRegistrationForm: (context) => const NJMPRegistrationForm(),
       AppConstants.navigateToSHGFTKRegistrationForm: (context) => const SHGFTKRegistrationForm(),
+      AppConstants.navigateToVWSCMemberScrenn: (context) => MembersTabScreen(),
 
 
       //ftk/sgh
       AppConstants.navigateToFTKLogin: (context) => FtkShgLogin(),
       AppConstants.navigateToFtkLandingpage: (context) => FtkLandingpage(),
-      AppConstants.navigateToFTKListScrenn: (context) => MembersTabScreen(),
       AppConstants.navigateToFTKQuestionscategory: (context) => FtkQuestionscategory(),
       AppConstants.navigateToBasicDetailsForm: (context) => Basicdetails(),
       AppConstants.navigateToLocationFormScreen: (context) => LocationFormScreen(),
       AppConstants.navigateToWaterSampleForm: (context) => WaterSampleForm(),
       AppConstants.navigateToSanitaryInspectionForm: (context) => SanitaryInspectionForm(),
       AppConstants.navigateToMonthlyChargeCollectionForm: (context) => MonthlyChargeCollectionForm(),
+
+      // njm / wso
+      AppConstants.navigateToNJMLogin: (context) => NjmWsoLogin(),
+      AppConstants.navigateToNJMWSOLandingPage: (context) => NjmWsoLandingpage(),
       AppConstants.navigateToNjmCategory: (context) => const NjmCategory(),
       AppConstants.navigateToWscCategory: (context) => const WscCategory(),
       AppConstants.navigateToGroundWaterPumpForm: (context) => const GroundWaterPumpForm(),
@@ -75,11 +78,6 @@ class AppRoutes {
       AppConstants.navigateToDisinfectionForm: (context) => const DisinfectionForm(),
       AppConstants.navigateToNonSupplyForm: (context) => const NonSupplyForm(),
       AppConstants.navigateToEscalationAlertsScreen: (context) => const EscalationAlertsScreen(),
-
-
-      // njm/wso
-      AppConstants.navigateToNJMLogin: (context) => NjmWsoLogin(),
-      AppConstants.navigateToNJMWSOLandingPage: (context) => NjmWsoLandingpage(),
 
     };
   }

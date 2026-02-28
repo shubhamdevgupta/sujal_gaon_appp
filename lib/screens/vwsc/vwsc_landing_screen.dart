@@ -313,7 +313,7 @@ class VwscLandingScreen extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacementNamed(
           context,
-          AppConstants.navigateToFTKListScrenn,
+          AppConstants.navigateToVWSCMemberScrenn,
         );
       },
 
