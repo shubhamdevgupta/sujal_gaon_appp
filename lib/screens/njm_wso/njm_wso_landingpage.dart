@@ -109,7 +109,6 @@ class NjmWsoLandingpage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                     ],
                   ),
 
@@ -141,7 +140,7 @@ class NjmWsoLandingpage extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacementNamed(
           context,
-          AppConstants.navigateToFTKQuestionscategory,
+          AppConstants.navigateToNjmCategory,
         );
       },
 
@@ -175,7 +174,7 @@ class NjmWsoLandingpage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Water Quality Monitoring ",
+                    "NJM/WSO ",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -186,7 +185,7 @@ class NjmWsoLandingpage extends StatelessWidget {
                   SizedBox(height: 4),
 
                   Text(
-                    "Activity Log of NJM / WSO",
+                    "Nal Jal Mitra / Water Supply Operator Operations",
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
@@ -302,7 +301,6 @@ class NjmWsoLandingpage extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _locationItemWithIcon({
     required IconData icon,

@@ -58,10 +58,7 @@ class VwscLandingScreen extends StatelessWidget {
               _dashboardCard(context),
 
               const SizedBox(height: 16),
-              _registerOptions(context),
-              const SizedBox(height: 16),
-              /*   InkWell(onTap: () { Navigator.pushReplacementNamed(
-                  context,AppConstants.navigateToGpLogin);},child: _dashboard(context)),*/
+              //_registerOptions(context),
               _listCard(context),
             ],
           ),
@@ -199,8 +196,8 @@ class VwscLandingScreen extends StatelessWidget {
       ),
     );
   }*/
-
-  Widget _registerOptions(BuildContext context) {
+// TODO will be show later
+/*  Widget _registerOptions(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -307,13 +304,13 @@ class VwscLandingScreen extends StatelessWidget {
       ),
     );
   }
-
+*/
   Widget _listCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacementNamed(
           context,
-          AppConstants.navigateToFTKListScrenn,
+          AppConstants.navigateToVWSCMemberScrenn,
         );
       },
 

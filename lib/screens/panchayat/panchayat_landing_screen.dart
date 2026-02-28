@@ -87,7 +87,9 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
               SizedBox(height: 20),
               // ================= DASHBOARD =================
               _dashboardCard(context),
+              const SizedBox(height: 16),
 
+              _registerOptions(context),
               const SizedBox(height: 16),
               _listCard(context, provider, stateId, panchayatId),
             ],
@@ -232,6 +234,113 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
             ),
 
             Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _registerOptions(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+
+        border: Border.all(color: Colors.blueGrey.shade200, width: 1.2),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _registerRowProfessional(
+            icon: Icons.water_drop,
+            title: "Register NJMP",
+            subtitle: "Nal Jal Mitra Registration",
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                AppConstants.navigateToNJMPRegistrationForm,
+              );
+            },
+          ),
+
+          Divider(height: 1, thickness: 1, color: Colors.blueGrey.shade100),
+
+          _registerRowProfessional(
+            icon: Icons.groups_rounded,
+            title: "SHGs / FTK Trained Women",
+            subtitle: "Self Help Group Registration",
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                AppConstants.navigateToSHGFTKRegistrationForm,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _registerRowProfessional({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: Row(
+          children: [
+            Container(
+              height: 46,
+              width: 46,
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E88E5).withOpacity(0.12),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(icon, color: const Color(0xFF1565C0), size: 24),
+            ),
+
+            const SizedBox(width: 18),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF0F172A),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.blueGrey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Color(0xFF1565C0),
+            ),
           ],
         ),
       ),
