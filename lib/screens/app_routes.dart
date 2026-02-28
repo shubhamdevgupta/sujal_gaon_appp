@@ -31,8 +31,6 @@ import 'njm_wso/njm_wso_cat/water_supply_components/wsc_category.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/overhead_service.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/pumps_form.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/spring_water.dart';
-import 'panchayat/dashboard.dart';
-import 'panchayat/panchayat_dashboard.dart';
 import 'njm_wso/njm_wso_landingpage.dart';
 import 'njm_wso/njm_wso_login.dart';
 
@@ -66,11 +64,6 @@ class AppRoutes {
       AppConstants.navigateToWaterSampleForm: (context) => WaterSampleForm(),
       AppConstants.navigateToSanitaryInspectionForm: (context) => SanitaryInspectionForm(),
       AppConstants.navigateToMonthlyChargeCollectionForm: (context) => MonthlyChargeCollectionForm(),
-      AppConstants.navigateToSanitaryInspectionForm: (context) =>
-          SanitaryInspectionForm(),
-      AppConstants.navigateToMonthlyChargeCollectionForm: (context) =>
-          MonthlyChargeCollectionForm(),
-      AppConstants.navigateToPreLoginScreen: (context) => const PreLoginScreen(),
       AppConstants.navigateToNjmCategory: (context) => const NjmCategory(),
       AppConstants.navigateToWscCategory: (context) => const WscCategory(),
       AppConstants.navigateToGroundWaterPumpForm: (context) => const GroundWaterPumpForm(),

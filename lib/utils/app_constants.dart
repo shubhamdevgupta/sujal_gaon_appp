@@ -32,7 +32,6 @@ class AppConstants {
   static const String navigateToFtkLandingpage = '/FtkLandingpage ';
   static const String navigateToFTKQuestionscategory = '/FtkQuestionscategory ';
   static const String navigateToRegisterNJMWSOScreen = '/registrationnjmwso ';
-  static const String navigateToVWSCListScreen = '/listofvwsc ';
 
   ///////////////     NJM / WSO
 
@@ -52,10 +51,6 @@ class AppConstants {
   static const String navigateToDisinfectionForm = '/DisinfectionForm ';
   static const String navigateToNonSupplyForm = '/NonSupplyForm ';
   static const String navigateToEscalationAlertsScreen = '/EscalationAlertsScreen ';
-  static const String navigateToSanitaryInspectionForm =
-      '/SanitaryInspectionForm ';
-  static const String navigateToMonthlyChargeCollectionForm =
-      '/MonthlyChargeCollectionForm ';
 
   ////////// NJM WSO
   static const String navigateToNJMLogin = '/NJMLogin ';
@@ -89,10 +84,7 @@ class AppConstants {
   static const String totalSamplestestedtilldate =
       'Total no. of samples tested by you till date';
   static const String addftk = 'Add New Sample ';
-  static const String navigateToFTKLogin = '/FtkLogin ';
-  static const String navigateToFTKListScrenn = '/listofftkwso ';
   static const String navigateToFTKLandingScreen = '/ftklandingscreen ';
-  static const String navigateToFTKQuestionscategory = '/FtkQuestionscategory ';
   static const String navigateToftkSampleInfoScreen = '/ftksampleinfoScreen';
 
   static const String selectedTest = 'Selected Test';
