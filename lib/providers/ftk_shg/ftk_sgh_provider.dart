@@ -7,7 +7,7 @@ class FtkSghProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  Future<void> fetchBlock(
+  Future<void> registerNjmFTK(
     String username,
     int userId,
     String firstName,
@@ -53,26 +53,4 @@ class FtkSghProvider extends ChangeNotifier {
     }
   }
 
-
-  Future<void> fetchNJMUser(
-    int userTypeId,
-    int userId,
-    int stateId,
-  ) async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      final rawResponse = await _njmRepo.fetchNjmFtkUser(
-        userTypeId,
-        userId,
-        stateId,
-      );
-    } catch (e) {
-      debugPrint("Error fetching block: $e");
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
 }

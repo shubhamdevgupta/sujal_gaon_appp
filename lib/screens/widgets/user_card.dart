@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
-  final Map<String, String> user;
+  final String name;
+  final String email;
+  final String village;
 
-  const UserCard({required this.user});
+  const UserCard({
+    super.key,
+    required this.name,
+    required this.email,
+    required this.village,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,37 +30,17 @@ class UserCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 55,
-            width: 55,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-              ),
-            ),
-            child: const Icon(Icons.person, color: Colors.white),
+          Text(
+            name,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user["name"] ?? "",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Text("📞 ${user["mobile"] ?? ""}"),
-                const SizedBox(height: 4),
-                Text("✉ ${user["email"] ?? ""}"),
-              ],
-            ),
-          ),
-          const Icon(Icons.arrow_forward_ios, size: 16),
+          const SizedBox(height: 6),
+          Text("Email: $email"),
+          const SizedBox(height: 4),
+          Text("Village: $village"),
         ],
       ),
     );

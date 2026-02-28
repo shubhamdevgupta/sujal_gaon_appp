@@ -1,45 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
+import 'package:jal_sanchalan/utils/auth/user_session_manager.dart';
+import 'package:provider/provider.dart';
 
+import '../../../utils/enum/user_type.dart';
 import 'ftk_sgh_page.dart';
 import 'njm_wso_page.dart';
 
-class MembersTabScreen extends StatelessWidget {
+class MembersTabScreen extends StatefulWidget {
   const MembersTabScreen({super.key});
 
   @override
+  State<MembersTabScreen> createState() => _MembersTabScreenState();
+}
+
+class _MembersTabScreenState extends State<MembersTabScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  final session = UserSessionManager();
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController = TabController(length: 2, vsync: this);
+
+    // Initial Load → NJM
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      session.init();
+      context.read<VwscProvider>().fetchNjmFtkUser(
+        UserType.njmp.id,
+        907392,
+        31,
+      );
+    });
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) return;
+
+      final provider = context.read<VwscProvider>();
+
+      if (_tabController.index == 0) {
+        provider.fetchNjmFtkUser(
+          UserType.njmp.id,
+          907392,
+          31,
+        );
+      } else {
+        provider.fetchNjmFtkUser(
+          UserType.ftk.id,
+          907392,
+          31,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFEAF3FB),
-        appBar: AppBar(
-          title: const Text(
-            "Members List",
-            style: TextStyle(color: Colors.white),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF1E88E5), Color(0xFF64B5F6)],
-              ),
-            ),
-          ),
-          bottom: const TabBar(
-            indicatorColor: Colors.white,
-            tabs: [
-              Tab(text: "NJM / WSO"),
-              Tab(text: "FTK / SGH"),
-            ],
-          ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFEAF3FB),
+      appBar: AppBar(
+        title: const Text(
+          "Members List",
+          style: TextStyle(color: Colors.white),
         ),
-        body: const TabBarView(
-          children: [
-            NjmWsoPage(),
-            FtkSghPage(),
+        centerTitle: true,
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: Colors.white,
+          tabs: const [
+            Tab(text: "NJM / WSO"),
+            Tab(text: "FTK / SGH"),
           ],
         ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [NjmWsoPage(), FtkSghPage()],
       ),
     );
   }

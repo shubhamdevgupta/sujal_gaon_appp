@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/providers/authentication_provider.dart';
 import 'package:jal_sanchalan/providers/master_provider.dart';
 import 'package:jal_sanchalan/providers/panchayat/panchayat_provider.dart';
+import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
 import 'package:jal_sanchalan/service/local_storage_service.dart';
 import 'package:jal_sanchalan/utils/AppUtil.dart';
 import 'package:jal_sanchalan/utils/app_constants.dart';
@@ -21,6 +22,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => MasterProvider()),
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (_) => PanchayatProvider()),
+        ChangeNotifierProvider(create: (_) => VwscProvider()),
       ],
       child: const MyApp(),
     ),
