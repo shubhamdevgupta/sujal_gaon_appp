@@ -142,7 +142,6 @@ class _Basicdetails extends State<Basicdetails> {
                 icon: Icons.verified_user,
                 title: "Appointment Authority",
                 children: [
-
                   _input(
                     "Authority Name & Designation",
                   ),

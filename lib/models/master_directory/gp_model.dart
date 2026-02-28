@@ -1,13 +1,3 @@
-// To parse this JSON data, do
-//
-//     final gPmodel = gPmodelFromJson(jsonString);
-
-import 'dart:convert';
-
-GPmodel gPmodelFromJson(String str) => GPmodel.fromJson(json.decode(str));
-
-String gPmodelToJson(GPmodel data) => json.encode(data.toJson());
-
 class GPmodel {
   bool status;
   String message;

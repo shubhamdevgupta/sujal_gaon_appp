@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/providers/authentication_provider.dart';
 import 'package:jal_sanchalan/utils/custom%20screen/app_text_field.dart';
+import 'package:jal_sanchalan/utils/enum/user_type.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/app_constants.dart';
@@ -237,17 +238,20 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                             ),
                           ),
                           onPressed: () async {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              AppConstants.navigateToPanchayatDashboard,
-                            );
-                         /*     provider.loginUser(
-                                mobileController.text,
-                                passwordController.text,
+                              provider.loginUser(
+                                "PR-ALLABAGRI-I-V-ADM",
+                                "Admin@1234",
+                                UserType.panchayat.id,
                                 () {
                                   Navigator.pushReplacementNamed(
                                     context,
-                                    AppConstants.navigateToPanchayatDashboard,
+                                    AppConstants.navigateToPanchayatLandingScreen,
+                                    arguments: {
+                                      "stateId": int.parse(
+                                          provider.loginResponse!.result!.loginResult!.stateId!),
+                                      "panchayatId": int.parse(
+                                          provider.loginResponse!.result!.loginResult!.panchayatId!),
+                                    },
                                   );
                                 },
                                 (errorMessage) {
@@ -256,13 +260,7 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                                   );
                                   ToastHelper.showToastMessage(errorMessage);
                                 },
-                              );*/
-
-
-                            Navigator.pushNamed(
-                              context,
-                              AppConstants.navigateToPanchayatLandingScreen,
-                            );
+                              );
                           },
                           child: const Text(
                             "Login",
@@ -270,62 +268,6 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                           ),
                         ),
                       ),
-
-                      /*          /// OR
-                      const Center(
-                        child: Text(
-                          "Or, Verify using OTP",
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                      ),
-
-                      const SizedBox(height: 15),
-
-                      /// Send OTP
-                      SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Color(0xFF1565C0)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: () {
-                            sendOTP();
-                          },
-                          child: const Text(
-                            "Send OTP",
-                            style: TextStyle(
-                              color: Color(0xFF1565C0),
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      /// Register
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Don’t have an account? "),
-                          GestureDetector(
-                            onTap: () {
-                              // Navigate to Register Screen
-                            },
-                            child: const Text(
-                              "Register Now",
-                              style: TextStyle(
-                                color: Color(0xFF1565C0),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),*/
                     ],
                   ),
                 ),
@@ -352,6 +294,6 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
               : "Please Enter Correct Captcha")
         : "Please Enter Password");
 
-    return provider.errorMsg.isEmpty;
+    return provider.errorMsg!.isNotEmpty;
   }
 }

@@ -1,12 +1,4 @@
-// To parse this JSON data, do
-//
-//     final statemodel = statemodelFromJson(jsonString);
 
-import 'dart:convert';
-
-Statemodel statemodelFromJson(String str) => Statemodel.fromJson(json.decode(str));
-
-String statemodelToJson(Statemodel data) => json.encode(data.toJson());
 
 class Statemodel {
   bool status;

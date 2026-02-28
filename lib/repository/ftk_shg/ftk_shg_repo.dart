@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'package:jal_sanchalan/models/ftk_sgh/FTKUserList.dart';
 import 'package:jal_sanchalan/models/ftk_sgh/FtkRegistrationResponse.dart';
 
-import '../service/base_api_service.dart';
-import '../utils/global_exception_handler.dart';
+import '../../service/base_api_service.dart';
+import '../../utils/global_exception_handler.dart';
 
 class FtkRepo {
   final BaseApiService _apiService = BaseApiService();
 
-  Future<Ftkregistrationresponse> registerNJMWSO(
+  //using this api we can register njm/wso and ftk/sgh both type of user
+  Future<Ftkregistrationresponse> registerNjmFTK(
     String username,
     int userId,
     String firstName,
@@ -27,7 +28,7 @@ class FtkRepo {
   ) async {
     try {
       final response = await _apiService.post(
-        'PanchayatLogin',
+        'SJLInsertRegistration',
         body: jsonEncode({
           'UserTypeId': username,
           'UserId': userId,
@@ -45,7 +46,6 @@ class FtkRepo {
           'LevelTraining': levelTraining,
           'IPAddress': ipAddress,
         }),
-        apiType: ApiType.egramswaraj,
       );
 
       return Ftkregistrationresponse.fromJson(response);
@@ -57,15 +57,15 @@ class FtkRepo {
       rethrow;
     }
   }
-
-  Future<Ftkuserlist> fetchNJMUser(
+  //using this api we can get list of  njm/wso and ftk/sgh both type of user
+  Future<Ftkuserlist> fetchNjmFtkUser(
     int userTypeId,
     int userId,
     int stateId,
   ) async {
     try {
       final response = await _apiService.get(
-        '/apimaster/getblock?UsertypeId=$userTypeId&UserId=$userId&StateId=$stateId',
+        '/SJL_GetRegistration_list?UsertypeId=$userTypeId&UserId=$userId&StateId=$stateId',
       );
 
       return Ftkuserlist.fromJson(response);

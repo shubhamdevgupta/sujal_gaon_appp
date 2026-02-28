@@ -89,7 +89,7 @@ class _SHGFTKRegistrationFormState
 
               const SizedBox(height: 22),
 
-              // ================= JJM REGISTRY =================
+/*              // ================= JJM REGISTRY =================
               _sectionCard(
                 icon: Icons.account_balance,
                 title: "JJM IMIS Registry Details",
@@ -108,7 +108,7 @@ class _SHGFTKRegistrationFormState
                 ],
               ),
 
-              const SizedBox(height: 22),
+              const SizedBox(height: 22),*/
 
               // ================= AREA OF OPERATION =================
               _sectionCard(
