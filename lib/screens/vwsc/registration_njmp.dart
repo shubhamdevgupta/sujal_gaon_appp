@@ -90,40 +90,121 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  _sectionCard(icon: Icons.holiday_village, title: "Chose your village",
-                      children: [
-                        CustomDropdown(
-                    value: masterProvider.selectedVillageId, // ✅ Selected ID
-                    items: masterProvider.villages.map((state) {
-                      return DropdownMenuItem<String>(
+                  _sectionCard(
+                    icon: Icons.location_city,
+                    title: "Village & Habitation Selection",
+                    children: [
 
-                        value: state.villageId.toString(), // ✅ State ID
+                      /// ===============================
+                      /// VILLAGE DROPDOWN
+                      /// ===============================
 
-                        child: Text(
-                          state.villageName,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      );
-                    }).toList(),
+                      CustomDropdown(
+                        value: masterProvider.selectedVillageId,
+                        items: masterProvider.villages.map((village) {
+                          return DropdownMenuItem<String>(
+                            value: village.villageId.toString(),
+                            child: Text(
+                              village.villageName,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        }).toList(),
+                        title: "Village *",
+                        onChanged: (value) {
+                          masterProvider.setSelectedVillage(value);
 
-                    title: "Village *",
+                          if (value != null && value.isNotEmpty) {
+                            masterProvider.fetchHabitation(value);
+                          }
+                        },
+                        appBarTitle: "Select Village",
+                      ),
 
-                    onChanged: (value) {
 
-                      masterProvider.setSelectedVillage(value); // ✅ Save state
 
-                      if (value != null && value.isNotEmpty) {
-                        masterProvider.fetchDirectory();// Next API
-                      }
-                    },
+                      /// ===============================
+                      /// HABITATION SECTION
+                      /// ===============================
 
-                    appBarTitle: "Select Village",
+                      if (masterProvider.selectedVillageId != null) ...[
+
+                        if (masterProvider.isLoading)
+                          const Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+
+                        if (!masterProvider.isLoading &&
+                            masterProvider.habitations.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Text("No Habitations Found"),
+                          ),
+
+                        if (masterProvider.habitations.isNotEmpty) ...[
+
+                          const Text(
+                            "Select Habitations",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: masterProvider.habitations.map((hab) {
+
+                              final habId = hab.habitationId.toString();
+
+                              final isSelected =
+                              masterProvider.selectedHabitationIds
+                                  .contains(habId);
+
+                              return FilterChip(
+                                label: Text(
+                                  hab.habitationName,
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black87,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+
+                                selected: isSelected,
+
+                                onSelected: (_) {
+                                  masterProvider.toggleHabitation(habId);
+                                },
+
+                                selectedColor: Colors.blue, // 🔵 Blue when selected
+
+                                backgroundColor: Colors.grey.shade100,
+
+                                checkmarkColor: Colors.white,
+
+                                elevation: isSelected ? 4 : 0,
+
+                                shadowColor: Colors.blue.withOpacity(0.4),
+
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                  side: BorderSide(
+                                    color: isSelected
+                                        ? Colors.blue
+                                        : Colors.grey.shade300,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ],
+                    ],
                   ),
-                      ]),
-
-
-
 
 
                 ],

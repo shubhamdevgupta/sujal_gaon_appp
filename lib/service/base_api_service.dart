@@ -13,8 +13,8 @@ import '../utils/auth/user_session_manager.dart';
 import '../utils/custom screen/custom_exception.dart';
 
 class BaseApiService {
-  final String _baseUrl = 'https://ejalshakti.gov.in/webapi/api/SJL/';
-  static const String ejalShakti = "https://ejalshakti.gov.in/wqmis/api/";
+  final String baseUrl = 'https://ejalshakti.gov.in/webapi/api/SJL/';
+  static const String ejalShakti = "https://ejalshakti.gov.in/WebAPI/";
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
   static const String github = "https://api.github.com/repos/";
 
@@ -23,7 +23,7 @@ class BaseApiService {
     Map<String, String>? headers,
     dynamic body, // Accepts raw JSON as string
   }) async {
-    final Uri url = Uri.parse('$_baseUrl$endpoint');
+    final Uri url = Uri.parse('$baseUrl$endpoint');
 
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
@@ -51,9 +51,11 @@ class BaseApiService {
 
   Future<dynamic> get(
     String endpoint, {
+    ApiType apiType = ApiType.baseUrl,
     Map<String, String>? headers,
   }) async {
-    final Uri url = Uri.parse('$_baseUrl$endpoint');
+    final String baseUrl = getBaseUrl(apiType);
+    final Uri url = Uri.parse('$baseUrl$endpoint');
 
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
@@ -150,11 +152,11 @@ class BaseApiService {
     }
   }
 
-
-
   String getBaseUrl(ApiType apiType) {
     switch (apiType) {
-      case ApiType.ejalShakti:
+      case ApiType.baseUrl:
+        return baseUrl;
+        case ApiType.ejalShakti:
         return ejalShakti;
       case ApiType.reverseGeocoding:
         return reverseGeocoding;
@@ -172,7 +174,6 @@ class BaseApiService {
   }
 }
 
-
 Future<String> getEncryptedToken() async {
   final session = UserSessionManager();
 
@@ -181,4 +182,4 @@ Future<String> getEncryptedToken() async {
   return session.token.toString();
 }
 
-enum ApiType { ejalShakti, reverseGeocoding, github }
+enum ApiType { baseUrl,ejalShakti, reverseGeocoding, github }
