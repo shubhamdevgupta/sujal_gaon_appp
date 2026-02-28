@@ -76,40 +76,46 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  _sectionCard(icon: Icons.holiday_village, title: "Chose your village", children: []),
-
-                  CustomDropdown(
-                    value: masterProvider.selectedGpId, // ✅ Selected ID
-                    items: masterProvider.gramPanchayats.map((state) {
+                  _sectionCard(icon: Icons.holiday_village, title: "Chose your village",
+                      children: [
+                        CustomDropdown(
+                    value: masterProvider.selectedVillageId, // ✅ Selected ID
+                    items: masterProvider.villages.map((state) {
                       return DropdownMenuItem<String>(
 
-                        value: state.panchayatId.toString(), // ✅ State ID
+                        value: state.villageId.toString(), // ✅ State ID
 
                         child: Text(
-                          state.grampanchayatName,
+                          state.villageName,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
                       );
                     }).toList(),
 
-                    title: "Gram Panchayat *",
+                    title: "Village *",
 
                     onChanged: (value) {
 
-                      masterProvider.setSelectedGp(value); // ✅ Save state
+                      masterProvider.setSelectedVillage(value); // ✅ Save state
 
                       if (value != null && value.isNotEmpty) {
-                        masterProvider.fetchVillage(value); // Next API
+                        masterProvider.fetchDirectory();// Next API
                       }
                     },
 
-                    appBarTitle: "Select Gram Panchayat",
+                    appBarTitle: "Select Village",
                   ),
+                      ]),
+
+
+
+
+
                 ],
               ),
 
-
+              const SizedBox(height: 22),
               // ================= OPERATOR DETAILS =================
               _sectionCard(
                 icon: Icons.person,
