@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/master_provider.dart';
 import '../../utils/custom screen/custom_dropdown.dart';
 
 class NJMPRegistrationForm extends StatefulWidget {
@@ -41,8 +43,8 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
 
   @override
   Widget build(BuildContext context) {
+    final masterProvider = context.watch<MasterProvider>();
     return Scaffold(
-
       backgroundColor: const Color(0xFFF4F7FB),
 
       appBar: AppBar(
@@ -73,6 +75,8 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  _sectionCard(icon: Icons.holiday_village, title: "Chose your village", children: []),
 
                   CustomDropdown(
                     value: masterProvider.selectedGpId, // ✅ Selected ID
