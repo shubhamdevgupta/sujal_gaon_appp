@@ -26,24 +26,6 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
 
-  // ===== Demo Auto Data (Replace with API) =====
-  final String gpName = "Hooda Gram Panchayat";
-  final String gpLGD = "123456";
-  final String villageName = "Sujal Gaon";
-  final String villageLGD = "654321";
-  final String districtName = "Sonipat";
-  final String districtLGD = "111222";
-  final String stateName = "Haryana";
-
-  final List<String> villages = ["Sujal Gaon", "Rampur", "Khera"];
-
-  final Map<String, List<String>> habitations = {
-    "Sujal Gaon": ["Hab-1", "Hab-2"],
-    "Rampur": ["Hab-A", "Hab-B"],
-    "Khera": ["Hab-X", "Hab-Y"],
-  };
-
-
   @override
   void initState() {
     super.initState();
@@ -498,11 +480,12 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
 
 
   Widget _submitButton(VwscProvider provider, MasterProvider masterProvider) {
+    provider.fetchDeviceId();
     return InkWell(
       onTap: () {
         provider.registerNjmFTK(
           regId: 0,
-          userTypeId: UserType.njmp.id,
+          userTypeId: UserType.ftk.id,
           stateId: int.parse(_localStorage.getString(AppConstants.prefState)!),
           districtId: int.parse(
             _localStorage.getString(AppConstants.prefDistrict)!,
@@ -526,7 +509,7 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
           createdBy: session.userId,
           validatedFrom: formatDate(provider.fromDate),
           validatedTo: formatDate(provider.toDate),
-          habitationIds: masterProvider.selectedHabitationIds.toString(),
+          habitationIds: masterProvider.selectedHabitationIdsAsString,
         );
       },
       child: Container(

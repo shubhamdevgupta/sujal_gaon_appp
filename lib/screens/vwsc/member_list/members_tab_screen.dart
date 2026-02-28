@@ -48,7 +48,7 @@ class _MembersTabScreenState extends State<MembersTabScreen>
       } else {
         provider.fetchNjmFtkUser(
           UserType.ftk.id, 907392,
-          31,
+          21,
           0
         );
       }
