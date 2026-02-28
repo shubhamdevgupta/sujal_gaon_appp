@@ -31,7 +31,8 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
     super.initState();
     session.init();
     final masterProvider = Provider.of<MasterProvider>(context, listen: false);
-    masterProvider.fetchVillage(_localStorage.getString(AppConstants.prefPanchayatId)!);
+    masterProvider.fetchVillage(
+        _localStorage.getString(AppConstants.prefPanchayatId)!);
   }
 
   @override
@@ -52,8 +53,14 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
       ),
 
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/icons/SJL_bg.png"),
@@ -264,7 +271,6 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
               ),
 
               const SizedBox(height: 30),
-
               _submitButton(vwscProvider, masterProvider),
 
               const SizedBox(height: 40),
@@ -335,7 +341,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
           const SizedBox(height: 16),
 
           ...children.map(
-            (e) =>
+                (e) =>
                 Padding(padding: const EdgeInsets.only(bottom: 16), child: e),
           ),
         ],
@@ -343,8 +349,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
     );
   }
 
-  Widget _input(
-    String hint, {
+  Widget _input(String hint, {
     TextEditingController? controller,
     TextInputType keyboard = TextInputType.text,
     int maxLines = 1,
@@ -387,8 +392,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
     );
   }
 
-  Widget _dropdown(
-    String label, {
+  Widget _dropdown(String label, {
     required String? value,
     required List<String> items,
     required Function(String?) onChanged,
@@ -477,7 +481,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
           createdBy: session.userId,
           validatedFrom: formatDate(provider.fromDate),
           validatedTo: formatDate(provider.toDate),
-          habitationIds: masterProvider.selectedHabitationIds.toString(),
+          habitationIds: masterProvider.selectedHabitationIdsAsString,
         );
       },
       child: Container(

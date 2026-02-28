@@ -73,14 +73,25 @@ class MasterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<String> selectedHabitationIds = [];
+
+  void toggleHabitation(String id) {
+    if (selectedHabitationIds.contains(id)) {
+      selectedHabitationIds.remove(id);
+    } else {
+      selectedHabitationIds.add(id);
+    }
+    notifyListeners();
+  }
+  String get selectedHabitationIdsAsString {
+    return selectedHabitationIds.join(',');
+  }
+
 
   List<RpwssResultList> directoryList = [];
 
   String? tempId;
   String? serviceAreaId;
-
-
-
 
   Future<void> fetchState() async {
     _isLoading = true;
@@ -113,8 +124,6 @@ class MasterProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-
 
   Future<void> fetchDistrict(String stateId) async {
 
@@ -158,7 +167,6 @@ class MasterProvider extends ChangeNotifier {
     }
   }
 
-
   Future<void> fetchBlock(String districtId) async {
 
     selectedBlockId = null;
@@ -194,7 +202,6 @@ class MasterProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   Future<void> fetchGramPanchayat(String blockId) async {
 
@@ -233,7 +240,6 @@ class MasterProvider extends ChangeNotifier {
     }
   }
 
-
   Future<void> fetchVillage(String panchayatId) async {
 
     // Reset old
@@ -270,17 +276,6 @@ class MasterProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  void toggleHabitation(String id) {
-    if (selectedHabitationIds.contains(id)) {
-      selectedHabitationIds.remove(id);
-    } else {
-      selectedHabitationIds.add(id);
-    }
-    notifyListeners();
-  }
-
-  List<String> selectedHabitationIds = [];
-
 
 
   void setSelectedVillage(String? value) {
