@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/custom screen/custom_dropdown.dart';
+
 class NJMPRegistrationForm extends StatefulWidget {
   const NJMPRegistrationForm({super.key});
 
@@ -45,7 +47,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF1565C0),
         title: const Text(
-          "NJMP Registration",
+          "NJM Registration",
           style: TextStyle(color: Colors.white),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -65,6 +67,43 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  CustomDropdown(
+                    value: masterProvider.selectedGpId, // ✅ Selected ID
+                    items: masterProvider.gramPanchayats.map((state) {
+                      return DropdownMenuItem<String>(
+
+                        value: state.panchayatId.toString(), // ✅ State ID
+
+                        child: Text(
+                          state.grampanchayatName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      );
+                    }).toList(),
+
+                    title: "Gram Panchayat *",
+
+                    onChanged: (value) {
+
+                      masterProvider.setSelectedGp(value); // ✅ Save state
+
+                      if (value != null && value.isNotEmpty) {
+                        masterProvider.fetchVillage(value); // Next API
+                      }
+                    },
+
+                    appBarTitle: "Select Gram Panchayat",
+                  ),
+                ],
+              ),
+
 
               // ================= OPERATOR DETAILS =================
               _sectionCard(
