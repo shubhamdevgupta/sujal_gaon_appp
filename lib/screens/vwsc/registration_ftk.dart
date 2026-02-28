@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/master_provider.dart';
+import '../../providers/vwsc/vwsc_provider.dart';
+import '../../service/local_storage_service.dart';
+import '../../utils/app_constants.dart';
+import '../../utils/auth/user_session_manager.dart';
 import '../../utils/custom screen/custom_dropdown.dart';
+import '../../utils/enum/user_type.dart';
 
 class SHGFTKRegistrationForm extends StatefulWidget {
   const SHGFTKRegistrationForm({super.key});
@@ -17,6 +22,9 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
 
   DateTime? fromDate;
   DateTime? toDate;
+
+  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
 
   // ===== Demo Auto Data (Replace with API) =====
   final String gpName = "Hooda Gram Panchayat";
@@ -35,13 +43,18 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
     "Khera": ["Hab-X", "Hab-Y"],
   };
 
+
   @override
   void initState() {
     super.initState();
+    session.init();
+    final masterProvider = Provider.of<MasterProvider>(context, listen: false);
+    masterProvider.fetchVillage(_localStorage.getString(AppConstants.prefPanchayatId)!);
   }
   @override
   Widget build(BuildContext context) {
     final masterProvider = context.watch<MasterProvider>();
+    final vwscProvider = context.watch<VwscProvider>();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
@@ -71,114 +84,7 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _sectionCard(
-                    icon: Icons.location_city,
-                    title: "Village & Habitation Selection",
-                    children: [
-                      /// ===============================
-                      /// VILLAGE DROPDOWN
-                      /// ===============================
-                      CustomDropdown(
-                        value: masterProvider.selectedVillageId,
-                        items: masterProvider.villages.map((village) {
-                          return DropdownMenuItem<String>(
-                            value: village.villageId.toString(),
-                            child: Text(
-                              village.villageName,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        }).toList(),
-                        title: "Village *",
-                        onChanged: (value) {
-                          masterProvider.setSelectedVillage(value);
 
-                          if (value != null && value.isNotEmpty) {
-                            masterProvider.fetchHabitation(value);
-                          }
-                        },
-                        appBarTitle: "Select Village",
-                      ),
-
-                      /// ===============================
-                      /// HABITATION SECTION
-                      /// ===============================
-                      if (masterProvider.selectedVillageId != null) ...[
-                        if (masterProvider.isLoading)
-                          const Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Center(child: CircularProgressIndicator()),
-                          ),
-
-                        if (!masterProvider.isLoading &&
-                            masterProvider.habitations.isEmpty)
-                          const Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Text("No Habitations Found"),
-                          ),
-
-                        if (masterProvider.habitations.isNotEmpty) ...[
-                          const Text(
-                            "Select Habitations",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: masterProvider.habitations.map((hab) {
-                              final habId = hab.habitationId.toString();
-
-                              final isSelected = masterProvider
-                                  .selectedHabitationIds
-                                  .contains(habId);
-
-                              return FilterChip(
-                                label: Text(
-                                  hab.habitationName,
-                                  style: TextStyle(
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.black87,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-
-                                selected: isSelected,
-
-                                onSelected: (_) {
-                                  masterProvider.toggleHabitation(habId);
-                                },
-
-                                selectedColor: Colors.blue,
-
-                                // 🔵 Blue when selected
-                                backgroundColor: Colors.grey.shade100,
-
-                                checkmarkColor: Colors.white,
-
-                                elevation: isSelected ? 4 : 0,
-
-                                shadowColor: Colors.blue.withOpacity(0.4),
-
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                  side: BorderSide(
-                                    color: isSelected
-                                        ? Colors.blue
-                                        : Colors.grey.shade300,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ],
-                    ],
-                  ),
                 ],
               ),
 
@@ -188,11 +94,11 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
                 icon: Icons.person,
                 title: "Personal Details",
                 children: [
-                  _input("Name (First + Last Name)"),
+                  _input("Name (First + Last Name)",controller: vwscProvider.nameController),
 
-                  _input("Contact Number", keyboard: TextInputType.phone),
+                  _input("Contact Number", controller: vwscProvider.phoneController,keyboard: TextInputType.phone),
 
-                  _input("Complete Address", maxLines: 3),
+                  _input("Complete Address", controller: vwscProvider.addressController,maxLines: 3),
                 ],
               ),
 
@@ -220,36 +126,116 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
               const SizedBox(height: 22),*/
 
               // ================= AREA OF OPERATION =================
+
               _sectionCard(
                 icon: Icons.map,
                 title: "Area of Operation",
                 children: [
-                  _dropdown(
-                    "Select Village",
-                    value: selectedVillage,
-                    items: villages,
-                    onChanged: (v) {
-                      setState(() {
-                        selectedVillage = v;
-                        selectedHabitation = null;
-                      });
+                  /// ===============================
+                  /// VILLAGE DROPDOWN
+                  /// ===============================
+                  CustomDropdown(
+                    value: masterProvider.selectedVillageId,
+                    items: masterProvider.villages.map((village) {
+                      return DropdownMenuItem<String>(
+                        value: village.villageId.toString(),
+                        child: Text(
+                          village.villageName,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    }).toList(),
+                    title: "Village *",
+                    onChanged: (value) {
+                      masterProvider.setSelectedVillage(value);
+
+                      if (value != null && value.isNotEmpty) {
+                        masterProvider.fetchHabitation(value);
+                      }
                     },
+                    appBarTitle: "Select Village",
                   ),
 
-                  _dropdown(
-                    "Select Habitation",
-                    value: selectedHabitation,
-                    items: selectedVillage == null
-                        ? []
-                        : habitations[selectedVillage] ?? [],
-                    onChanged: (v) {
-                      setState(() {
-                        selectedHabitation = v;
-                      });
-                    },
-                  ),
+                  /// ===============================
+                  /// HABITATION SECTION
+                  /// ===============================
+                  if (masterProvider.selectedVillageId != null) ...[
+                    if (masterProvider.isLoading)
+                      const Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+
+                    if (!masterProvider.isLoading &&
+                        masterProvider.habitations.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Text("No Habitations Found"),
+                      ),
+
+                    if (masterProvider.habitations.isNotEmpty) ...[
+                      const Text(
+                        "Select Habitations",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: masterProvider.habitations.map((hab) {
+                          final habId = hab.habitationId.toString();
+
+                          final isSelected = masterProvider
+                              .selectedHabitationIds
+                              .contains(habId);
+
+                          return FilterChip(
+                            label: Text(
+                              hab.habitationName,
+                              style: TextStyle(
+                                color: isSelected
+                                    ? Colors.white
+                                    : Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            selected: isSelected,
+
+                            onSelected: (_) {
+                              masterProvider.toggleHabitation(habId);
+                            },
+
+                            selectedColor: Colors.blue,
+
+                            // 🔵 Blue when selected
+                            backgroundColor: Colors.grey.shade100,
+
+                            checkmarkColor: Colors.white,
+
+                            elevation: isSelected ? 4 : 0,
+
+                            shadowColor: Colors.blue.withOpacity(0.4),
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              side: BorderSide(
+                                color: isSelected
+                                    ? Colors.blue
+                                    : Colors.grey.shade300,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ],
                 ],
               ),
+
 
               const SizedBox(height: 22),
 
@@ -258,31 +244,22 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
                 icon: Icons.date_range,
                 title: "Validated For",
                 children: [
-                  _datePickerBox(
+                  _datePicker(
                     label: "Valid From",
-                    date: fromDate,
-                    onSelect: (picked) {
-                      setState(() {
-                        fromDate = picked;
-                      });
-                    },
+                    date: vwscProvider.fromDate,
+                    onSelect: (d) => vwscProvider.setFromDate(d),
                   ),
-
-                  _datePickerBox(
+                  _datePicker(
                     label: "Valid To",
-                    date: toDate,
-                    onSelect: (picked) {
-                      setState(() {
-                        toDate = picked;
-                      });
-                    },
+                    date: vwscProvider.toDate,
+                    onSelect: (d) => vwscProvider.setToDate(d),
                   ),
                 ],
               ),
 
               const SizedBox(height: 30),
 
-              _submitButton(),
+              _submitButton(vwscProvider,masterProvider),
 
               const SizedBox(height: 40),
             ],
@@ -473,8 +450,15 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
   }
 
   // ================= DATE PICKER =================
+  String formatDate(DateTime? date) {
+    if (date == null) return "";
+    return "${date.day.toString().padLeft(2, '0')}/"
+        "${date.month.toString().padLeft(2, '0')}/"
+        "${date.year}";
+  }
 
-  Widget _datePickerBox({
+
+  Widget _datePicker({
     required String label,
     required DateTime? date,
     required Function(DateTime) onSelect,
@@ -495,11 +479,11 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.blueGrey.shade400, width: 1.3),
+          border: Border.all(color: Colors.blueGrey.shade400),
         ),
         child: Row(
           children: [
-            const Icon(Icons.calendar_today, color: Color(0xFF1976D2)),
+            const Icon(Icons.calendar_today, color: Color(0xFF1565C0)),
             const SizedBox(width: 12),
             Text(
               date == null ? label : "${date.day}/${date.month}/${date.year}",
@@ -512,26 +496,60 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
 
   // ================= SUBMIT BUTTON =================
 
-  Widget _submitButton() {
-    return Container(
-      width: double.infinity,
-      height: 56,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1E88E5), Color(0xFF1565C0)],
+
+  Widget _submitButton(VwscProvider provider, MasterProvider masterProvider) {
+    return InkWell(
+      onTap: () {
+        provider.registerNjmFTK(
+          regId: 0,
+          userTypeId: UserType.njmp.id,
+          stateId: int.parse(_localStorage.getString(AppConstants.prefState)!),
+          districtId: int.parse(
+            _localStorage.getString(AppConstants.prefDistrict)!,
+          ),
+          blockId: int.parse(
+            _localStorage.getString(AppConstants.prefBlockId)!,
+          ),
+          panchayatId: int.parse(
+            _localStorage.getString(AppConstants.prefPanchayatId)!,
+          ),
+          villageId: int.parse(masterProvider.selectedVillageId!),
+          firstName: provider.nameController.text,
+          lastName: '',
+          mobileNumber: int.parse(provider.phoneController.text),
+          designation: '',
+          email: provider.emailController.text,
+          gender: '',
+          address: provider.addressController.text,
+          levelTrainingId: 0,
+          ipAddress: provider.deviceId.toString(),
+          createdBy: session.userId,
+          validatedFrom: formatDate(provider.fromDate),
+          validatedTo: formatDate(provider.toDate),
+          habitationIds: masterProvider.selectedHabitationIds.toString(),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1E88E5), Color(0xFF1565C0)],
+          ),
+          borderRadius: BorderRadius.circular(30),
         ),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: const Center(
-        child: Text(
-          "Submit Registration",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+        child: const Center(
+          child: Text(
+            "Submit Registration",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ),
     );
   }
+
 }
