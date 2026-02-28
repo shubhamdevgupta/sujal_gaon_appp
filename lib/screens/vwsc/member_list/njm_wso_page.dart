@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/user_card.dart';
 
 class NjmWsoPage extends StatelessWidget {
   const NjmWsoPage({super.key});
 
-  final List<Map<String, String>> dummyUsers = const [
-    {
-      "name": "Amit Sharma",
-      "mobile": "9876543210",
-      "email": "amit.sharma@gmail.com"
-    },
-    {
-      "name": "Rohit Verma",
-      "mobile": "9123456780",
-      "email": "rohit.verma@gmail.com"
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return _buildUserList(dummyUsers);
-  }
+    final provider = context.watch<VwscProvider>();
 
-  Widget _buildUserList(List<Map<String, String>> users) {
+    if (provider.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (provider.njmFtkUsers.isEmpty) {
+      return const Center(child: Text("No Users Found"));
+    }
+
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: users.length,
+      itemCount: provider.njmFtkUsers.length,
       itemBuilder: (context, index) {
-        final user = users[index];
+        final user = provider.njmFtkUsers[index];
 
-        return UserCard(user: user);
+        return UserCard(
+          name: "${user.firstName} ${user.lastName}",
+          email: user.email ?? "",
+          village: user.villageName ?? "",
+        );
       },
     );
   }

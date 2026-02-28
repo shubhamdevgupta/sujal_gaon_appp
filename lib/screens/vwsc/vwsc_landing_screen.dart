@@ -345,14 +345,14 @@ class VwscLandingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "List of NJM/WSO",
+                    "NJM/WSO & FTK/SGH Members",
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
 
                   SizedBox(height: 4),
 
                   Text(
-                    "View RegisteredNJM/WSO Members",
+                    "View Registered NJM/WSO & FTK/SGH Members",
                     style: TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                 ],

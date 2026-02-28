@@ -1,11 +1,11 @@
-class Ftkuserlist {
+class NjmFtkMemberlist {
   final int? userId;
   final bool status;
   final String? message;
   final String? token;
-  final List<SJLRegistration> registrationList;
+  final List<NjmFtKMember> registrationList;
 
-  Ftkuserlist({
+  NjmFtkMemberlist({
     this.userId,
     required this.status,
     this.message,
@@ -13,18 +13,16 @@ class Ftkuserlist {
     required this.registrationList,
   });
 
-  factory Ftkuserlist.fromJson(Map<String, dynamic> json) {
-    return Ftkuserlist(
+  factory NjmFtkMemberlist.fromJson(Map<String, dynamic> json) {
+    return NjmFtkMemberlist(
       userId: json['UserId'],
       status: json['Status'] ?? false,
       message: json['msg'],
       token: json['Token'],
       registrationList: json['SJLRegistrationlist'] != null
-          ? List<SJLRegistration>.from(
-              json['SJLRegistrationlist'].map(
-                (x) => SJLRegistration.fromJson(x),
-              ),
-            )
+          ? List<NjmFtKMember>.from(
+          json['SJLRegistrationlist']
+              .map((x) => NjmFtKMember.fromJson(x)))
           : [],
     );
   }
@@ -35,19 +33,19 @@ class Ftkuserlist {
       'Status': status,
       'msg': message,
       'Token': token,
-      'SJLRegistrationlist': registrationList.map((e) => e.toJson()).toList(),
+      'SJLRegistrationlist':
+      registrationList.map((e) => e.toJson()).toList(),
     };
   }
 }
 
 /// 🔹 Individual Registration Model
-class SJLRegistration {
-  final int? registrationId;
-  final int? userId;
+class NjmFtKMember {
+  final int? regId;
   final int? userTypeId;
   final String? firstName;
   final String? lastName;
-  final int? mobileNumber;
+  final String? mobileNumber; // keep as String
   final String? designation;
   final String? email;
   final int? stateId;
@@ -56,16 +54,20 @@ class SJLRegistration {
   final int? panchayatId;
   final int? villageId;
   final String? address;
+  final String? gender;
   final String? stateName;
   final String? districtName;
   final String? blockName;
   final String? panchayatName;
   final String? villageName;
   final String? levelTraining;
+  final String? levelTrainingId;
+  final int? isEnable;
+  final String? validatedFrom;
+  final String? validatedTo;
 
-  SJLRegistration({
-    this.registrationId,
-    this.userId,
+  NjmFtKMember({
+    this.regId,
     this.userTypeId,
     this.firstName,
     this.lastName,
@@ -78,22 +80,26 @@ class SJLRegistration {
     this.panchayatId,
     this.villageId,
     this.address,
+    this.gender,
     this.stateName,
     this.districtName,
     this.blockName,
     this.panchayatName,
     this.villageName,
     this.levelTraining,
+    this.levelTrainingId,
+    this.isEnable,
+    this.validatedFrom,
+    this.validatedTo,
   });
 
-  factory SJLRegistration.fromJson(Map<String, dynamic> json) {
-    return SJLRegistration(
-      registrationId: json['RegistrationId'],
-      userId: json['UserId'],
+  factory NjmFtKMember.fromJson(Map<String, dynamic> json) {
+    return NjmFtKMember(
+      regId: json['RegId'],
       userTypeId: json['UserTypeId'],
       firstName: json['FirstName'],
       lastName: json['LastName'],
-      mobileNumber: json['MobileNumber'],
+      mobileNumber: json['MobileNumber']?.toString(),
       designation: json['Designation'],
       email: json['Email'],
       stateId: json['StateId'],
@@ -102,19 +108,23 @@ class SJLRegistration {
       panchayatId: json['PanchayatId'],
       villageId: json['VillageId'],
       address: json['Address'],
+      gender: json['Gender'],
       stateName: json['StateName'],
       districtName: json['DistrictName'],
       blockName: json['BlockName'],
       panchayatName: json['PanchayatName'],
       villageName: json['VillageName'],
-      levelTraining: json['LevelTraining'],
+      levelTraining: json['Leveltarining'],
+      levelTrainingId: json['LeveltariningId']?.toString(),
+      isEnable: json['IsEnable'],
+      validatedFrom: json['Validated_from'],
+      validatedTo: json['Validated_to'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'RegistrationId': registrationId,
-      'UserId': userId,
+      'RegId': regId,
       'UserTypeId': userTypeId,
       'FirstName': firstName,
       'LastName': lastName,
@@ -127,12 +137,17 @@ class SJLRegistration {
       'PanchayatId': panchayatId,
       'VillageId': villageId,
       'Address': address,
+      'Gender': gender,
       'StateName': stateName,
       'DistrictName': districtName,
       'BlockName': blockName,
       'PanchayatName': panchayatName,
       'VillageName': villageName,
-      'LevelTraining': levelTraining,
+      'Leveltarining': levelTraining,
+      'LeveltariningId': levelTrainingId,
+      'IsEnable': isEnable,
+      'Validated_from': validatedFrom,
+      'Validated_to': validatedTo,
     };
   }
 }
