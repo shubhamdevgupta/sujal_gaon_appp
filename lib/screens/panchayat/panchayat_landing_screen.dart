@@ -24,7 +24,6 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       session.init();
-      // provider = context.read<PanchayatProvider>();
     });
   }
 

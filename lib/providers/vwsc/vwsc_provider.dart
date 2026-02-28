@@ -1,16 +1,66 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/repository/ftk_shg/ftk_shg_repo.dart';
 import 'package:jal_sanchalan/repository/vwsc/vwsc_repo.dart';
 
 import '../../models/vwsc/njm_ftk_memberList.dart';
+import '../../utils/device_utils.dart';
 
 class VwscProvider extends ChangeNotifier {
   final VwscRepo _vwscRepo = VwscRepo();
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   List<NjmFtKMember> njmFtkUsers = [];
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController appointAuthConroller = TextEditingController();
+
+  final Map<String, int> levelTranningMap = {
+    "Not Trained": 1,
+    "Nal Jal Mitra (PMKVY-JJM)": 2,
+    "Trained under State Programme": 3,
+  };
+
+  String? _selectedLevelLabel;
+  int? _selectedLevelId;
+
+  String? get selectedLevelLabel => _selectedLevelLabel;
+  int? get selectedLevelId => _selectedLevelId;
+
+  void setSelectedLevel(String? label) {
+    _selectedLevelLabel = label;
+
+    if (label != null) {
+      _selectedLevelId = levelTranningMap[label];
+    } else {
+      _selectedLevelId = null;
+    }
+
+    notifyListeners();
+  }
+
+  DateTime? _fromDate;
+  DateTime? _toDate;
+
+  DateTime? get fromDate => _fromDate;
+  DateTime? get toDate => _toDate;
+
+  void setFromDate(DateTime date) {
+    _fromDate = date;
+    notifyListeners();
+  }
+
+  void setToDate(DateTime date) {
+    _toDate = date;
+    notifyListeners();
+  }
+  String? _deviceId;
+  String? get deviceId => _deviceId;
+
 
   Future<void> fetchNjmFtkUser(
     int userTypeId,
@@ -26,12 +76,12 @@ class VwscProvider extends ChangeNotifier {
         userTypeId,
         userId,
         stateId,
-        regId
+        regId,
       );
-      if(rawResponse.status==true){
-        njmFtkUsers=rawResponse.registrationList;
-      }else{
-       njmFtkUsers=[];
+      if (rawResponse.status == true) {
+        njmFtkUsers = rawResponse.registrationList;
+      } else {
+        njmFtkUsers = [];
       }
     } catch (e) {
       debugPrint("Error fetching block: $e");
@@ -39,5 +89,72 @@ class VwscProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> registerNjmFTK({
+    required int regId,
+    required int userTypeId,
+    required int stateId,
+    required int districtId,
+    required int blockId,
+    required int panchayatId,
+    required int villageId,
+    required String firstName,
+    required String lastName,
+    required int mobileNumber,
+    required String designation,
+    required String email,
+    required String gender,
+    required String address,
+    required int levelTrainingId,
+    required String ipAddress,
+    required int createdBy,
+    required String validatedFrom,
+    required String validatedTo,
+    required String habitationIds,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _vwscRepo.registerNjmFTK(
+        regId,
+        userTypeId,
+        stateId,
+        districtId,
+        blockId,
+        panchayatId,
+        villageId,
+        firstName,
+        lastName,
+        mobileNumber,
+        designation,
+        email,
+        gender,
+        address,
+        levelTrainingId,
+        ipAddress,
+        createdBy,
+        validatedFrom,
+        validatedTo,
+        habitationIds,
+      );
+
+      if (response.status == true) {
+        debugPrint("Registration Successful");
+      } else {
+        debugPrint("Registration Failed: ${response.message}");
+      }
+    } catch (e) {
+      debugPrint("Registration Error: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+  Future<void> fetchDeviceId() async {
+    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
+    debugPrint('Device ID: $_deviceId');
+    notifyListeners();
   }
 }

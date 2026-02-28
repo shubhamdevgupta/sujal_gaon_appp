@@ -26,21 +26,23 @@ class AuthenticationProvider extends ChangeNotifier {
   PanchayatLoginResponse? get loginResponse => _loginResponse;
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   bool _isShownPassword = false;
+
   bool get isShownPassword => _isShownPassword;
 
   String? errorMsg = '';
 
-/*
+  /*
   Future<void> checkLoginStatus() async {
     _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
     notifyListeners();
   }
 */
 
-/*
+  /*
   Future<void> logoutUser() async {
     _isLoggedIn = false;
 
@@ -74,6 +76,22 @@ class AuthenticationProvider extends ChangeNotifier {
         _localStorage.saveString(
           AppConstants.prefToken,
           _loginResponse!.token.toString(),
+        );
+        _localStorage.saveString(
+          AppConstants.prefState,
+          _loginResponse!.result!.loginResult!.stateId.toString(),
+        );
+        _localStorage.saveString(
+          AppConstants.prefDistrict,
+          _loginResponse!.result!.loginResult!.districtId.toString(),
+        );
+        _localStorage.saveString(
+          AppConstants.prefBlockId,
+          _loginResponse!.result!.loginResult!.blockId.toString(),
+        );
+        _localStorage.saveString(
+          AppConstants.prefPanchayatId,
+          _loginResponse!.result!.loginResult!.panchayatId.toString(),
         );
         _localStorage.saveInt(
           AppConstants.prefUserId,

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
+import 'package:jal_sanchalan/service/local_storage_service.dart';
+import 'package:jal_sanchalan/utils/app_constants.dart';
+import 'package:jal_sanchalan/utils/enum/user_type.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/master_provider.dart';
+import '../../utils/auth/user_session_manager.dart';
 import '../../utils/custom screen/custom_dropdown.dart';
 
 class NJMPRegistrationForm extends StatefulWidget {
@@ -12,52 +17,27 @@ class NJMPRegistrationForm extends StatefulWidget {
 }
 
 class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
-
   String? trainingLevel;
   String? selectedVillage;
   String? selectedHabitation;
-
+  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
   DateTime? fromDate;
   DateTime? toDate;
-
-  // Demo Auto values (Replace from API)
-  final String gpName = "Hooda Gram Panchayat";
-  final String gpLGD = "123456";
-  final String villageName = "Sujal Gaon";
-  final String villageLGD = "654321";
-  final String districtName = "Sonipat";
-  final String districtLGD = "111222";
-  final String stateName = "Haryana";
-
-  final List<String> villages = [
-    "Sujal Gaon",
-    "Rampur",
-    "Khera",
-  ];
-
-  final Map<String, List<String>> habitations = {
-    "Sujal Gaon": ["Hab-1", "Hab-2"],
-    "Rampur": ["Hab-A", "Hab-B"],
-    "Khera": ["Hab-X", "Hab-Y"],
-  };
 
 
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
+    session.init();
+    final masterProvider = Provider.of<MasterProvider>(context, listen: false);
+    masterProvider.fetchVillage(_localStorage.getString(AppConstants.prefPanchayatId)!);
   }
 
-  Future<void> _loadInitialData() async {
-    final masterProvider =
-    Provider.of<MasterProvider>(context, listen: false);
-
-    await masterProvider.fetchVillage("252219");
-  }
-  
   @override
   Widget build(BuildContext context) {
     final masterProvider = context.watch<MasterProvider>();
+    final vwscProvider = context.watch<VwscProvider>();
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
 
@@ -84,21 +64,49 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  _sectionCard(
+                    icon: Icons.person,
+                    title: "Operator Details",
+                    children: [
+                      _input(
+                        "Name of the Operator",
+                        controller: vwscProvider.nameController,
+                      ),
+                      _input(
+                        "Contact Number",
+                        keyboard: TextInputType.phone,
+                        controller: vwscProvider.phoneController,
+                      ),
+                      _input(
+                        "Email Id",
+                        keyboard: TextInputType.emailAddress,
+                        controller: vwscProvider.emailController,
+                      ),
+                      _input(
+                        "Complete Address",
+                        maxLines: 3,
+                        controller: vwscProvider.addressController,
+                      ),
+                      _dropdown(
+                        "Level of Training",
+                        value: vwscProvider.selectedLevelLabel,
+                        items: vwscProvider.levelTranningMap.keys.toList(),
+                        onChanged: (value) {
+                          vwscProvider.setSelectedLevel(value);
+                        },
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 22),
 
                   _sectionCard(
                     icon: Icons.location_city,
                     title: "Village & Habitation Selection",
                     children: [
-
-                      /// ===============================
-                      /// VILLAGE DROPDOWN
-                      /// ===============================
-
                       CustomDropdown(
                         value: masterProvider.selectedVillageId,
                         items: masterProvider.villages.map((village) {
@@ -121,14 +129,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                         appBarTitle: "Select Village",
                       ),
 
-
-
-                      /// ===============================
-                      /// HABITATION SECTION
-                      /// ===============================
-
                       if (masterProvider.selectedVillageId != null) ...[
-
                         if (masterProvider.isLoading)
                           const Padding(
                             padding: EdgeInsets.all(12),
@@ -143,7 +144,6 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                           ),
 
                         if (masterProvider.habitations.isNotEmpty) ...[
-
                           const Text(
                             "Select Habitations",
                             style: TextStyle(
@@ -156,11 +156,10 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                             spacing: 8,
                             runSpacing: 8,
                             children: masterProvider.habitations.map((hab) {
-
                               final habId = hab.habitationId.toString();
 
-                              final isSelected =
-                              masterProvider.selectedHabitationIds
+                              final isSelected = masterProvider
+                                  .selectedHabitationIds
                                   .contains(habId);
 
                               return FilterChip(
@@ -180,8 +179,9 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                                   masterProvider.toggleHabitation(habId);
                                 },
 
-                                selectedColor: Colors.blue, // 🔵 Blue when selected
+                                selectedColor: Colors.blue,
 
+                                // 🔵 Blue when selected
                                 backgroundColor: Colors.grey.shade100,
 
                                 checkmarkColor: Colors.white,
@@ -205,66 +205,15 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                       ],
                     ],
                   ),
-
-
-                ],
-              ),
-
-              const SizedBox(height: 22),
-              // ================= OPERATOR DETAILS =================
-              _sectionCard(
-                icon: Icons.person,
-                title: "Operator Details",
-                children: [
-
-                  _input("Name of the Operator"),
-                  _input("Contact Number", keyboard: TextInputType.phone),
-                  _input("Complete Address", maxLines: 3),
-                  _dropdown(
-                    "Level of Training",
-                    value: trainingLevel,
-                    items: const [
-                      "Not Trained",
-                      "Nal Jal Mitra (PMKVY-JJM)",
-                      "Trained under State Programme",
-                    ],
-                    onChanged: (v) {
-                      setState(() {
-                        trainingLevel = v;
-                      });
-                    },
-                  ),
-
                 ],
               ),
 
               const SizedBox(height: 22),
 
-              // ================= JJM DETAILS =================
-   /*           _sectionCard(
-                icon: Icons.account_balance,
-                title: "JJM IMIS Registry Details",
-                children: [
-
-                  _readOnly("Gram Panchayat", gpName),
-                  _readOnly("GP LGD Code", gpLGD),
-
-                  _readOnly("Village", villageName),
-                  _readOnly("Village LGD Code", villageLGD),
-
-                  _readOnly("District", districtName),
-                  _readOnly("District LGD Code", districtLGD),
-
-                  _readOnly("State", stateName),
-                ],
-              ),*/
-
-              // ================= AUTHORITY & AREA =================
-              _sectionCard(
+              /*     _sectionCard(
                 icon: Icons.map,
                 title: "Authority & Area of Operation",
                 children: [
-
                   _input("Appointment Authority Details"),
 
                   _dropdown(
@@ -294,33 +243,29 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                     },
                   ),
                 ],
-              ),
-
-              const SizedBox(height: 22),
+              ), */
 
               // ================= VALIDATION =================
               _sectionCard(
                 icon: Icons.date_range,
                 title: "Validation Period",
                 children: [
-
                   _datePicker(
                     label: "Valid From",
-                    date: fromDate,
-                    onSelect: (d) => setState(() => fromDate = d),
+                    date: vwscProvider.fromDate,
+                    onSelect: (d) => vwscProvider.setFromDate(d),
                   ),
-
                   _datePicker(
                     label: "Valid To",
-                    date: toDate,
-                    onSelect: (d) => setState(() => toDate = d),
+                    date: vwscProvider.toDate,
+                    onSelect: (d) => vwscProvider.setToDate(d),
                   ),
                 ],
               ),
 
               const SizedBox(height: 30),
 
-              _submitButton(),
+              _submitButton(vwscProvider, masterProvider),
 
               const SizedBox(height: 40),
             ],
@@ -331,6 +276,12 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
   }
 
   // ================= SECTION CARD =================
+  String formatDate(DateTime? date) {
+    if (date == null) return "";
+    return "${date.day.toString().padLeft(2, '0')}/"
+        "${date.month.toString().padLeft(2, '0')}/"
+        "${date.year}";
+  }
 
   Widget _sectionCard({
     required IconData icon,
@@ -349,10 +300,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
         borderRadius: BorderRadius.circular(22),
 
         // 🔥 Added subtle border texture
-        border: Border.all(
-          color: Colors.blueGrey.shade200,
-          width: 1.2,
-        ),
+        border: Border.all(color: Colors.blueGrey.shade200, width: 1.2),
 
         boxShadow: [
           BoxShadow(
@@ -365,7 +313,6 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Row(
             children: [
               Icon(icon, color: const Color(0xFF1976D2)),
@@ -383,18 +330,13 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
           const SizedBox(height: 12),
 
           // 🔵 Partition Line
-          Divider(
-            thickness: 1.2,
-            color: Colors.blueGrey.shade200,
-          ),
+          Divider(thickness: 1.2, color: Colors.blueGrey.shade200),
 
           const SizedBox(height: 16),
 
           ...children.map(
-                (e) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: e,
-            ),
+            (e) =>
+                Padding(padding: const EdgeInsets.only(bottom: 16), child: e),
           ),
         ],
       ),
@@ -402,14 +344,14 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
   }
 
   Widget _input(
-      String hint, {
-        TextEditingController? controller,
-        TextInputType keyboard = TextInputType.text,
-        int maxLines = 1,
-        int? maxLength,
-        bool readOnly = false,
-        Function(String)? onChanged,
-      }) {
+    String hint, {
+    TextEditingController? controller,
+    TextInputType keyboard = TextInputType.text,
+    int maxLines = 1,
+    int? maxLength,
+    bool readOnly = false,
+    Function(String)? onChanged,
+  }) {
     return TextField(
       controller: controller,
       keyboardType: keyboard,
@@ -421,11 +363,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
       decoration: InputDecoration(
         hintText: hint,
 
-        prefixIcon: const Icon(
-          Icons.edit,
-          color: Color(0xFF1976D2),
-          size: 18,
-        ),
+        prefixIcon: const Icon(Icons.edit, color: Color(0xFF1976D2), size: 18),
 
         filled: true,
         fillColor: Colors.white,
@@ -438,113 +376,39 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
         // 🔥 Darker textured border
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(
-            color: Colors.blueGrey.shade400,
-            width: 1.3,
-          ),
+          borderSide: BorderSide(color: Colors.blueGrey.shade400, width: 1.3),
         ),
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: Color(0xFF1976D2),
-            width: 1.8,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF1976D2), width: 1.8),
         ),
       ),
     );
   }
 
-  // ================= INPUT =================
-
-
-  // ================= DROPDOWN =================
-
   Widget _dropdown(
-      String hint, {
-        required String? value,
-        required List<String> items,
-        required Function(String?) onChanged,
-      }) {
+    String label, {
+    required String? value,
+    required List<String> items,
+    required Function(String?) onChanged,
+  }) {
     return DropdownButtonFormField<String>(
       value: value,
-
       decoration: InputDecoration(
-        hintText: hint,
-
-        prefixIcon: const Icon(
-          Icons.arrow_drop_down_circle,
-          color: Color(0xFF1976D2),
-          size: 18,
-        ),
-
-        filled: true,
-        fillColor: Colors.white,
-
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
-
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(
-            color: Colors.blueGrey.shade400,
-            width: 1.3,
-          ),
-        ),
-
+        labelText: label,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: Color(0xFF1976D2),
-            width: 1.8,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF1565C0)),
         ),
       ),
-
       items: items
-          .map(
-            (e) => DropdownMenuItem(
-          value: e,
-          child: Text(e),
-        ),
-      )
+          .map((item) => DropdownMenuItem(value: item, child: Text(item)))
           .toList(),
-
       onChanged: onChanged,
     );
   }
-
-  // ================= READ ONLY =================
-
-  Widget _readOnly(String label, String value) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF4F7FB),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.blueGrey.shade200),
-      ),
-      child: Row(
-        children: [
-          Text("$label: ",
-              style:
-              const TextStyle(fontWeight: FontWeight.w600)),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(
-                  color: Color(0xFF1565C0),
-                  fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ================= DATE PICKER =================
 
   Widget _datePicker({
     required String label,
@@ -571,12 +435,11 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
         ),
         child: Row(
           children: [
-            const Icon(Icons.calendar_today,
-                color: Color(0xFF1565C0)),
+            const Icon(Icons.calendar_today, color: Color(0xFF1565C0)),
             const SizedBox(width: 12),
-            Text(date == null
-                ? label
-                : "${date.day}/${date.month}/${date.year}"),
+            Text(
+              date == null ? label : "${date.day}/${date.month}/${date.year}",
+            ),
           ],
         ),
       ),
@@ -585,26 +448,56 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
 
   // ================= BUTTON =================
 
-  Widget _submitButton() {
-    return Container(
-      width: double.infinity,
-      height: 56,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF1E88E5),
-            Color(0xFF1565C0),
-          ],
+  Widget _submitButton(VwscProvider provider, MasterProvider masterProvider) {
+    return InkWell(
+      onTap: () {
+        provider.registerNjmFTK(
+          regId: 0,
+          userTypeId: UserType.njmp.id,
+          stateId: int.parse(_localStorage.getString(AppConstants.prefState)!),
+          districtId: int.parse(
+            _localStorage.getString(AppConstants.prefDistrict)!,
+          ),
+          blockId: int.parse(
+            _localStorage.getString(AppConstants.prefBlockId)!,
+          ),
+          panchayatId: int.parse(
+            _localStorage.getString(AppConstants.prefPanchayatId)!,
+          ),
+          villageId: int.parse(masterProvider.selectedVillageId!),
+          firstName: provider.nameController.text,
+          lastName: '',
+          mobileNumber: int.parse(provider.phoneController.text),
+          designation: '',
+          email: provider.emailController.text,
+          gender: '',
+          address: provider.addressController.text,
+          levelTrainingId: provider.selectedLevelId!,
+          ipAddress: provider.deviceId.toString(),
+          createdBy: session.userId,
+          validatedFrom: formatDate(provider.fromDate),
+          validatedTo: formatDate(provider.toDate),
+          habitationIds: masterProvider.selectedHabitationIds.toString(),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1E88E5), Color(0xFF1565C0)],
+          ),
+          borderRadius: BorderRadius.circular(30),
         ),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: const Center(
-        child: Text(
-          "Submit Registration",
-          style: TextStyle(
+        child: const Center(
+          child: Text(
+            "Submit Registration",
+            style: TextStyle(
               color: Colors.white,
               fontSize: 16,
-              fontWeight: FontWeight.w600),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ),
     );

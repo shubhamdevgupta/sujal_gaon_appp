@@ -5,6 +5,10 @@ class AppConstants {
   static const String prefIsLoggedIn = 'isLoggedIn';
   static const String prefToken = 'token';
   static const String prefUserId = 'userId';
+  static const String prefState = 'stateId';
+  static const String prefDistrict = 'districtId';
+  static const String prefBlockId = 'blockId';
+  static const String prefPanchayatId = 'panchayatId';
 
   //auth
   static const String navigateToDashboardScreen = '/dashboardScreen';
