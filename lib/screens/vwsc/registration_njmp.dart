@@ -41,6 +41,20 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
     "Khera": ["Hab-X", "Hab-Y"],
   };
 
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    final masterProvider =
+    Provider.of<MasterProvider>(context, listen: false);
+
+    await masterProvider.fetchVillage("252219");
+  }
+  
   @override
   Widget build(BuildContext context) {
     final masterProvider = context.watch<MasterProvider>();
