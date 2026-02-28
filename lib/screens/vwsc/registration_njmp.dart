@@ -42,6 +42,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: const Color(0xFFF4F7FB),
 
       appBar: AppBar(
