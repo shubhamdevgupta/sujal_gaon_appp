@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/master_provider.dart';
+import '../../utils/custom screen/custom_dropdown.dart';
 
 class NJMPRegistrationForm extends StatefulWidget {
   const NJMPRegistrationForm({super.key});
@@ -37,15 +41,30 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
     "Khera": ["Hab-X", "Hab-Y"],
   };
 
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    final masterProvider =
+    Provider.of<MasterProvider>(context, listen: false);
+
+    await masterProvider.fetchVillage("252219");
+  }
+  
   @override
   Widget build(BuildContext context) {
+    final masterProvider = context.watch<MasterProvider>();
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
 
       appBar: AppBar(
         backgroundColor: const Color(0xFF1565C0),
         title: const Text(
-          "NJMP Registration",
+          "NJM Registration",
           style: TextStyle(color: Colors.white),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -66,6 +85,132 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
           child: Column(
             children: [
 
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  _sectionCard(
+                    icon: Icons.location_city,
+                    title: "Village & Habitation Selection",
+                    children: [
+
+                      /// ===============================
+                      /// VILLAGE DROPDOWN
+                      /// ===============================
+
+                      CustomDropdown(
+                        value: masterProvider.selectedVillageId,
+                        items: masterProvider.villages.map((village) {
+                          return DropdownMenuItem<String>(
+                            value: village.villageId.toString(),
+                            child: Text(
+                              village.villageName,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        }).toList(),
+                        title: "Village *",
+                        onChanged: (value) {
+                          masterProvider.setSelectedVillage(value);
+
+                          if (value != null && value.isNotEmpty) {
+                            masterProvider.fetchHabitation(value);
+                          }
+                        },
+                        appBarTitle: "Select Village",
+                      ),
+
+
+
+                      /// ===============================
+                      /// HABITATION SECTION
+                      /// ===============================
+
+                      if (masterProvider.selectedVillageId != null) ...[
+
+                        if (masterProvider.isLoading)
+                          const Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+
+                        if (!masterProvider.isLoading &&
+                            masterProvider.habitations.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Text("No Habitations Found"),
+                          ),
+
+                        if (masterProvider.habitations.isNotEmpty) ...[
+
+                          const Text(
+                            "Select Habitations",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: masterProvider.habitations.map((hab) {
+
+                              final habId = hab.habitationId.toString();
+
+                              final isSelected =
+                              masterProvider.selectedHabitationIds
+                                  .contains(habId);
+
+                              return FilterChip(
+                                label: Text(
+                                  hab.habitationName,
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black87,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+
+                                selected: isSelected,
+
+                                onSelected: (_) {
+                                  masterProvider.toggleHabitation(habId);
+                                },
+
+                                selectedColor: Colors.blue, // 🔵 Blue when selected
+
+                                backgroundColor: Colors.grey.shade100,
+
+                                checkmarkColor: Colors.white,
+
+                                elevation: isSelected ? 4 : 0,
+
+                                shadowColor: Colors.blue.withOpacity(0.4),
+
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                  side: BorderSide(
+                                    color: isSelected
+                                        ? Colors.blue
+                                        : Colors.grey.shade300,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ],
+                    ],
+                  ),
+
+
+                ],
+              ),
+
+              const SizedBox(height: 22),
               // ================= OPERATOR DETAILS =================
               _sectionCard(
                 icon: Icons.person,

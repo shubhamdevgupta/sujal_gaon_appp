@@ -62,10 +62,7 @@ class MasterProvider extends ChangeNotifier {
   List<Villagelist> villages = [];
   String? selectedVillageId;
 
-  void setSelectedVillage(String? value) {
-    selectedVillageId = value;
-    notifyListeners();
-  }
+
 
 
   List<HabitationList> habitations = [];
@@ -273,6 +270,27 @@ class MasterProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  void toggleHabitation(String id) {
+    if (selectedHabitationIds.contains(id)) {
+      selectedHabitationIds.remove(id);
+    } else {
+      selectedHabitationIds.add(id);
+    }
+    notifyListeners();
+  }
+
+  List<String> selectedHabitationIds = [];
+
+
+
+  void setSelectedVillage(String? value) {
+    selectedVillageId = value;
+    selectedHabitationIds.clear();
+    habitations.clear();
+    notifyListeners();
+  }
+
+
 
   Future<void> fetchHabitation(String villageId) async {
 
