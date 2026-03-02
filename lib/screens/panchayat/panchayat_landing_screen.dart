@@ -184,7 +184,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
       },
 
       child: Container(
-        height: 90,
+        height: 130,
         padding: const EdgeInsets.all(16),
 
         decoration: BoxDecoration(

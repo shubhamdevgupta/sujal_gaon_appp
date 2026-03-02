@@ -32,6 +32,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF1565C0),
         title: const Text("Login", style: TextStyle(color: Colors.white)),
         centerTitle: true,

@@ -29,55 +29,69 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: const Color(0xFF1565C0),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-
-        title: const Text(
-          "Sujal Gaon",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
+    return WillPopScope(
+      onWillPop: () async {
+        return await _showExitDialog();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: const Color(0xFF1565C0),
+          title: const Text(
+            "Sujal Gaon",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
           ),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout, color: Colors.white),
+              onPressed: ()async {
+                await context.read<AuthenticationProvider>().logoutUser();
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppConstants.navigateToFTKLogin,
+                      (route) => false,
+                );
+              },
+            )
+          ],
         ),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF64B5F6), Colors.blue.shade50],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF64B5F6), Colors.blue.shade50],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(10),
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /*_buildCustomHeader(),*/
-              // ================= WELCOME =================
-              const SizedBox(height: 20),
-
-              _buildWelcomeCard(),
-
-              SizedBox(height: 20),
-              // ================= DASHBOARD =================
-              _dashboardCard(context),
-
-              const SizedBox(height: 16),
-
-              //_listCard(context),
-            ],
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(10),
+      
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /*_buildCustomHeader(),*/
+                // ================= WELCOME =================
+                const SizedBox(height: 20),
+      
+                _buildWelcomeCard(),
+      
+                SizedBox(height: 20),
+                // ================= DASHBOARD =================
+                _dashboardCard(context),
+      
+                const SizedBox(height: 16),
+      
+                //_listCard(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -463,5 +477,26 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
       color: Colors.grey.shade300,
       margin: const EdgeInsets.symmetric(horizontal: 10),
     );
+  }
+  Future<bool> _showExitDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Exit App"),
+        content: const Text(
+            "Are you sure you want to exit the application?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("No"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text("Yes"),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 }

@@ -18,7 +18,6 @@ class AuthenticationProvider extends ChangeNotifier {
   final session = UserSessionManager();
 
   bool _isLoggedIn = false;
-
   bool get isLoggedIn => _isLoggedIn;
 
   var randomOne = 0, randomTwo = 0, captchResult = 0;
@@ -123,7 +122,14 @@ class AuthenticationProvider extends ChangeNotifier {
         userTypeId,
       );
       if (_njmFtkLoginResponse?.status == true) {
+        await _localStorage.clearAll();
+        await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
+
         _generatedOtp = _njmFtkLoginResponse?.otp.toString();
+        _localStorage.saveString(
+          AppConstants.prefToken,
+          _njmFtkLoginResponse!.token.toString(),
+        );
         _localStorage.saveInt(
           AppConstants.prefRegId,
           _njmFtkLoginResponse!.regId,
@@ -208,24 +214,11 @@ class AuthenticationProvider extends ChangeNotifier {
       onFailure("Invalid OTP");
     }
   }
-
-  /*  int generateCaptcha() {
-    int max = 15;
-    randomOne = Random().nextInt(max);
-    randomTwo = Random().nextInt(max);
-    captchResult = randomOne + randomTwo;
-    notifyListeners();
-    return captchResult;
-  }*/
-
-  /*
   Future<void> checkLoginStatus() async {
     _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
     notifyListeners();
   }
-*/
 
-  /*
   Future<void> logoutUser() async {
     _isLoggedIn = false;
 
@@ -234,7 +227,6 @@ class AuthenticationProvider extends ChangeNotifier {
     await session.clearPref();
     notifyListeners();
   }
-*/
   void togglePasswordVisibility() {
     _isShownPassword = !_isShownPassword;
     notifyListeners();
