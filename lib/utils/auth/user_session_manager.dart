@@ -16,7 +16,7 @@ class UserSessionManager {
   String mobile = '';
   String loginId = '';
   int userId = 0;
-  int roleId = 0;
+  int regId = 0;
 
 
 
@@ -24,13 +24,11 @@ class UserSessionManager {
     _prefs = await SharedPreferences.getInstance();
     token = _prefs?.getString(AppConstants.prefToken) ?? '';
     userId = _prefs!.getInt(AppConstants.prefUserId)??0 ;
+    regId = _prefs!.getInt(AppConstants.prefRegId)??0 ;
   }
 
   bool get isInitialized => _prefs != null;
 
-  // Optional: helper getters
-  String getToken() => token;
-  int getUserId() => _prefs?.getInt(AppConstants.prefUserId) ?? 0 ;
   Future<void> clearPref() async {
     _prefs ??= await SharedPreferences.getInstance();
     await _prefs!.remove(AppConstants.prefUserId);
