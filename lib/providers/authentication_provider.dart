@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:jal_sanchalan/models/njm_ftk_dashboard_response.dart';
+import 'package:jal_sanchalan/models/njm_ftk_login_response.dart';
 
 import '../models/panchayat/panchayat_login_response.dart';
 import '../repository/authentication_repository.dart';
@@ -22,8 +24,16 @@ class AuthenticationProvider extends ChangeNotifier {
   var randomOne = 0, randomTwo = 0, captchResult = 0;
 
   PanchayatLoginResponse? _loginResponse;
-
   PanchayatLoginResponse? get loginResponse => _loginResponse;
+
+  NjmFtkLoginResponse? _njmFtkLoginResponse;
+  NjmFtkLoginResponse? get njmFtkLoginResponse => _njmFtkLoginResponse;
+
+  NjmFtkDashboardResponse? _njmFtkDashboardResponse;
+  NjmFtkDashboardResponse? get njmFtkDashboardResponse => _njmFtkDashboardResponse;
+
+  String? _generatedOtp;
+  String? get generatedOtp => _generatedOtp;
 
   bool _isLoading = false;
 
@@ -54,19 +64,20 @@ class AuthenticationProvider extends ChangeNotifier {
 */
 
   // Method to login user
-  Future<void> loginUser(
+  Future<void> panchayatLoginUser(
     userName,
     password,
     userTypeId,
     Function() onSuccess,
     Function onFailure,
-  ) async {
+  ) async
+  {
     _isLoading = true;
     notifyListeners();
     String hashPass = generatePasswordHash(password);
 
     try {
-      _loginResponse = await _authRepository.loginUser(
+      _loginResponse = await _authRepository.panchayatLoginUser(
         userName,
         hashPass,
         userTypeId,
@@ -113,6 +124,71 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> ftkSghLoginUser(
+    loginId,
+    userTypeId,
+    Function() onSuccess,
+    Function onFailure,
+  ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _njmFtkLoginResponse = await _authRepository.ftkSghLoginUser(
+        loginId,
+        userTypeId,
+      );
+      if (_njmFtkLoginResponse?.status == true) {
+        _generatedOtp = _njmFtkLoginResponse?.otp.toString();
+        _localStorage.saveInt(
+          AppConstants.prefRegId,
+          _njmFtkLoginResponse!.regId,
+        );
+
+        onSuccess();
+      } else {
+        errorMsg = _njmFtkLoginResponse?.message;
+        onFailure(errorMsg);
+      }
+    } catch (e, stackTrace) {
+      GlobalExceptionHandler.handleException(
+        e as Exception,
+        stackTrace: stackTrace,
+      );
+      _njmFtkLoginResponse = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+  Future<void> fetchNjmFtkDashboard(
+    regId,
+  ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _njmFtkDashboardResponse = await _authRepository.fetchNjmFtkDashboard(regId);
+      if (_njmFtkLoginResponse?.status == true) {
+        _generatedOtp = _njmFtkLoginResponse?.otp.toString();
+
+      } else {
+        errorMsg = _njmFtkLoginResponse?.message;
+      }
+    } catch (e, stackTrace) {
+      GlobalExceptionHandler.handleException(
+        e as Exception,
+        stackTrace: stackTrace,
+      );
+      _njmFtkLoginResponse = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   String trim(String value) => value.trim();
 
   String sha512Base64(String input) {
@@ -133,6 +209,24 @@ class AuthenticationProvider extends ChangeNotifier {
     final sha256Hash = sha256.convert(utf8.encode(md5Hash)).toString();
 
     return sha256Hash;
+  }
+
+  void verifyOtp(
+      String enteredOtp,
+      Function() onSuccess,
+      Function(String) onFailure,
+      ) {
+    if (_generatedOtp == null) {
+      onFailure("Please request OTP first");
+      return;
+    }
+
+    if (enteredOtp == _generatedOtp) {
+      _isLoggedIn = true;
+      onSuccess();
+    } else {
+      onFailure("Invalid OTP");
+    }
   }
 
   /*  int generateCaptcha() {

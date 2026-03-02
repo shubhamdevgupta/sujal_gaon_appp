@@ -4,9 +4,15 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_constants.dart';
 
-class NjmWsoLandingpage extends StatelessWidget {
+class NjmWsoLandingpage extends StatefulWidget {
   const NjmWsoLandingpage({super.key});
 
+  @override
+  State<NjmWsoLandingpage> createState() => _NjmWsoLandingpageState();
+}
+
+
+class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
