@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       listen: false,
     );*/
     final masterProvider = Provider.of<MasterProvider>(context, listen: false);
-    final roleId = session.roleId;
+    //final roleId = session.roleId;
     //  await authProvider.checkLoginStatus();
     //  masterProvider.clearData();
     /*    if (authProvider.isLoggedIn) {

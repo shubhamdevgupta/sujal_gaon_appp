@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/authentication_provider.dart';
 import '../../utils/app_constants.dart';
 
 class NjmWsoLandingpage extends StatefulWidget {
@@ -11,8 +13,12 @@ class NjmWsoLandingpage extends StatefulWidget {
   State<NjmWsoLandingpage> createState() => _NjmWsoLandingpageState();
 }
 
-
 class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,6 +219,8 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   }
 
   Widget _buildLocationCard() {
+    final provider = context.watch<AuthenticationProvider>();
+
     return Container(
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.all(15),
@@ -248,7 +256,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 icon: Icons.account_balance,
                 color: Color(0xFF1976D2),
                 title: "State",
-                value: "Haryana",
+                value: "${provider.njmFtkDashboardResponse!.stateName}",
               ),
 
               _verticalDivider(),
@@ -257,9 +265,9 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 icon: Icons.place,
                 color: Color(0xFFE53935),
                 title: "District",
-                value: "Sonipat",
+                value: "${provider.njmFtkDashboardResponse!.districtLgdCode}",
                 subTitle: "LGD Code",
-                subTitleValue: "54557",
+                subTitleValue: "0000",
               ),
             ],
           ),
@@ -275,9 +283,10 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 icon: Icons.apartment,
                 color: Color(0xFF8D6E63),
                 title: "Block",
-                value: "Gohana",
+                value: "${provider.njmFtkDashboardResponse!.blockName}",
                 subTitle: "LGD Code",
-                subTitleValue: "54557",
+                subTitleValue:
+                    "${provider.njmFtkDashboardResponse!.blockLgdCode}",
               ),
 
               _verticalDivider(),
@@ -286,9 +295,10 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 icon: Icons.home,
                 color: Color(0xFF00796B),
                 title: "GP",
-                value: "Hooda",
+                value: "${provider.njmFtkDashboardResponse!.panchayatName}",
                 subTitle: "LGD Code",
-                subTitleValue: "54557",
+                subTitleValue:
+                    "${provider.njmFtkDashboardResponse!.panchayatLgdCode}",
               ),
             ],
           ),
@@ -298,11 +308,6 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
           const Divider(),
 
           const SizedBox(height: 5),
-
-          // ================= STATS =================
-          Row(
-            children: const [_statBox("Villages", "12"), _statBox("VWSC", "4")],
-          ),
         ],
       ),
     );
@@ -317,45 +322,56 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
     String? subTitleValue,
   }) {
     return Expanded(
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 22),
-
-          const SizedBox(width: 8),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          /// 🔹 Top Row → Icon + Title
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 6),
               Text(
-                "$title: $value",
+                title,
                 style: TextStyle(
                   fontSize: 13,
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-
-              /// 🔥 Show only if subtitle exists
-              if (subTitle != null &&
-                  subTitleValue != null &&
-                  subTitleValue.isNotEmpty)
-                Text(
-                  "$subTitle: $subTitleValue",
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
             ],
           ),
+
+          const SizedBox(height: 4),
+
+          /// 🔹 Main Value (Below Row)
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+
+          /// 🔹 Optional Subtitle Section
+          if (subTitle != null &&
+              subTitleValue != null &&
+              subTitleValue.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(
+              "$subTitle: $subTitleValue",
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            ),
+          ],
         ],
       ),
     );
   }
 
   Widget _buildWelcomeCard() {
+    final provider = context.watch<AuthenticationProvider>();
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(22),
 
@@ -380,7 +396,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
 
-                children: const [
+                children: [
                   Text(
                     "Welcome Back 👋",
                     style: TextStyle(color: Colors.white70),
@@ -389,7 +405,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                   SizedBox(height: 6),
 
                   Text(
-                    "NJM WSO User",
+                    "${provider.njmFtkDashboardResponse!.firstName}${provider.njmFtkDashboardResponse!.lastName}",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -423,38 +439,6 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
       height: 40,
       color: Colors.grey.shade300,
       margin: const EdgeInsets.symmetric(horizontal: 10),
-    );
-  }
-}
-
-class _statBox extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const _statBox(this.title, this.value);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1976D2),
-            ),
-          ),
-
-          const SizedBox(height: 2),
-
-          Text(
-            title,
-            style: TextStyle(fontSize: 11, color: Colors.grey.shade700),
-          ),
-        ],
-      ),
     );
   }
 }

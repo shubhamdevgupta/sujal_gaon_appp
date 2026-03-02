@@ -35,7 +35,7 @@ class AuthenticaitonRepository {
     }
   }
 
-  Future<NjmFtkLoginResponse> ftkSghLoginUser(
+  Future<NjmFtkLoginResponse> loginNjmFtkUser(
     String loginId,
     int userTypeId,
   ) async {
@@ -63,7 +63,7 @@ class AuthenticaitonRepository {
   ) async {
     try {
       final response = await _apiService.get(
-        '/SJL_Get_dashboard_list?RegId=$regId',
+        'SJL_Get_dashboard_list?RegId=$regId',
       );
 
       return NjmFtkDashboardResponse.fromJson(response);

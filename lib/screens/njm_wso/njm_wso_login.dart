@@ -222,7 +222,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
       return;
     }
 
-    provider.ftkSghLoginUser(
+    provider.loginNjmFtkUser(
       mobile,
       UserType.njmp.id,
           () {

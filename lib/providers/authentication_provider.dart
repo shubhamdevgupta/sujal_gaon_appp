@@ -24,15 +24,18 @@ class AuthenticationProvider extends ChangeNotifier {
   var randomOne = 0, randomTwo = 0, captchResult = 0;
 
   PanchayatLoginResponse? _loginResponse;
+
   PanchayatLoginResponse? get loginResponse => _loginResponse;
 
   NjmFtkLoginResponse? _njmFtkLoginResponse;
+
   NjmFtkLoginResponse? get njmFtkLoginResponse => _njmFtkLoginResponse;
 
   NjmFtkDashboardResponse? _njmFtkDashboardResponse;
   NjmFtkDashboardResponse? get njmFtkDashboardResponse => _njmFtkDashboardResponse;
 
   String? _generatedOtp;
+
   String? get generatedOtp => _generatedOtp;
 
   bool _isLoading = false;
@@ -45,24 +48,6 @@ class AuthenticationProvider extends ChangeNotifier {
 
   String? errorMsg = '';
 
-  /*
-  Future<void> checkLoginStatus() async {
-    _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
-    notifyListeners();
-  }
-*/
-
-  /*
-  Future<void> logoutUser() async {
-    _isLoggedIn = false;
-
-    // Clear SharedPreferences
-    await _localStorage.clearAll();
-    await session.clearPref();
-    notifyListeners();
-  }
-*/
-
   // Method to login user
   Future<void> panchayatLoginUser(
     userName,
@@ -70,8 +55,7 @@ class AuthenticationProvider extends ChangeNotifier {
     userTypeId,
     Function() onSuccess,
     Function onFailure,
-  ) async
-  {
+  ) async {
     _isLoading = true;
     notifyListeners();
     String hashPass = generatePasswordHash(password);
@@ -124,7 +108,7 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> ftkSghLoginUser(
+  Future<void> loginNjmFtkUser(
     loginId,
     userTypeId,
     Function() onSuccess,
@@ -134,7 +118,7 @@ class AuthenticationProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _njmFtkLoginResponse = await _authRepository.ftkSghLoginUser(
+      _njmFtkLoginResponse = await _authRepository.loginNjmFtkUser(
         loginId,
         userTypeId,
       );
@@ -162,20 +146,16 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-
-  Future<void> fetchNjmFtkDashboard(
-    regId,
-  ) async {
+  Future<void> fetchNjmFtkDashboard(regId) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      _njmFtkDashboardResponse = await _authRepository.fetchNjmFtkDashboard(regId);
-      if (_njmFtkLoginResponse?.status == true) {
-        _generatedOtp = _njmFtkLoginResponse?.otp.toString();
-
+      var rawResponse = await _authRepository.fetchNjmFtkDashboard(regId);
+      if (rawResponse.status == true) {
+        _njmFtkDashboardResponse = rawResponse;
       } else {
-        errorMsg = _njmFtkLoginResponse?.message;
+        errorMsg = rawResponse.msg;
       }
     } catch (e, stackTrace) {
       GlobalExceptionHandler.handleException(
@@ -212,10 +192,10 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   void verifyOtp(
-      String enteredOtp,
-      Function() onSuccess,
-      Function(String) onFailure,
-      ) {
+    String enteredOtp,
+    Function() onSuccess,
+    Function(String) onFailure,
+  ) {
     if (_generatedOtp == null) {
       onFailure("Please request OTP first");
       return;
@@ -238,6 +218,23 @@ class AuthenticationProvider extends ChangeNotifier {
     return captchResult;
   }*/
 
+  /*
+  Future<void> checkLoginStatus() async {
+    _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
+    notifyListeners();
+  }
+*/
+
+  /*
+  Future<void> logoutUser() async {
+    _isLoggedIn = false;
+
+    // Clear SharedPreferences
+    await _localStorage.clearAll();
+    await session.clearPref();
+    notifyListeners();
+  }
+*/
   void togglePasswordVisibility() {
     _isShownPassword = !_isShownPassword;
     notifyListeners();
