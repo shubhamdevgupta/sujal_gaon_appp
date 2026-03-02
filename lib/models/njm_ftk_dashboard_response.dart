@@ -1,45 +1,8 @@
 class NjmFtkDashboardResponse {
-  final int? userId;
   final bool? status;
   final String? msg;
   final String? token;
-  final List<NjmFtkDashboardItem>? dashboardList;
 
-  NjmFtkDashboardResponse({
-    this.userId,
-    this.status,
-    this.msg,
-    this.token,
-    this.dashboardList,
-  });
-
-  factory NjmFtkDashboardResponse.fromJson(Map<String, dynamic> json) {
-    return NjmFtkDashboardResponse(
-      userId: json['UserId'],
-      status: json['Status'],
-      msg: json['msg'],
-      token: json['Token'],
-      dashboardList: json['SJLDashboardlist'] != null
-          ? List<NjmFtkDashboardItem>.from(
-          json['SJLDashboardlist']
-              .map((x) => NjmFtkDashboardItem.fromJson(x)))
-          : [],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'UserId': userId,
-      'Status': status,
-      'msg': msg,
-      'Token': token,
-      'SJLDashboardlist':
-      dashboardList?.map((x) => x.toJson()).toList(),
-    };
-  }
-}
-
-class NjmFtkDashboardItem {
   final int? regId;
   final int? userTypeId;
   final String? firstName;
@@ -47,27 +10,42 @@ class NjmFtkDashboardItem {
   final int? mobileNumber;
   final String? designation;
   final String? email;
+
   final int? stateId;
   final int? districtId;
   final int? blockId;
   final int? panchayatId;
   final int? villageId;
+
+  final int? districtLgdCode;
+  final int? blockLgdCode;
+  final int? panchayatLgdCode;
+  final int? villageLgdCode;
+
   final String? address;
   final String? gender;
+
   final String? stateName;
   final String? districtName;
   final String? blockName;
   final String? panchayatName;
   final String? villageName;
+
   final String? levelTraining;
   final String? levelTrainingId;
+
   final int? isEnable;
+
   final String? validatedFrom;
   final String? validatedTo;
+
   final String? habitationIds;
   final String? habitationNames;
 
-  NjmFtkDashboardItem({
+  NjmFtkDashboardResponse({
+    this.status,
+    this.msg,
+    this.token,
     this.regId,
     this.userTypeId,
     this.firstName,
@@ -80,6 +58,10 @@ class NjmFtkDashboardItem {
     this.blockId,
     this.panchayatId,
     this.villageId,
+    this.districtLgdCode,
+    this.blockLgdCode,
+    this.panchayatLgdCode,
+    this.villageLgdCode,
     this.address,
     this.gender,
     this.stateName,
@@ -96,8 +78,11 @@ class NjmFtkDashboardItem {
     this.habitationNames,
   });
 
-  factory NjmFtkDashboardItem.fromJson(Map<String, dynamic> json) {
-    return NjmFtkDashboardItem(
+  factory NjmFtkDashboardResponse.fromJson(Map<String, dynamic> json) {
+    return NjmFtkDashboardResponse(
+      status: json['Status'],
+      msg: json['msg'],
+      token: json['Token'],
       regId: json['RegId'],
       userTypeId: json['UserTypeId'],
       firstName: json['FirstName'],
@@ -110,6 +95,10 @@ class NjmFtkDashboardItem {
       blockId: json['BlockId'],
       panchayatId: json['PanchayatId'],
       villageId: json['VillageId'],
+      districtLgdCode: json['District_lgdcode'],
+      blockLgdCode: json['Block_lgdcode'],
+      panchayatLgdCode: json['Panchayat_lgdcode'],
+      villageLgdCode: json['Village_lgdcode'],
       address: json['Address'],
       gender: json['Gender'],
       stateName: json['StateName'],
@@ -129,6 +118,9 @@ class NjmFtkDashboardItem {
 
   Map<String, dynamic> toJson() {
     return {
+      'Status': status,
+      'msg': msg,
+      'Token': token,
       'RegId': regId,
       'UserTypeId': userTypeId,
       'FirstName': firstName,
@@ -141,6 +133,10 @@ class NjmFtkDashboardItem {
       'BlockId': blockId,
       'PanchayatId': panchayatId,
       'VillageId': villageId,
+      'District_lgdcode': districtLgdCode,
+      'Block_lgdcode': blockLgdCode,
+      'Panchayat_lgdcode': panchayatLgdCode,
+      'Village_lgdcode': villageLgdCode,
       'Address': address,
       'Gender': gender,
       'StateName': stateName,
