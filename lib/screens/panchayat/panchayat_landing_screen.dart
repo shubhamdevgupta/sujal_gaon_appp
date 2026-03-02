@@ -64,11 +64,10 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF64B5F6), Colors.blue.shade50],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/icons/SJL_bg.png"),
+            fit: BoxFit.cover,
           ),
         ),
         child: SingleChildScrollView(
@@ -536,76 +535,77 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
   }
 
   Widget _buildWelcomeCard() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(22),
-
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-
-        child: Container(
-          height: 110,
-          padding: const EdgeInsets.all(18),
-
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF2196F3), Color(0xFF0D47A1)],
-            ),
-            borderRadius: BorderRadius.circular(22),
+    return Container(
+      height: 180,
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          children: [
+            /// Background Image
+            Positioned.fill(
+              child: Image.asset(
+                "assets/icons/welcom_bg.png", // your new image
+                fit: BoxFit.cover,
+                alignment: Alignment.centerRight, // keeps character visible
+              ),
+            ),
 
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
+            /// Left Gradient Overlay (for text visibility)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
+              ),
+            ),
+
+            /// Content
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
                   Text(
                     "Welcome Back 👋",
-                    style: TextStyle(color: Colors.white70),
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 14,
+                    ),
                   ),
-
-                  SizedBox(height: 6),
-
+                  SizedBox(height: 10),
                   Text(
                     "Panchayat User",
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
+                      color: Colors.blue,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+
+
                 ],
               ),
-
-              Container(
-                width: 100,
-                height: 120,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage('assets/icons/user_icon.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              /*   CircleAvatar(
-                radius: 32,
-                backgroundColor: Colors.white,
-                child: Container(
-                  decoration: BoxDecoration(shape: BoxShape.circle,image: DecorationImage(image: image)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Image.asset(
-                      "assets/icons/user_icon.png",
-                    ),
-                  ),
-                ),
-              )*/
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
