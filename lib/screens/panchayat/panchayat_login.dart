@@ -238,7 +238,7 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                             ),
                           ),
                           onPressed: () async {
-                              provider.loginUser(
+                              provider.panchayatLoginUser(
                                 "PR-AKINPARA-V-ADM",
                                 "Admin@1234",
                                 UserType.panchayat.id,
