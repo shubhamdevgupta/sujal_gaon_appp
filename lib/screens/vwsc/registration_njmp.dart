@@ -75,42 +75,6 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _sectionCard(
-                    icon: Icons.person,
-                    title: "Operator Details",
-                    children: [
-                      _input(
-                        "Name of the Operator",
-                        controller: vwscProvider.nameController,
-                      ),
-                      _input(
-                        "Contact Number",
-                        keyboard: TextInputType.phone,
-                        controller: vwscProvider.phoneController,
-                      ),
-                      _input(
-                        "Email Id",
-                        keyboard: TextInputType.emailAddress,
-                        controller: vwscProvider.emailController,
-                      ),
-                      _input(
-                        "Complete Address",
-                        maxLines: 3,
-                        controller: vwscProvider.addressController,
-                      ),
-                      _dropdown(
-                        "Level of Training",
-                        value: vwscProvider.selectedLevelLabel,
-                        items: vwscProvider.levelTranningMap.keys.toList(),
-                        onChanged: (value) {
-                          vwscProvider.setSelectedLevel(value);
-                        },
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 22),
-
-                  _sectionCard(
                     icon: Icons.location_city,
                     title: "Village & Habitation Selection",
                     children: [
@@ -212,6 +176,42 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                       ],
                     ],
                   ),
+                  const SizedBox(height: 22),
+
+                  _sectionCard(
+                    icon: Icons.person,
+                    title: "Operator Details",
+                    children: [
+                      _input(
+                        "Name of the Operator",
+                        controller: vwscProvider.nameController,
+                      ),
+                      _input(
+                        "Contact Number",
+                        keyboard: TextInputType.phone,
+                        controller: vwscProvider.phoneController,
+                      ),
+                      _input(
+                        "Email Id",
+                        keyboard: TextInputType.emailAddress,
+                        controller: vwscProvider.emailController,
+                      ),
+                      _input(
+                        "Complete Address",
+                        maxLines: 3,
+                        controller: vwscProvider.addressController,
+                      ),
+                      _dropdown(
+                        "Level of Training",
+                        value: vwscProvider.selectedLevelLabel,
+                        items: vwscProvider.levelTranningMap.keys.toList(),
+                        onChanged: (value) {
+                          vwscProvider.setSelectedLevel(value);
+                        },
+                      ),
+                    ],
+                  ),
+
                 ],
               ),
 
@@ -391,24 +391,39 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
       ),
     );
   }
-
-  Widget _dropdown(String label, {
-    required String? value,
-    required List<String> items,
-    required Function(String?) onChanged,
-  }) {
+  Widget _dropdown(
+      String label, {
+        required String? value,
+        required List<String> items,
+        required Function(String?) onChanged,
+      }) {
     return DropdownButtonFormField<String>(
       value: value,
+      isExpanded: true,   // 🔥 VERY IMPORTANT FIX
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 14,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFF1565C0)),
         ),
       ),
       items: items
-          .map((item) => DropdownMenuItem(value: item, child: Text(item)))
+          .map(
+            (item) => DropdownMenuItem(
+          value: item,
+          child: Text(
+            item,
+            overflow: TextOverflow.ellipsis,  // 🔥 prevent overflow
+          ),
+        ),
+      )
           .toList(),
       onChanged: onChanged,
     );

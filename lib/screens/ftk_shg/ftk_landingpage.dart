@@ -1,11 +1,14 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
+import '../../utils/loader_utils.dart';
 
 class FtkLandingpage extends StatefulWidget {
   const FtkLandingpage({super.key});
@@ -29,6 +32,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<AuthenticationProvider>();
     return WillPopScope(
       onWillPop: () async {
         return await _showExitDialog();
@@ -54,7 +58,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                 await context.read<AuthenticationProvider>().logoutUser();
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  AppConstants.navigateToFTKLogin,
+                  AppConstants.navigateToPreLoginScreen,
                       (route) => false,
                 );
               },
@@ -71,28 +75,35 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
               end: Alignment.bottomRight,
             ),
           ),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
-      
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /*_buildCustomHeader(),*/
-                // ================= WELCOME =================
-                const SizedBox(height: 20),
-      
-                _buildWelcomeCard(),
-      
-                SizedBox(height: 20),
-                // ================= DASHBOARD =================
-                _dashboardCard(context),
-      
-                const SizedBox(height: 16),
-      
-                //_listCard(context),
-              ],
-            ),
-          ),
+          child: Stack(
+            children: [
+              provider.njmFtkDashboardResponse == null
+                  ? SizedBox()
+                  : SingleChildScrollView(
+                padding: const EdgeInsets.all(10),
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /*_buildCustomHeader(),*/
+                    // ================= WELCOME =================
+                    const SizedBox(height: 20),
+
+                    _buildWelcomeCard(),
+
+                    SizedBox(height: 20),
+                    // ================= DASHBOARD =================
+                    _dashboardCard(context),
+
+                    const SizedBox(height: 16),
+
+                    //_listCard(context),
+                  ],
+                ),
+              ),
+              LoaderUtils.conditionalLoader(isLoading: provider.isLoading),
+            ],
+          )
         ),
       ),
     );
@@ -180,7 +191,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
   Widget _registerCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacementNamed(
+        Navigator.pushNamed(
           context,
           AppConstants.navigateToFTKQuestionscategory,
         );
@@ -479,12 +490,13 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
     );
   }
   Future<bool> _showExitDialog() async {
-    return await showDialog(
+    final shouldExit = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Exit App"),
         content: const Text(
-            "Are you sure you want to exit the application?"),
+          "Are you sure you want to exit the application?",
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -496,7 +508,16 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
           ),
         ],
       ),
-    ) ??
-        false;
+    );
+
+    if (shouldExit == true) {
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();   // 🔥 closes app
+      } else if (Platform.isIOS) {
+        exit(0);  // not recommended by Apple but works
+      }
+    }
+
+    return false; // 🔥 prevent default pop
   }
 }

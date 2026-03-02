@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/providers/master_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/authentication_provider.dart';
+import '../../providers/update_provider.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
+import '../../utils/update_dialog.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,10 +16,12 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   final session = UserSessionManager();
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
@@ -27,24 +31,27 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       duration: const Duration(seconds: 2),
     );
 
-    _fadeAnimation =
-        CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
     _controller.forward();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-   //   await session.sanitizePrefs(); // await clear
-      await session.init(); // await init after clearing
-      await _checkForUpdateAndNavigate(); // navigate after setup
+      await session.init();
+      await _checkForUpdateAndNavigate();
     });
   }
 
   Future<void> _checkForUpdateAndNavigate() async {
-    // Use Provider instance instead of creating new one
-    /*    final updateViewModel = Provider.of<UpdateViewModel>(context, listen: false);
+/*    // Use Provider instance instead of creating new one
+    final updateViewModel = Provider.of<UpdateViewModel>(
+      context,
+      listen: false,
+    );
 
     // Use throttled check (force on startup to ensure first check happens)
-    bool isAvailable = await updateViewModel.checkForUpdateWithThrottle(forceCheck: true);
+    bool isAvailable = await updateViewModel.checkForUpdateWithThrottle(
+      forceCheck: true,
+    );
 
     if (isAvailable && mounted) {
       final updateInfo = await updateViewModel.getUpdateInfo();
@@ -60,55 +67,85 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   Future<void> _navigateToNextScreen() async {
-      await Future.delayed(const Duration(seconds: 3)); // Optional splash delay
+    await Future.delayed(const Duration(seconds: 2));
 
-    /*  final authProvider = Provider.of<AuthenticationProvider>(
+    final authProvider = Provider.of<AuthenticationProvider>(
       context,
       listen: false,
-    );*/
-    final masterProvider = Provider.of<MasterProvider>(context, listen: false);
-    //final roleId = session.roleId;
-    //  await authProvider.checkLoginStatus();
-    //  masterProvider.clearData();
-    /*    if (authProvider.isLoggedIn) {
-      if (roleId == 4) {
-        Navigator.pushReplacementNamed(
-          context,
-          AppConstants.navigateToDashboardScreen,
-        );
-      } else if (roleId == 8) {
-        Navigator.pushReplacementNamed(
-          context,
-          AppConstants.navigateToDwsmDashboard,
-        );
-      } else if (roleId == 7) {
-        Navigator.pushReplacementNamed(
-          context,
-          AppConstants.navigateToFtkDashboard,
-        );
-      }
-    } else {
-      Navigator.pushReplacementNamed(
-        context,
-        AppConstants.navigateToLoginScreen,
-      );
-    }*/
-       Navigator.pushReplacementNamed(
-      context,
-      AppConstants.navigateToPreLoginScreen,
     );
+
+    await authProvider.checkLoginStatus();
+
+    final isLoggedIn = authProvider.isLoggedIn;
+
+    if (!mounted) return;
+
+    if (!isLoggedIn) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppConstants.navigateToPreLoginScreen,
+        (route) => false,
+      );
+      return;
+    }
+
+    // 🔥 Read saved user type
+    final userTypeId =
+        session.userTypeId; // Make sure session.init() loads this
+
+    switch (userTypeId) {
+      case 10001: // Panchayat
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppConstants.navigateToPanchayatLandingScreen,
+          (route) => false,
+        );
+        break;
+
+      case 45: // NJM
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppConstants.navigateToNJMWSOLandingPage,
+          (route) => false,
+        );
+        break;
+
+      case 46: // FTK
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppConstants.navigateToFtkLandingpage,
+          (route) => false,
+        );
+        break;
+
+      case 10: // VWSC
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppConstants.navigateToVWSCLandingScreen,
+          (route) => false,
+        );
+        break;
+
+      default:
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppConstants.navigateToPreLoginScreen,
+          (route) => false,
+        );
+    }
   }
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // ================= BACKGROUND IMAGE =================
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -118,51 +155,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             ),
           ),
 
-          // ================= DARK OVERLAY =================
           Container(color: Colors.black.withOpacity(0.45)),
 
-          // ================= CONTENT =================
           Center(
             child: FadeTransition(
               opacity: _fadeAnimation,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [
-                  // App Title
-        /*          const Text(
-                    "Sujal Gaon",
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: 1.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  const Text(
-                    "Empowering Rural Water Management",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
-                      letterSpacing: 1,
-                    ),
-                  ),*/
-
-                  const SizedBox(height: 40),
-
-                  // Loading Indicator
-                  const SizedBox(
-                    width: 28,
-                    height: 28,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                ],
+                children: [const SizedBox(height: 40)],
               ),
             ),
           ),

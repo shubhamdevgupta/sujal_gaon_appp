@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/providers/authentication_provider.dart';
 import 'package:jal_sanchalan/providers/master_provider.dart';
 import 'package:jal_sanchalan/providers/panchayat/panchayat_provider.dart';
+import 'package:jal_sanchalan/providers/update_provider.dart';
 import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
 import 'package:jal_sanchalan/service/local_storage_service.dart';
 import 'package:jal_sanchalan/utils/AppUtil.dart';
@@ -23,6 +24,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (_) => PanchayatProvider()),
         ChangeNotifierProvider(create: (_) => VwscProvider()),
+        ChangeNotifierProvider(create: (_) => UpdateViewModel()),
       ],
       child: const MyApp(),
     ),
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: 'Sujal Gaon',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

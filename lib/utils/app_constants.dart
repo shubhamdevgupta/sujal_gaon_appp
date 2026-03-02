@@ -5,11 +5,14 @@ class AppConstants {
   static const String prefIsLoggedIn = 'isLoggedIn';
   static const String prefToken = 'token';
   static const String prefUserId = 'userId';
+  static const String prefUserTypeId = 'userTypeId';
   static const String prefRegId = 'regId';
   static const String prefState = 'stateId';
   static const String prefDistrict = 'districtId';
   static const String prefBlockId = 'blockId';
   static const String prefPanchayatId = 'panchayatId';
+  static const String prefLastUpdateCheckTime = 'last_update_check_time';
+
 
   //auth
   static const String navigateToDashboardScreen = '/dashboardScreen';

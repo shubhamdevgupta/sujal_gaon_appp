@@ -246,12 +246,6 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                                   Navigator.pushReplacementNamed(
                                     context,
                                     AppConstants.navigateToPanchayatLandingScreen,
-                                    arguments: {
-                                      "stateId": int.parse(
-                                          provider.loginResponse!.result!.loginResult!.stateId!),
-                                      "panchayatId": int.parse(
-                                          provider.loginResponse!.result!.loginResult!.panchayatId!),
-                                    },
                                   );
                                 },
                                 (errorMessage) {

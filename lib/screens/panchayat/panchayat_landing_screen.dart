@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/providers/panchayat/panchayat_provider.dart';
+import 'package:jal_sanchalan/service/local_storage_service.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/authentication_provider.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
 
@@ -16,8 +18,7 @@ class PanchayatLandingScreen extends StatefulWidget {
 
 class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
   final session = UserSessionManager();
-
-  //late PanchayatProvider provider;
+  final LocalStorageService storageService = LocalStorageService();
 
   @override
   void initState() {
@@ -29,72 +30,79 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final provider = context.watch<PanchayatProvider>();
-
-    int stateId = args["stateId"] as int;
-    int panchayatId = args["panchayatId"] as int;
-
-    print("--------- $stateId  &&&&&& $panchayatId");
-
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-
-        elevation: 0,
-
-        backgroundColor: const Color(0xFF1565C0),
-
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-
-        title: const Text(
-          "Sujal Gaon",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
+    return WillPopScope(
+      onWillPop: _showExitDialog,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: const Color(0xFF1565C0),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout, color: Colors.white),
+              onPressed: () async {
+                await context.read<AuthenticationProvider>().logoutUser();
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppConstants.navigateToPreLoginScreen,
+                      (route) => false,
+                );
+              },
+            )
+          ],
+          title: const Text(
+            "Sujal Gaon",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
-      ),
 
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/icons/SJL_bg.png"),
-            fit: BoxFit.cover,
+        body: Container(
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF64B5F6), Colors.blue.shade50],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(10),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(10),
 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /*_buildCustomHeader(),*/
-              // ================= WELCOME =================
-              const SizedBox(height: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /*_buildCustomHeader(),*/
+                // ================= WELCOME =================
+                const SizedBox(height: 20),
 
-              _buildWelcomeCard(),
+                _buildWelcomeCard(),
 
-              SizedBox(height: 20),
-              // ================= DASHBOARD =================
-              _dashboardCard(context),
-              const SizedBox(height: 16),
+                SizedBox(height: 20),
+                // ================= DASHBOARD =================
+                _dashboardCard(context),
+                const SizedBox(height: 16),
 
-              _registerOptions(context),
-              const SizedBox(height: 16),
+                _registerOptions(context),
+                const SizedBox(height: 16),
 
-              _listCardNJMFTK(context),
-              const SizedBox(height: 16),
-              _listCard(context, provider, stateId, panchayatId),
-
-            ],
+                _listCardNJMFTK(context),
+                const SizedBox(height: 16),
+                _listCard(context, provider),
+              ],
+            ),
           ),
         ),
       ),
@@ -160,8 +168,6 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                       ),
 
                       const SizedBox(height: 8),
-
-                      // ================= INNER WHITE CARD =================
                       _buildLocationCard(),
                     ],
                   ),
@@ -173,6 +179,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
       ],
     );
   }
+
   Widget _listCardNJMFTK(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -234,21 +241,19 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
     );
   }
 
-  Widget _listCard(
-    BuildContext context,
-    PanchayatProvider provider,
-    int stateId,
-    int panchayatId,
-  ) {
+  Widget _listCard(BuildContext context,
+      PanchayatProvider provider,) {
     return GestureDetector(
-      onTap: () async{
-       await provider.fetchVwscMemberList(session.userId, stateId, panchayatId);
+      onTap: () async {
+        await provider.fetchVwscMemberList(
+            session.userId,
+            int.parse(storageService.getString(AppConstants.prefState)!),
+            int.parse(storageService.getString(AppConstants.prefPanchayatId)!));
 
-       Navigator.pushReplacementNamed(
-         context,
-         AppConstants.navigateToVWSCListScreen,
-         arguments: provider.vwscMember, // pass list directly
-       );
+        Navigator.pushNamed(
+          context,
+          AppConstants.navigateToVWSCListScreen,
+        );
       },
       child: Container(
         height: 90,
@@ -349,6 +354,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
       ),
     );
   }
+
   Widget _registerRowProfessional({
     required IconData icon,
     required String title,
@@ -534,78 +540,100 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
     );
   }
 
-  Widget _buildWelcomeCard() {
-    return Container(
-      height: 180,
-      width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.15),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+  Future<bool> _showExitDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (context) =>
+          AlertDialog(
+            title: const Text("Exit App"),
+            content: const Text(
+                "Are you sure you want to exit the application?"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text("No"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text("Yes"),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: Stack(
-          children: [
-            /// Background Image
-            Positioned.fill(
-              child: Image.asset(
-                "assets/icons/welcom_bg.png", // your new image
-                fit: BoxFit.cover,
-                alignment: Alignment.centerRight, // keeps character visible
-              ),
+    ) ??
+        false;
+  }
+
+  Widget _buildWelcomeCard() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(22),
+
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+
+        child: Container(
+          height: 110,
+          padding: const EdgeInsets.all(18),
+
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF2196F3), Color(0xFF0D47A1)],
             ),
+            borderRadius: BorderRadius.circular(22),
+          ),
 
-            /// Left Gradient Overlay (for text visibility)
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
-              ),
-            ),
-
-            /// Content
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+
                 children: const [
                   Text(
                     "Welcome Back 👋",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.white70),
                   ),
-                  SizedBox(height: 10),
+
+                  SizedBox(height: 6),
+
                   Text(
                     "Panchayat User",
                     style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 26,
+                      color: Colors.white,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
-
                 ],
               ),
-            ),
-          ],
+
+              Container(
+                width: 100,
+                height: 120,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage('assets/icons/user_icon.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+
+              /*   CircleAvatar(
+                radius: 32,
+                backgroundColor: Colors.white,
+                child: Container(
+                  decoration: BoxDecoration(shape: BoxShape.circle,image: DecorationImage(image: image)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Image.asset(
+                      "assets/icons/user_icon.png",
+                    ),
+                  ),
+                ),
+              )*/
+            ],
+          ),
         ),
       ),
     );
@@ -655,4 +683,5 @@ class _statBox extends StatelessWidget {
       ),
     );
   }
+
 }

@@ -66,6 +66,10 @@ class AuthenticationProvider extends ChangeNotifier {
         userTypeId,
       );
       if (_loginResponse?.status == true) {
+
+        await _localStorage.clearAll();
+
+        await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
         onSuccess();
         _localStorage.saveString(
           AppConstants.prefToken,
@@ -91,6 +95,12 @@ class AuthenticationProvider extends ChangeNotifier {
           AppConstants.prefUserId,
           _loginResponse!.userId ?? 0,
         );
+
+        _localStorage.saveInt(
+          AppConstants.prefUserTypeId,
+          userTypeId,
+        );
+      await  session.init();
       } else {
         errorMsg = _loginResponse?.message;
         onFailure(errorMsg);
@@ -126,15 +136,20 @@ class AuthenticationProvider extends ChangeNotifier {
         await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
 
         _generatedOtp = _njmFtkLoginResponse?.otp.toString();
+      await  _localStorage.saveInt(
+          AppConstants.prefRegId,
+          _njmFtkLoginResponse!.regId,
+        );
         _localStorage.saveString(
           AppConstants.prefToken,
           _njmFtkLoginResponse!.token.toString(),
         );
-        _localStorage.saveInt(
-          AppConstants.prefRegId,
-          _njmFtkLoginResponse!.regId,
-        );
 
+        _localStorage.saveInt(
+          AppConstants.prefUserTypeId,
+          userTypeId,
+        );
+      await  session.init();
         onSuccess();
       } else {
         errorMsg = _njmFtkLoginResponse?.message;
@@ -202,6 +217,7 @@ class AuthenticationProvider extends ChangeNotifier {
     Function() onSuccess,
     Function(String) onFailure,
   ) {
+    print("-------- ${session.regId}");
     if (_generatedOtp == null) {
       onFailure("Please request OTP first");
       return;
@@ -215,7 +231,7 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
   Future<void> checkLoginStatus() async {
-    _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
+    _isLoggedIn = await _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
     notifyListeners();
   }
 

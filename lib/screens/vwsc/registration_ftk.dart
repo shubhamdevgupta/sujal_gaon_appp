@@ -63,52 +63,6 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                ],
-              ),
-
-              SizedBox(height: 22,),
-              // ================= PERSONAL DETAILS =================
-              _sectionCard(
-                icon: Icons.person,
-                title: "Personal Details",
-                children: [
-                  _input("Name (First + Last Name)",controller: vwscProvider.nameController),
-
-                  _input("Contact Number", controller: vwscProvider.phoneController,keyboard: TextInputType.phone),
-
-                  _input("Complete Address", controller: vwscProvider.addressController,maxLines: 3),
-                ],
-              ),
-
-              const SizedBox(height: 22),
-
-              /*              // ================= JJM REGISTRY =================
-              _sectionCard(
-                icon: Icons.account_balance,
-                title: "JJM IMIS Registry Details",
-                children: [
-
-                  _readOnly("Gram Panchayat", gpName),
-                  _readOnly("GP LGD Code", gpLGD),
-
-                  _readOnly("Village", villageName),
-                  _readOnly("Village LGD Code", villageLGD),
-
-                  _readOnly("District", districtName),
-                  _readOnly("District LGD Code", districtLGD),
-
-                  _readOnly("State", stateName),
-                ],
-              ),
-
-              const SizedBox(height: 22),*/
-
-              // ================= AREA OF OPERATION =================
-
               _sectionCard(
                 icon: Icons.map,
                 title: "Area of Operation",
@@ -217,11 +171,42 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
                   ],
                 ],
               ),
+              const SizedBox(height: 22),
+              _sectionCard(
+                icon: Icons.person,
+                title: "Personal Details",
+                children: [
+                  _input("Name (First + Last Name)",controller: vwscProvider.nameController),
 
+                  _input("Contact Number", controller: vwscProvider.phoneController,keyboard: TextInputType.phone),
+
+                  _input("Complete Address", controller: vwscProvider.addressController,maxLines: 3),
+                ],
+              ),
 
               const SizedBox(height: 22),
 
-              // ================= VALIDATION PERIOD =================
+              /*              // ================= JJM REGISTRY =================
+              _sectionCard(
+                icon: Icons.account_balance,
+                title: "JJM IMIS Registry Details",
+                children: [
+
+                  _readOnly("Gram Panchayat", gpName),
+                  _readOnly("GP LGD Code", gpLGD),
+
+                  _readOnly("Village", villageName),
+                  _readOnly("Village LGD Code", villageLGD),
+
+                  _readOnly("District", districtName),
+                  _readOnly("District LGD Code", districtLGD),
+
+                  _readOnly("State", stateName),
+                ],
+              ),
+
+              const SizedBox(height: 22),*/
+
               _sectionCard(
                 icon: Icons.date_range,
                 title: "Validated For",

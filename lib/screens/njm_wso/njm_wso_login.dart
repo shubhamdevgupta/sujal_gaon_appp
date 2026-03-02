@@ -257,7 +257,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
     provider.verifyOtp(
       enteredOtp,
           () {
-        Navigator.pushNamed(context, AppConstants.navigateToFtkLandingpage);
+        Navigator.pushNamed(context, AppConstants.navigateToNJMWSOLandingPage);
       },
           (error) {
         showMessage(error);
