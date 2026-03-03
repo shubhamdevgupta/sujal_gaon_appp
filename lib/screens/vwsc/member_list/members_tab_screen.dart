@@ -18,6 +18,7 @@ class _MembersTabScreenState extends State<MembersTabScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final session = UserSessionManager();
+
   @override
   void initState() {
     super.initState();
@@ -28,9 +29,10 @@ class _MembersTabScreenState extends State<MembersTabScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       session.init();
       context.read<VwscProvider>().fetchNjmFtkUser(
-        UserType.njmp.id,907392,
+        UserType.njmp.id,
+        907392,
         21,
-        0
+        0,
       );
     });
 
@@ -40,17 +42,9 @@ class _MembersTabScreenState extends State<MembersTabScreen>
       final provider = context.read<VwscProvider>();
 
       if (_tabController.index == 0) {
-        provider.fetchNjmFtkUser(
-          UserType.njmp.id, 907392,
-          21,
-          0
-        );
+        provider.fetchNjmFtkUser(UserType.njmp.id, 907392, 21, 0);
       } else {
-        provider.fetchNjmFtkUser(
-          UserType.ftk.id, 907392,
-          21,
-          0
-        );
+        provider.fetchNjmFtkUser(UserType.ftk.id, 907392, 21, 0);
       }
     });
   }
@@ -66,19 +60,22 @@ class _MembersTabScreenState extends State<MembersTabScreen>
     return Scaffold(
       backgroundColor: const Color(0xFFEAF3FB),
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1976D2),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
-          "Members List",
+          "SHGs / FTK Registration",
           style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true,
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,
+          labelColor: Colors.white,
           tabs: const [
             Tab(text: "NJM / WSO"),
             Tab(text: "FTK / SGH"),
           ],
         ),
+        centerTitle: true,
       ),
       body: TabBarView(
         controller: _tabController,

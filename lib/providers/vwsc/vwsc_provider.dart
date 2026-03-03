@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/repository/vwsc/vwsc_repo.dart';
 
+import '../../models/ftk_sgh/NjmFtkRegistrationResponse.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
 import '../../utils/device_utils.dart';
 
@@ -18,6 +19,10 @@ class VwscProvider extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController appointAuthConroller = TextEditingController();
+
+  Njmftkregistrationresponse? _njmftkregistrationresponse;
+  Njmftkregistrationresponse? get njmFtkRegistrationResponse => _njmftkregistrationresponse;
+
 
   final Map<String, int> levelTranningMap = {
     "Not Trained": 1,
@@ -67,7 +72,8 @@ class VwscProvider extends ChangeNotifier {
     int userId,
     int stateId,
     int regId,
-  ) async {
+  ) async
+  {
     _isLoading = true;
     notifyListeners();
 
@@ -112,7 +118,8 @@ class VwscProvider extends ChangeNotifier {
     required String validatedFrom,
     required String validatedTo,
     required String habitationIds,
-  }) async {
+  }) async
+  {
     _isLoading = true;
     notifyListeners();
 
@@ -141,8 +148,9 @@ class VwscProvider extends ChangeNotifier {
       );
 
       if (response.status == true) {
-        debugPrint("Registration Successful");
+        _njmftkregistrationresponse = response;
       } else {
+        _njmftkregistrationresponse=null;
         debugPrint("Registration Failed: ${response.message}");
       }
     } catch (e) {
@@ -152,9 +160,24 @@ class VwscProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   Future<void> fetchDeviceId() async {
     _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
     debugPrint('Device ID: $_deviceId');
     notifyListeners();
   }
+
+  void clearData() {
+    _isLoading = false;
+    _njmftkregistrationresponse = null;
+    _fromDate=null;
+    _toDate=null;
+
+    nameController.clear();
+    phoneController.clear();
+    emailController.clear();
+    addressController.clear();
+    notifyListeners();
+  }
+
 }

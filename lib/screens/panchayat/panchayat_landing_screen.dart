@@ -50,7 +50,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                       (route) => false,
                 );
               },
-            )
+            ),
           ],
           title: const Text(
             "Sujal Gaon",
@@ -110,6 +110,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
   }
 
   Widget _dashboardCard(BuildContext context) {
+    final provider = context.watch<PanchayatProvider>();
     return Column(
       children: [
         Container(
@@ -183,12 +184,8 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
   Widget _listCardNJMFTK(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacementNamed(
-          context,
-          AppConstants.navigateToVWSCMemberScrenn,
-        );
+        Navigator.pushNamed(context, AppConstants.navigateToVWSCMemberScrenn);
       },
-
       child: Container(
         height: 130,
         padding: const EdgeInsets.all(16),
@@ -220,7 +217,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "NJM/WSO & FTK/SGH Members",
+                    "NJM / WSO & FTK/SGH Members",
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
 
@@ -241,19 +238,10 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
     );
   }
 
-  Widget _listCard(BuildContext context,
-      PanchayatProvider provider,) {
+  Widget _listCard(BuildContext context, PanchayatProvider provider) {
     return GestureDetector(
-      onTap: () async {
-        await provider.fetchVwscMemberList(
-            session.userId,
-            int.parse(storageService.getString(AppConstants.prefState)!),
-            int.parse(storageService.getString(AppConstants.prefPanchayatId)!));
-
-        Navigator.pushNamed(
-          context,
-          AppConstants.navigateToVWSCListScreen,
-        );
+      onTap: ()  {
+        Navigator.pushNamed(context, AppConstants.navigateToVWSCListScreen);
       },
       child: Container(
         height: 90,
@@ -265,9 +253,9 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
             colors: [
-              Color(0xFFF8FBFF), // very light (left)
-              Color(0xFFE3F2FD), // soft blue (middle)
-              Color(0xFFD0E8FF), // faded blue glow (right)
+              Color(0xFFF8FBFF),
+              Color(0xFFE3F2FD),
+              Color(0xFFD0E8FF),
             ],
             stops: [0.0, 0.6, 1.0],
           ),
@@ -327,7 +315,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
         children: [
           _registerRowProfessional(
             icon: Icons.water_drop,
-            title: "Register NJMP",
+            title: "Register NJM / WSO",
             subtitle: "Nal Jal Mitra Registration",
             onTap: () {
               Navigator.pushNamed(
@@ -416,6 +404,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
   }
 
   Widget _buildLocationCard() {
+    final provider = context.watch<AuthenticationProvider>();
     return Container(
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.all(15),
@@ -451,7 +440,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 icon: Icons.account_balance,
                 color: Color(0xFF1976D2),
                 title: "State",
-                value: "Haryana",
+                value: "${provider.panchayatResult?.loginResult?.stateName}",
               ),
 
               _verticalDivider(),
@@ -460,7 +449,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 icon: Icons.place,
                 color: Color(0xFFE53935),
                 title: "District",
-                value: "Sonipat",
+                value: "${provider.panchayatResult?.loginResult?.districtName}",
               ),
             ],
           ),
@@ -476,7 +465,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 icon: Icons.apartment,
                 color: Color(0xFF8D6E63),
                 title: "Block",
-                value: "Gohana",
+                value: "${provider.panchayatResult?.loginResult?.blockName}",
               ),
 
               _verticalDivider(),
@@ -485,7 +474,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 icon: Icons.home,
                 color: Color(0xFF00796B),
                 title: "GP",
-                value: "Hooda",
+                value: "${provider.panchayatResult?.loginResult?.panchayatName}",
               ),
             ],
           ),
@@ -513,32 +502,57 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
     required Color color,
     required String title,
     required String value,
+    String? subTitle,
+    String? subTitleValue,
   }) {
     return Expanded(
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 22),
-
-          const SizedBox(width: 8),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          /// 🔹 Top Row → Icon + Title
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 6),
               Text(
-                "${title}: ${value}",
+                title,
                 style: TextStyle(
                   fontSize: 13,
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
           ),
+
+          const SizedBox(height: 4),
+
+          /// 🔹 Main Value (Below Row)
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+
+          /// 🔹 Optional Subtitle Section
+          if (subTitle != null &&
+              subTitleValue != null &&
+              subTitleValue.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(
+              "$subTitle: $subTitleValue",
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            ),
+          ],
         ],
       ),
     );
   }
+
 
   Future<bool> _showExitDialog() async {
     return await showDialog(
@@ -547,7 +561,8 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
           AlertDialog(
             title: const Text("Exit App"),
             content: const Text(
-                "Are you sure you want to exit the application?"),
+              "Are you sure you want to exit the application?",
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -683,5 +698,4 @@ class _statBox extends StatelessWidget {
       ),
     );
   }
-
 }

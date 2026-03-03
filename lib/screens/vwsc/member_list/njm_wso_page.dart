@@ -19,18 +19,31 @@ class NjmWsoPage extends StatelessWidget {
       return const Center(child: Text("No Users Found"));
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: provider.njmFtkUsers.length,
-      itemBuilder: (context, index) {
-        final user = provider.njmFtkUsers[index];
+    return Scaffold(
+      backgroundColor: const Color(0xFFF4F7FB),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/icons/SJL_bg.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: provider.njmFtkUsers.length,
+          itemBuilder: (context, index) {
+            final user = provider.njmFtkUsers[index];
 
-        return UserCard(
-          name: "${user.firstName} ${user.lastName}",
-          email: user.email ?? "",
-          village: user.villageName ?? "",
-        );
-      },
+            return UserCard(
+              name: "${user.firstName} ${user.lastName}",
+              email: user.email ?? "",
+              village: user.villageName ?? "",
+            );
+          },
+        ),
+      ),
     );
   }
 }

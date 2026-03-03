@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../providers/master_provider.dart';
 import '../../utils/auth/user_session_manager.dart';
 import '../../utils/custom screen/custom_dropdown.dart';
+import '../../utils/toast_helper.dart';
 
 class NJMPRegistrationForm extends StatefulWidget {
   const NJMPRegistrationForm({super.key});
@@ -76,7 +77,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                 children: [
                   _sectionCard(
                     icon: Icons.location_city,
-                    title: "Village & Habitation Selection",
+                    title: "Area of Operator",
                     children: [
                       CustomDropdown(
                         value: masterProvider.selectedVillageId,
@@ -217,42 +218,6 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
 
               const SizedBox(height: 22),
 
-              /*     _sectionCard(
-                icon: Icons.map,
-                title: "Authority & Area of Operation",
-                children: [
-                  _input("Appointment Authority Details"),
-
-                  _dropdown(
-                    "Select Village (Area of Operation)",
-                    value: selectedHabitation,
-                    items: selectedVillage == null
-                        ? []
-                        : habitations[selectedVillage] ?? [],
-                    onChanged: (v) {
-                      setState(() {
-                        selectedHabitation = v;
-                      });
-                    },
-                  ),
-
-                  /// HABITATION
-                  _dropdown(
-                    "Select Habitation",
-                    value: selectedHabitation,
-                    items: selectedVillage == null
-                        ? []
-                        : habitations[selectedVillage] ?? [],
-                    onChanged: (v) {
-                      setState(() {
-                        selectedHabitation = v;
-                      });
-                    },
-                  ),
-                ],
-              ), */
-
-              // ================= VALIDATION =================
               _sectionCard(
                 icon: Icons.date_range,
                 title: "Validation Period",
@@ -469,8 +434,8 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
 
   Widget _submitButton(VwscProvider provider, MasterProvider masterProvider) {
     return InkWell(
-      onTap: () {
-        provider.registerNjmFTK(
+      onTap: () async{
+       await provider.registerNjmFTK(
           regId: 0,
           userTypeId: UserType.njmp.id,
           stateId: int.parse(_localStorage.getString(AppConstants.prefState)!),
@@ -498,6 +463,85 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
           validatedTo: formatDate(provider.toDate),
           habitationIds: masterProvider.selectedHabitationIdsAsString,
         );
+
+        if (provider.njmFtkRegistrationResponse != null &&
+            provider.njmFtkRegistrationResponse!.status == true) {
+          showDialog(
+            context: context,
+            barrierDismissible: false, // Disable tap outside to dismiss
+            builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              titlePadding: const EdgeInsets.only(top: 20),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 10,
+              ),
+              actionsPadding: const EdgeInsets.only(bottom: 10, right: 10),
+              title: Column(
+                children: [
+                  Image.asset(
+                    'assets/icons/check.png',
+                    // <-- Your success image (PNG) path here
+                    height: 60,
+                    width: 80,
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Success!",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                ],
+              ),
+              content: Text(
+                provider.njmFtkRegistrationResponse?.message ??
+                    'FTK Registration completed!',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+              actions: [
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 12,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context); // Close dialog
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        AppConstants.navigateToFtkLandingpage,
+                            (route) => false, // Clear back stack
+                      );
+                      provider.clearData();
+                    },
+                    child: const Text(
+                      "OK",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          ToastHelper.showErrorSnackBar(
+            context,
+            provider.njmFtkRegistrationResponse!.message ??
+                "Registration Failed",
+          );
+        }
       },
       child: Container(
         width: double.infinity,

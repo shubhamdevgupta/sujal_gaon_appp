@@ -126,7 +126,7 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
 
                       /// Mobile Number
                       const Text(
-                        "Registered Mobile/Username",
+                        "Registered eGram Swaraj Username",
                         style: TextStyle(fontWeight: FontWeight.w500),
                       ),
 
@@ -136,7 +136,7 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                         controller: mobileController,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.phone),
-                          hintText: "Enter Mobile Number or Username",
+                          hintText: "Enter Username",
                           counterText: "",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -188,43 +188,6 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                       ),
 
                       const SizedBox(height: 25),
-
-                /*      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: 50,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF1F3F4),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                '${provider.randomOne} + ${provider.randomTwo} = ?',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'OpenSans',
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          InkWell(
-                            onTap: provider.generateCaptcha,
-                            borderRadius: BorderRadius.circular(30),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.blue.shade50,
-                              child: const Icon(
-                                Icons.refresh,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 25),*/
 
                       /// Login Button
                       SizedBox(

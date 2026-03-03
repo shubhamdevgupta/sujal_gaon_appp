@@ -8,6 +8,7 @@ import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
 import '../../utils/custom screen/custom_dropdown.dart';
 import '../../utils/enum/user_type.dart';
+import '../../utils/toast_helper.dart';
 
 class SHGFTKRegistrationForm extends StatefulWidget {
   const SHGFTKRegistrationForm({super.key});
@@ -31,8 +32,11 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
     super.initState();
     session.init();
     final masterProvider = Provider.of<MasterProvider>(context, listen: false);
-    masterProvider.fetchVillage(_localStorage.getString(AppConstants.prefPanchayatId)!);
+    masterProvider.fetchVillage(
+      _localStorage.getString(AppConstants.prefPanchayatId)!,
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     final masterProvider = context.watch<MasterProvider>();
@@ -176,11 +180,28 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
                 icon: Icons.person,
                 title: "Personal Details",
                 children: [
-                  _input("Name (First + Last Name)",controller: vwscProvider.nameController),
+                  _input(
+                    "Name (First + Last Name)",
+                    controller: vwscProvider.nameController,
+                  ),
 
-                  _input("Contact Number", controller: vwscProvider.phoneController,keyboard: TextInputType.phone),
+                  _input(
+                    "Contact Number",
+                    controller: vwscProvider.phoneController,
+                    keyboard: TextInputType.phone,
+                  ),
 
-                  _input("Complete Address", controller: vwscProvider.addressController,maxLines: 3),
+                  _input(
+                    "Email Id",
+                    keyboard: TextInputType.emailAddress,
+                    controller: vwscProvider.emailController,
+                  ),
+
+                  _input(
+                    "Complete Address",
+                    controller: vwscProvider.addressController,
+                    maxLines: 3,
+                  ),
                 ],
               ),
 
@@ -206,10 +227,9 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
               ),
 
               const SizedBox(height: 22),*/
-
               _sectionCard(
                 icon: Icons.date_range,
-                title: "Validated For",
+                title: "Validated Period",
                 children: [
                   _datePicker(
                     label: "Valid From",
@@ -226,7 +246,7 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
 
               const SizedBox(height: 30),
 
-              _submitButton(vwscProvider,masterProvider),
+              _submitButton(vwscProvider, masterProvider),
 
               const SizedBox(height: 40),
             ],
@@ -424,7 +444,6 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
         "${date.year}";
   }
 
-
   Widget _datePicker({
     required String label,
     required DateTime? date,
@@ -463,12 +482,11 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
 
   // ================= SUBMIT BUTTON =================
 
-
   Widget _submitButton(VwscProvider provider, MasterProvider masterProvider) {
     provider.fetchDeviceId();
     return InkWell(
-      onTap: () {
-        provider.registerNjmFTK(
+      onTap: () async {
+        await provider.registerNjmFTK(
           regId: 0,
           userTypeId: UserType.ftk.id,
           stateId: int.parse(_localStorage.getString(AppConstants.prefState)!),
@@ -496,6 +514,84 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
           validatedTo: formatDate(provider.toDate),
           habitationIds: masterProvider.selectedHabitationIdsAsString,
         );
+        if (provider.njmFtkRegistrationResponse != null &&
+            provider.njmFtkRegistrationResponse!.status == true) {
+          showDialog(
+            context: context,
+            barrierDismissible: false, // Disable tap outside to dismiss
+            builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              titlePadding: const EdgeInsets.only(top: 20),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 10,
+              ),
+              actionsPadding: const EdgeInsets.only(bottom: 10, right: 10),
+              title: Column(
+                children: [
+                  Image.asset(
+                    'assets/icons/check.png',
+                    // <-- Your success image (PNG) path here
+                    height: 60,
+                    width: 80,
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Success!",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                ],
+              ),
+              content: Text(
+                provider.njmFtkRegistrationResponse?.message ??
+                    'FTK Registration completed!',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+              actions: [
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 12,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context); // Close dialog
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        AppConstants.navigateToFtkLandingpage,
+                        (route) => false, // Clear back stack
+                      );
+                      provider.clearData();
+                    },
+                    child: const Text(
+                      "OK",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          ToastHelper.showErrorSnackBar(
+            context,
+            provider.njmFtkRegistrationResponse!.message ??
+                "Registration Failed",
+          );
+        }
       },
       child: Container(
         width: double.infinity,
@@ -519,5 +615,4 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
       ),
     );
   }
-
 }

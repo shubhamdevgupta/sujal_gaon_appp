@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
 import 'package:jal_sanchalan/screens/ftk_shg/ftk_landingpage.dart';
-import 'package:jal_sanchalan/screens/panchayat/VwscListScreen.dart';
+import 'package:jal_sanchalan/screens/panchayat/vwsc_member_list.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_login.dart';
 import 'package:jal_sanchalan/screens/vwsc/member_list/members_tab_screen.dart';
@@ -44,7 +44,7 @@ class AppRoutes {
       //panchayat
       AppConstants.navigateToGramPanchayatLogin: (context) => const PanchayatLogin(),
       AppConstants.navigateToPanchayatLandingScreen: (context) => const PanchayatLandingScreen(),
-      AppConstants.navigateToVWSCListScreen: (context) => VwscListScreen(),
+      AppConstants.navigateToVWSCListScreen: (context) => VwscMemberList(),
 
       //vwsc
       AppConstants.navigateToVwscLogin: (context) => const VwscLogin(),

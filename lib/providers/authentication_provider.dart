@@ -23,8 +23,10 @@ class AuthenticationProvider extends ChangeNotifier {
   var randomOne = 0, randomTwo = 0, captchResult = 0;
 
   PanchayatLoginResponse? _loginResponse;
-
   PanchayatLoginResponse? get loginResponse => _loginResponse;
+
+  PanchayatResult? _panchayatResult;
+  PanchayatResult? get panchayatResult => _panchayatResult;
 
   NjmFtkLoginResponse? _njmFtkLoginResponse;
 
@@ -71,6 +73,7 @@ class AuthenticationProvider extends ChangeNotifier {
 
         await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
         onSuccess();
+        _panchayatResult=_loginResponse!.result;
         _localStorage.saveString(
           AppConstants.prefToken,
           _loginResponse!.token.toString(),

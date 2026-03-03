@@ -1,11 +1,11 @@
-class Ftkregistrationresponse {
+class Njmftkregistrationresponse {
   final int? userId;
   final bool status;
   final String? message;
   final String? token;
   final int? id;
 
-  Ftkregistrationresponse({
+  Njmftkregistrationresponse({
     this.userId,
     required this.status,
     this.message,
@@ -13,8 +13,8 @@ class Ftkregistrationresponse {
     this.id,
   });
 
-  factory Ftkregistrationresponse.fromJson(Map<String, dynamic> json) {
-    return Ftkregistrationresponse(
+  factory Njmftkregistrationresponse.fromJson(Map<String, dynamic> json) {
+    return Njmftkregistrationresponse(
       userId: json['UserId'],
       status: json['Status'] ?? false,
       message: json['msg'],
