@@ -47,7 +47,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   AppConstants.navigateToPreLoginScreen,
-                      (route) => false,
+                  (route) => false,
                 );
               },
             ),
@@ -63,14 +63,8 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
         ),
 
         body: Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [Color(0xFF64B5F6), Colors.blue.shade50],
@@ -239,7 +233,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
 
   Widget _listCard(BuildContext context, PanchayatProvider provider) {
     return GestureDetector(
-      onTap: ()  {
+      onTap: () {
         Navigator.pushNamed(context, AppConstants.navigateToVWSCListScreen);
       },
       child: Container(
@@ -251,11 +245,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
           gradient: const LinearGradient(
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
-            colors: [
-              Color(0xFFF8FBFF),
-              Color(0xFFE3F2FD),
-              Color(0xFFD0E8FF),
-            ],
+            colors: [Color(0xFFF8FBFF), Color(0xFFE3F2FD), Color(0xFFD0E8FF)],
             stops: [0.0, 0.6, 1.0],
           ),
           boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
@@ -473,7 +463,8 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 icon: Icons.home,
                 color: Color(0xFF00796B),
                 title: "GP",
-                value: "${provider.panchayatResult?.loginResult?.panchayatName}",
+                value:
+                    "${provider.panchayatResult?.loginResult?.panchayatName}",
               ),
             ],
           ),
@@ -552,12 +543,10 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
     );
   }
 
-
   Future<bool> _showExitDialog() async {
     return await showDialog(
-      context: context,
-      builder: (context) =>
-          AlertDialog(
+          context: context,
+          builder: (context) => AlertDialog(
             title: const Text("Exit App"),
             content: const Text(
               "Are you sure you want to exit the application?",
@@ -573,7 +562,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
               ),
             ],
           ),
-    ) ??
+        ) ??
         false;
   }
 

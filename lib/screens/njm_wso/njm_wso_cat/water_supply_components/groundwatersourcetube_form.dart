@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:math';
+
+import '../../../../providers/njm_wso/njm_wso_provider.dart';
 
 class GroundWaterPumpForm extends StatefulWidget {
   const GroundWaterPumpForm({super.key});
@@ -84,6 +87,7 @@ class _GroundWaterPumpFormState
 
   @override
   Widget build(BuildContext context) {
+    final njm_wsoProvider = context.watch<NjmWsoProvider>();
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
 
@@ -117,85 +121,26 @@ class _GroundWaterPumpFormState
                 children: [
 
                   _dropdown(
-                    "Type of Pump",
-                    value: pumpType,
-                    items: const [
-                      DropdownMenuItem(
-                        value: "Submersible",
-                        child: Text("Submersible"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Horizontal",
-                        child: Text("Horizontal"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Vertical",
-                        child: Text("Vertical"),
-                      ),
-                    ],
-                    onChanged: (v) => setState(() => pumpType = v),
+                    "Level of Training",
+                    value: njm_wsoProvider.selectedtypesofpump,
+                    items: njm_wsoProvider.typesofpumpMap.keys.toList(),
+                    onChanged: (value) {
+                      njm_wsoProvider.setSelectedtypesofpump(value);
+                    },
                   ),
 
-                  _dropdown(
-                    "Type of Pump",
-                    value: pumpType,
-                    items: const [
-                      DropdownMenuItem(
-                        value: "Submersible",
-                        child: Text("Submersible"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Horizontal",
-                        child: Text("Horizontal"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Vertical",
-                        child: Text("Vertical"),
-                      ),
-                    ],
-                    onChanged: (v) => setState(() => pumpType = v),
-                  ),
+
 
                   _input(
                     "Discharge of Pump (m3/h)",
-                    controller: dischargeController,
+                    controller: njm_wsoProvider.dischargeController,
                     keyboard: TextInputType.number,
                   ),
 
                   _input(
                     "Head of Pump (m)",
-                    controller: headController,
+                    controller: njm_wsoProvider.headController,
                     keyboard: TextInputType.number,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 22),
-
-              // ================= OPERATION =================
-              _sectionCard(
-                icon: Icons.access_time,
-                title: "Pump Operation",
-                children: [
-
-                  _input(
-                    "Pump Start Time (HH:MM)",
-                    controller: startTimeController,
-                    onChanged: (_) =>
-                        _calculatePumpingHours(),
-                  ),
-
-                  _input(
-                    "Pump Stop Time (HH:MM)",
-                    controller: stopTimeController,
-                    onChanged: (_) =>
-                        _calculatePumpingHours(),
-                  ),
-
-                  _input(
-                    "Pumping Hours (Auto)",
-                    controller: pumpingHoursController,
-                    readOnly: true,
                   ),
                 ],
               ),
@@ -210,19 +155,13 @@ class _GroundWaterPumpFormState
 
                   _dropdown(
                     "Flow Meter Installed?",
-                    value: flowMeterInstalled,
-                    items: const [
-                      DropdownMenuItem(
-                        value: "Yes",
-                        child: Text("Yes"),
-                      ),
-                      DropdownMenuItem(
-                        value: "No",
-                        child: Text("No"),
-                      ),
-                    ],
-                    onChanged: (v) => setState(() => flowMeterInstalled = v),
+                    value: njm_wsoProvider.Isflow_meter_yesno,
+                    items: njm_wsoProvider.yesnoMap.keys.toList(),
+                    onChanged: (value) {
+                      njm_wsoProvider.setIsflowmeteryesno(value);
+                    },
                   ),
+
 
                   if (flowMeterInstalled == "Yes") ...[
                     _input(
@@ -234,13 +173,44 @@ class _GroundWaterPumpFormState
 
                     _input(
                       "Flow Meter Reading (Stop)",
-                      controller: flowStopController,
+                      controller: njm_wsoProvider.flowStopController,
                       keyboard: TextInputType.number,
                       onChanged: (_) => _calculateVolume(),
                     ),
                   ],
                 ],
               ),
+              const SizedBox(height: 22),
+
+              // ================= OPERATION =================
+              _sectionCard(
+                icon: Icons.access_time,
+                title: "Pump Operation",
+                children: [
+
+                  _input(
+                    "Pump Start Time (HH:MM)",
+                    controller: njm_wsoProvider.startTimeController,
+                    onChanged: (_) =>
+                        _calculatePumpingHours(),
+                  ),
+
+                  _input(
+                    "Pump Stop Time (HH:MM)",
+                    controller: njm_wsoProvider.stopTimeController,
+                    onChanged: (_) =>
+                        _calculatePumpingHours(),
+                  ),
+
+                  _input(
+                    "Pumping Hours (Auto)",
+                    controller: njm_wsoProvider.pumpingHoursController,
+                    readOnly: true,
+                  ),
+                ],
+              ),
+
+
 
               const SizedBox(height: 22),
 
@@ -252,7 +222,7 @@ class _GroundWaterPumpFormState
 
                   _input(
                     "Volume Supplied (KL / m3)",
-                    controller: volumeController,
+                    controller: njm_wsoProvider.volumeController,
                     readOnly: true,
                   ),
                 ],
@@ -395,52 +365,39 @@ class _GroundWaterPumpFormState
 
 
   Widget _dropdown(
-      String hint, {
-        required List<DropdownMenuItem<String>> items,
+      String label, {
+        required String? value,
+        required List<String> items,
         required Function(String?) onChanged,
-        String? value,
       }) {
     return DropdownButtonFormField<String>(
       value: value,
-      icon: const Icon(
-        Icons.keyboard_arrow_down_rounded,
-        color: Color(0xFF1976D2),
-      ),
+      isExpanded: true,   // 🔥 VERY IMPORTANT FIX
       decoration: InputDecoration(
-        hintText: hint,
-
-        prefixIcon: const Icon(
-          Icons.arrow_drop_down_circle,
-          color: Color(0xFF1976D2),
-          size: 18,
-        ),
-
-        filled: true,
-        fillColor: Colors.white,
-
+        labelText: label,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
+          horizontal: 12,
           vertical: 14,
         ),
-
-        // 🔥 Dark textured border (same as input)
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(
-            color: Colors.blueGrey.shade400,
-            width: 1.3,
-          ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: Color(0xFF1976D2),
-            width: 1.8,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF1565C0)),
         ),
       ),
-      items: items,
+      items: items
+          .map(
+            (item) => DropdownMenuItem(
+          value: item,
+          child: Text(
+            item,
+            overflow: TextOverflow.ellipsis,  // 🔥 prevent overflow
+          ),
+        ),
+      )
+          .toList(),
       onChanged: onChanged,
     );
   }
