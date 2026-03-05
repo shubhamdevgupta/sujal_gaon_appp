@@ -110,7 +110,6 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
   }
 
   Widget _dashboardCard(BuildContext context) {
-    final provider = context.watch<PanchayatProvider>();
     return Column(
       children: [
         Container(
@@ -663,10 +662,6 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
     );
   }
 }
-
-// =======================================================
-// STAT ITEM
-// =======================================================
 
 class _statBox extends StatelessWidget {
   final String title;
