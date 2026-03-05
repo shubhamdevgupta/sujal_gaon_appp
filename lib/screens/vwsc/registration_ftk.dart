@@ -227,24 +227,7 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
               ),
 
               const SizedBox(height: 22),*/
-              _sectionCard(
-                icon: Icons.date_range,
-                title: "Validated Period",
-                children: [
-                  _datePicker(
-                    label: "Valid From",
-                    date: vwscProvider.fromDate,
-                    onSelect: (d) => vwscProvider.setFromDate(d),
-                  ),
-                  _datePicker(
-                    label: "Valid To",
-                    date: vwscProvider.toDate,
-                    onSelect: (d) => vwscProvider.setToDate(d),
-                  ),
-                ],
-              ),
 
-              const SizedBox(height: 30),
 
               _submitButton(vwscProvider, masterProvider),
 
