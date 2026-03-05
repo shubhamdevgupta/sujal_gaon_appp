@@ -26,10 +26,22 @@ class NjmWsoProvider extends ChangeNotifier {
   Njmftkregistrationresponse? get njmFtkRegistrationResponse => _njmftkregistrationresponse;
 
 
+  DateTime? _fromDate;
+  DateTime? _toDate;
+
+  DateTime? get fromDate => _fromDate;
+  DateTime? get toDate => _toDate;
 
   String? pumpType;
   String? locationType;
   String? flowMeterInstalled;
+
+
+  String? _selectedtypesofpump;
+  int? _selectedtypesofpumpId;
+
+  String? get selectedtypesofpump => _selectedtypesofpump;
+  int? get selectedtypesofpumpId => _selectedtypesofpumpId;
 
   final dischargeController = TextEditingController();
   final headController = TextEditingController();
@@ -42,6 +54,18 @@ class NjmWsoProvider extends ChangeNotifier {
   final pumpingHoursController = TextEditingController();
   final volumeController = TextEditingController();
 
+  String? _Isflow_meter_yesno;
+  int? _Isflow_meter_yesnoId;
+
+  String? get Isflow_meter_yesno => _Isflow_meter_yesno;
+  int? get Isflow_meter_yesnoId => _Isflow_meter_yesnoId;
+
+  String? _deviceId;
+  String? get deviceId => _deviceId;
+
+  GroundWaterPumpResponse? _groundWaterResponse;
+  GroundWaterPumpResponse? get groundWaterResponse => _groundWaterResponse;
+
 
   final Map<String, int> typesofpumpMap = {
     "Submersible": 1,
@@ -49,11 +73,6 @@ class NjmWsoProvider extends ChangeNotifier {
     "vertical": 3,
   };
 
-  String? _selectedtypesofpump;
-  int? _selectedtypesofpumpId;
-
-  String? get selectedtypesofpump => _selectedtypesofpump;
-  int? get selectedtypesofpumpId => _selectedtypesofpumpId;
 
   void setSelectedtypesofpump(String? label) {
     _selectedtypesofpump = label;
@@ -73,11 +92,7 @@ class NjmWsoProvider extends ChangeNotifier {
     "no": 2,
   };
 
-  String? _Isflow_meter_yesno;
-  int? _Isflow_meter_yesnoId;
 
-  String? get Isflow_meter_yesno => _Isflow_meter_yesno;
-  int? get Isflow_meter_yesnoId => _Isflow_meter_yesnoId;
 
   void setIsflowmeteryesno(String? label) {
     _Isflow_meter_yesno = label;
@@ -91,12 +106,6 @@ class NjmWsoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime? _fromDate;
-  DateTime? _toDate;
-
-  DateTime? get fromDate => _fromDate;
-  DateTime? get toDate => _toDate;
-
   void setFromDate(DateTime date) {
     _fromDate = date;
     notifyListeners();
@@ -106,13 +115,6 @@ class NjmWsoProvider extends ChangeNotifier {
     _toDate = date;
     notifyListeners();
   }
-  String? _deviceId;
-  String? get deviceId => _deviceId;
-
-
-
-
-
   Future<void> insertOrUpdateGroundWaterPumpHouse({
     required int id,
     required int stateId,
@@ -170,8 +172,6 @@ class NjmWsoProvider extends ChangeNotifier {
     }
   }
 
-  GroundWaterPumpResponse? _groundWaterResponse;
-  GroundWaterPumpResponse? get groundWaterResponse => _groundWaterResponse;
   Future<void> fetchDeviceId() async {
     _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
     debugPrint('Device ID: $_deviceId');
