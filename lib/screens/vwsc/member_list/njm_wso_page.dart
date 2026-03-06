@@ -40,6 +40,9 @@ class NjmWsoPage extends StatelessWidget {
               name: "${user.firstName} ${user.lastName}",
               email: user.email ?? "",
               village: user.villageName ?? "",
+              phone:  "9599460671",
+              trainingLevel: "State Level",
+              address: user.address ?? "",
             );
           },
         ),

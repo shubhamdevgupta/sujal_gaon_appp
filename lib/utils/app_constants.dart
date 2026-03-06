@@ -21,8 +21,7 @@ class AppConstants {
   static const String navigateToSplashScreen = '/ ';
 
   //panchayat
-  static const String navigateToPanchayatLandingScreen =
-      '/Panchayatlandingscreen ';
+  static const String navigateToPanchayatLandingScreen = '/Panchayatlandingscreen ';
   static const String navigateToGramPanchayatLogin = '/panchayatlogin ';
   static const String navigateToVWSCListScreen = '/listofvwsc ';
 

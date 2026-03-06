@@ -63,19 +63,12 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
         ),
 
         body: Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF64B5F6), Colors.blue.shade50],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/icons/SJL_bg.png"),
+              fit: BoxFit.cover,
             ),
           ),
           child: SingleChildScrollView(
@@ -86,21 +79,100 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
               children: [
                 /*_buildCustomHeader(),*/
                 // ================= WELCOME =================
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
 
                 _buildWelcomeCard(),
+                const SizedBox(height: 10),
 
-                SizedBox(height: 20),
                 // ================= DASHBOARD =================
                 _dashboardCard(context),
                 const SizedBox(height: 16),
 
-                _registerOptions(context),
+                /// REGISTER NJM
+                Text(
+                  "Registration",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1565C0),
+                  ),
+                ),
+                SizedBox(height: 8),
+
+                _viewActionCard(
+                  icon: Icons.water_drop,
+                  title: "Register NJM / WSO",
+                  subtitle: "Register Nal Jal Mitra",
+                  iconColor: Colors.blue,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      AppConstants.navigateToNJMPRegistrationForm,
+                    );
+                  },
+                ),
+                SizedBox(height: 10),
+
+
+                _viewActionCard(
+                  icon: Icons.groups,
+                  title: "Register SHG / FTK Women",
+                  subtitle: "Register Self Help Group",
+                  iconColor: Colors.blue,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      AppConstants.navigateToSHGFTKRegistrationForm,
+                    );
+                  },
+                ),
+
+                SizedBox(height: 10),
+
+                /// VIEW DATA
+
+              Text(
+                "View Records",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1565C0),
+                ),
+              ),
+
+                SizedBox(height: 8),
+
+                _viewActionCard(
+                  icon: Icons.assignment,
+                  title: "View Registered Members",
+                  subtitle: "NJM / WSO / FTK / SHG",
+                  iconColor: Colors.teal,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      AppConstants.navigateToVWSCMemberScrenn,
+                    );
+                  },
+                ),
+
+                _viewActionCard(
+                  icon: Icons.list_alt,
+                  title: "View VWSC",
+                  subtitle: "Registered VWSC",
+                  iconColor: Colors.teal,
+                  onTap: () {
+                    Navigator.pushNamed(context, AppConstants.navigateToVWSCListScreen);
+                  }
+                ),
+
+
+
                 const SizedBox(height: 16),
 
-                _listCardNJMFTK(context),
+
+         /*       _listCardNJMFTK(context),
                 const SizedBox(height: 16),
-                _listCard(context, provider),
+                _listCard(context, provider),*/
               ],
             ),
           ),
@@ -110,297 +182,305 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
   }
 
   Widget _dashboardCard(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(22),
-            gradient: LinearGradient(
-              colors: [Colors.white, Colors.blue.shade200],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-
-            // Outer shadow
-            boxShadow: [BoxShadow(color: Colors.white)],
-          ),
-
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(22),
-
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8),
-
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.dashboard_customize,
-                            color: Colors.blue,
-                            size: 26,
-                          ),
-
-                          const SizedBox(width: 8),
-
-                          const Text(
-                            "Dashboard",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          const Spacer(),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-
-                      const Text(
-                        "Overview Your Panchayat Area",
-                        style: TextStyle(color: Colors.black87, fontSize: 13),
-                      ),
-
-                      const SizedBox(height: 8),
-                      _buildLocationCard(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _listCardNJMFTK(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, AppConstants.navigateToVWSCMemberScrenn);
-      },
-      child: Container(
-        height: 130,
-        padding: const EdgeInsets.all(16),
-
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: const LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: [
-              Color(0xFFF8FBFF), // very light (left)
-              Color(0xFFE3F2FD), // soft blue (middle)
-              Color(0xFFD0E8FF), // faded blue glow (right)
-            ],
-            stops: [0.0, 0.6, 1.0],
-          ),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
-        ),
-
-        child: Row(
-          children: const [
-            Icon(Icons.list_alt, color: Color(0xFF1976D2), size: 28),
-
-            SizedBox(width: 12),
-
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "NJM / WSO & FTK/SGH Members",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-                  ),
-
-                  SizedBox(height: 4),
-
-                  Text(
-                    "View Registered NJM/WSO & FTK/SGH Members",
-                    style: TextStyle(fontSize: 12, color: Colors.black54),
-                  ),
-                ],
-              ),
-            ),
-
-            Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _listCard(BuildContext context, PanchayatProvider provider) {
-    return GestureDetector(
-      onTap: ()  {
-        Navigator.pushNamed(context, AppConstants.navigateToVWSCListScreen);
-      },
-      child: Container(
-        height: 90,
-        padding: const EdgeInsets.all(16),
-
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: const LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: [
-              Color(0xFFF8FBFF),
-              Color(0xFFE3F2FD),
-              Color(0xFFD0E8FF),
-            ],
-            stops: [0.0, 0.6, 1.0],
-          ),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
-        ),
-
-        child: Row(
-          children: const [
-            Icon(Icons.list_alt, color: Color(0xFF1976D2), size: 28),
-
-            SizedBox(width: 12),
-
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "List VWSC Members",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-                  ),
-
-                  SizedBox(height: 4),
-
-                  Text(
-                    "View Registered Villages",
-                    style: TextStyle(fontSize: 12, color: Colors.black54),
-                  ),
-                ],
-              ),
-            ),
-
-            Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _registerOptions(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(22),
 
-        border: Border.all(color: Colors.blueGrey.shade200, width: 1.2),
+        /// Blue White Gradient
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFF5FAFF),
+            Color(0xFFE3F2FD),
+            Color(0xFFD6EBFF),
+          ],
+        ),
+
+        border: Border.all(
+          color: Colors.blue.withOpacity(.55),
+        ),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 16,
+            color: Colors.blue.withOpacity(.10),
+            blurRadius: 18,
             offset: const Offset(0, 8),
-          ),
+          )
         ],
       ),
+
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _registerRowProfessional(
-            icon: Icons.water_drop,
-            title: "Register NJM / WSO",
-            subtitle: "Nal Jal Mitra Registration",
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                AppConstants.navigateToNJMPRegistrationForm,
-              );
-            },
+
+          /// HEADER
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1565C0).withOpacity(.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.dashboard_customize_rounded,
+                  color: Color(0xFF1565C0),
+                  size: 22,
+                ),
+              ),
+
+              const SizedBox(width: 10),
+
+              const Text(
+                "Dashboard",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0F172A),
+                ),
+              ),
+            ],
           ),
 
-          Divider(height: 1, thickness: 1, color: Colors.blueGrey.shade100),
+          const SizedBox(height: 6),
 
-          _registerRowProfessional(
-            icon: Icons.groups_rounded,
-            title: "SHGs / FTK Trained Women",
-            subtitle: "Self Help Group Registration",
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                AppConstants.navigateToSHGFTKRegistrationForm,
-              );
-            },
+          Text(
+            "Overview your Panchayat Area",
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.black.withOpacity(.65),
+            ),
           ),
+
+          const SizedBox(height: 12),
+
+          /// LOCATION CARD
+          _buildLocationCard(),
+
+          const SizedBox(height: 14),
+
+          /// STATS
+          Row(
+            children: [
+              Expanded(
+                child: _statCard(
+                  icon: Icons.home_rounded,
+                  title: "Villages",
+                  value: "12",
+                  subtitle: "Total Villages",
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _statCard(
+                  icon: Icons.groups_rounded,
+                  title: "VWSC / Pani Samiti",
+                  value: "4",
+                  subtitle: "Villages Covered",
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
   }
 
-  Widget _registerRowProfessional({
+  Widget _statCard({
+    required IconData icon,
+    required String title,
+    required String value,
+    required String subtitle,
+  }) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: Container(
+        height: 150, // ensures equal height
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+
+          gradient: LinearGradient(
+            colors: [
+              Colors.white.withOpacity(.9),
+              Colors.blue.shade50.withOpacity(.9),
+            ],
+          ),
+
+          border: Border.all(
+            color: Colors.blue.withOpacity(.55),
+          ),
+
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blue.withOpacity(.12),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            )
+          ],
+        ),
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+
+            /// ICON
+            Container(
+              height: 36,
+              width: 36,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.blue.shade100,
+                    Colors.blue.shade400,
+                  ],
+                ),
+              ),
+              child: Icon(icon, color: Colors.white, size: 20),
+            ),
+
+            const SizedBox(height: 6),
+
+            /// TITLE
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            const SizedBox(height: 2),
+
+            /// VALUE
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1565C0),
+              ),
+            ),
+
+            /// SUBTITLE
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.black.withOpacity(.6),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  /// GLASS CARD (TRANSPARENT EFFECT)
+  Widget _glassCard({required Widget child}) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            color: Colors.white.withOpacity(.65),
+            border: Border.all(
+              color: Colors.white.withOpacity(.4),
+            ),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+
+
+  Widget _viewActionCard({
     required IconData icon,
     required String title,
     required String subtitle,
     required VoidCallback onTap,
+    required Color iconColor,
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: Row(
-          children: [
-            Container(
-              height: 46,
-              width: 46,
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E88E5).withOpacity(0.12),
-                borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(18),
+
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+
+        child: _glassCard(
+          child: Row(
+            children: [
+
+              /// ICON CONTAINER
+              Container(
+                height: 42,
+                width: 42,
+                decoration: BoxDecoration(
+                  color: iconColor.withOpacity(.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: iconColor),
               ),
-              child: Icon(icon, color: const Color(0xFF1565C0), size: 24),
-            ),
 
-            const SizedBox(width: 18),
+              const SizedBox(width: 12),
 
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF0F172A),
+              /// TEXT
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.blueGrey.shade600,
+
+                    const SizedBox(height: 2),
+
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            const Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: Color(0xFF1565C0),
-            ),
-          ],
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16,
+                color: Colors.black,
+              )
+            ],
+          ),
         ),
       ),
     );
   }
+
+
+
 
   Widget _buildLocationCard() {
     final provider = context.watch<AuthenticationProvider>();
@@ -422,7 +502,10 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
           stops: [0.0, 0.6, 1.0],
         ),
 
-        border: Border.all(color: Colors.blue.withOpacity(0.1)),
+
+        border: Border.all(
+          color: Colors.blue.withOpacity(.55),
+        ),
 
         boxShadow: [
           BoxShadow(color: Colors.blue.withOpacity(0.05), blurRadius: 10),
@@ -480,17 +563,6 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
 
           const SizedBox(height: 5),
 
-          const Divider(),
-
-          const SizedBox(height: 5),
-
-          // ================= STATS =================
-          Row(
-            children: const [
-              _statBox("Villages", "12"),
-              _statBox("Villages where VWSC/pani samiti formed", "4"),
-            ],
-          ),
         ],
       ),
     );
