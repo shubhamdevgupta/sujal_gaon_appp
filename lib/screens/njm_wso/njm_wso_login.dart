@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../providers/authentication_provider.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/enum/user_type.dart';
+import '../../utils/toast_helper.dart';
 
 class NjmWsoLogin extends StatefulWidget {
   const NjmWsoLogin({super.key});
@@ -146,7 +147,29 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
                         _mainButton(
                           text: "Send OTP",
                           isLoading: authProvider.isLoading,
-                          onTap: sendOTP,
+                          onTap: () {
+                            final provider = context.read<AuthenticationProvider>();
+                            String mobile = mobileController.text.trim();
+
+                            if (mobile.length != 10) {
+                              showMessage("Enter valid mobile number");
+                              return;
+                            }
+
+                            provider.loginNjmFtkUser(
+                              mobile,
+                              UserType.njmp.id,
+                              () {
+                                showMessage("OTP Sent Successfully");
+                                setState(() {
+                                  isOtpSent = true;
+                                });
+                              },
+                              (error) {
+                                showMessage(error ?? "Failed to send OTP");
+                              },
+                            );
+                          },
                         )
                       else ...[
                         const Text("Enter OTP"),
@@ -161,7 +184,29 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
                         _mainButton(
                           text: "Verify OTP",
                           isLoading: authProvider.isLoading,
-                          onTap: verifyOTP,
+                          onTap: () {
+                            final provider = context
+                                .read<AuthenticationProvider>();
+
+                            String enteredOtp = otpController.text.trim();
+
+                            if (enteredOtp.length != 6) {
+                              showMessage("Enter valid OTP");
+                              return;
+                            }
+                            provider.verifyOtp(
+                              enteredOtp,
+                              () {
+                                Navigator.pushNamed(
+                                  context,
+                                  AppConstants.navigateToNJMWSOLandingPage,
+                                );
+                              },
+                              (error) {
+                                showMessage(error);
+                              },
+                            );
+                          },
                         ),
                       ],
                     ],
@@ -196,7 +241,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
 
   // ===================== LOGIC ======================
 
-  void loginWithPassword() {
+  void loginWithPassword() async{
     final provider = context.read<AuthenticationProvider>();
 
     String mobile = mobileController.text.trim();
@@ -207,65 +252,26 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
       return;
     }
 
-    /* provider.panchayatLoginUser(
+   await provider.panchayatLoginUser(
       mobile,
-      password,
-      "1",
-      () {
-        Navigator.pushNamed(context, AppConstants.navigateToNJMLandingScreen);
-      },
-      (error) {
-        showMessage(error ?? "Login Failed");
-      },
-    );*/
-  }
-
-  void sendOTP() {
-    final provider = context.read<AuthenticationProvider>();
-    String mobile = mobileController.text.trim();
-
-    if (mobile.length != 10) {
-      showMessage("Enter valid mobile number");
-      return;
-    }
-
-    provider.loginNjmFtkUser(
-      mobile,
+      provider.generateSha512Pass(password),
       UserType.njmp.id,
           () {
-        showMessage("OTP Sent Successfully");
-        setState(() {
-          isOtpSent = true;
-        });
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppConstants.navigateToNJMWSOLandingPage,
+              (route) => false,
+        );
       },
-          (error) {
-        showMessage(error ?? "Failed to send OTP");
-      },
-    );
-  }
-
-  void verifyOTP() {
-    final provider = context.read<AuthenticationProvider>();
-
-    String enteredOtp = otpController.text.trim();
-
-    if (enteredOtp.length != 6) {
-      showMessage("Enter valid OTP");
-      return;
-    }
-
-    provider.verifyOtp(
-      enteredOtp,
-          () {
-        Navigator.pushNamed(context, AppConstants.navigateToNJMWSOLandingPage);
-      },
-          (error) {
-        showMessage(error);
+          (errorMessage) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+        ToastHelper.showToastMessage(errorMessage);
       },
     );
-  }
 
-  // ================= UI HELPERS =================
+  }
 
   Widget _mainButton({
     required String text,
@@ -286,18 +292,18 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
         child: isLoading
             ? const CircularProgressIndicator(color: Colors.white)
             : Text(
-          text,
-          style: const TextStyle(fontSize: 16, color: Colors.white),
-        ),
+                text,
+                style: const TextStyle(fontSize: 16, color: Colors.white),
+              ),
       ),
     );
   }
 
   InputDecoration _inputDecoration(
-      String hint,
-      IconData icon, {
-        Widget? suffix,
-      }) {
+    String hint,
+    IconData icon, {
+    Widget? suffix,
+  }) {
     return InputDecoration(
       prefixIcon: Icon(icon),
       hintText: hint,
