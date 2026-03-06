@@ -337,10 +337,7 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   String generateSha512Pass(String password) {
-    final passwordBytes = utf8.encode(password);
-    final md5Hash = md5.convert(passwordBytes).toString();
     final sha256Hash = sha512.convert(utf8.encode(password)).toString();
-
     return sha256Hash;
   }
 
