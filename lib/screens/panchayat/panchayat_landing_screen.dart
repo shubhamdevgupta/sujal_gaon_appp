@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jal_sanchalan/providers/panchayat/panchayat_provider.dart';
 import 'package:jal_sanchalan/service/local_storage_service.dart';
 import 'package:provider/provider.dart';
@@ -31,8 +32,19 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<PanchayatProvider>();
-    return WillPopScope(
-      onWillPop: _showExitDialog,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        Future.microtask(() async {
+          bool shouldExit = await _showExitDialog();
+
+          if (shouldExit) {
+            SystemNavigator.pop();
+          }
+        });
+      },
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -47,7 +59,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   AppConstants.navigateToPreLoginScreen,
-                      (route) => false,
+                  (route) => false,
                 );
               },
             ),
@@ -483,7 +495,6 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
 
 
   Widget _buildLocationCard() {
-    final provider = context.watch<AuthenticationProvider>();
     return Container(
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.all(15),
@@ -522,7 +533,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 icon: Icons.account_balance,
                 color: Color(0xFF1976D2),
                 title: "State",
-                value: "${provider.panchayatResult?.loginResult?.stateName}",
+                value: "${storageService.getString(AppConstants.prefStateName)}",
               ),
 
               _verticalDivider(),
@@ -531,7 +542,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 icon: Icons.place,
                 color: Color(0xFFE53935),
                 title: "District",
-                value: "${provider.panchayatResult?.loginResult?.districtName}",
+                value: "${storageService.getString(AppConstants.prefDistrictName)}",
               ),
             ],
           ),
@@ -547,7 +558,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 icon: Icons.apartment,
                 color: Color(0xFF8D6E63),
                 title: "Block",
-                value: "${provider.panchayatResult?.loginResult?.blockName}",
+                value: "${storageService.getString(AppConstants.prefBlockName)}",
               ),
 
               _verticalDivider(),
@@ -556,7 +567,8 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 icon: Icons.home,
                 color: Color(0xFF00796B),
                 title: "GP",
-                value: "${provider.panchayatResult?.loginResult?.panchayatName}",
+                value:
+                    "${storageService.getString(AppConstants.prefPanchayatName)}",
               ),
             ],
           ),
@@ -624,12 +636,10 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
     );
   }
 
-
   Future<bool> _showExitDialog() async {
     return await showDialog(
-      context: context,
-      builder: (context) =>
-          AlertDialog(
+          context: context,
+          builder: (context) => AlertDialog(
             title: const Text("Exit App"),
             content: const Text(
               "Are you sure you want to exit the application?",
@@ -645,7 +655,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
               ),
             ],
           ),
-    ) ??
+        ) ??
         false;
   }
 

@@ -33,9 +33,18 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AuthenticationProvider>();
-    return WillPopScope(
-      onWillPop: () async {
-        return await _showExitDialog();
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        Future.microtask(() async {
+          bool shouldExit = await _showExitDialog();
+
+          if (shouldExit) {
+            SystemNavigator.pop();
+          }
+        });
       },
       child: Scaffold(
         appBar: AppBar(
@@ -489,6 +498,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
       margin: const EdgeInsets.symmetric(horizontal: 10),
     );
   }
+
   Future<bool> _showExitDialog() async {
     final shouldExit = await showDialog<bool>(
       context: context,
@@ -512,12 +522,12 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
 
     if (shouldExit == true) {
       if (Platform.isAndroid) {
-        SystemNavigator.pop();   // 🔥 closes app
+        SystemNavigator.pop();
       } else if (Platform.isIOS) {
-        exit(0);  // not recommended by Apple but works
+        exit(0);
       }
     }
 
-    return false; // 🔥 prevent default pop
+    return false;
   }
 }

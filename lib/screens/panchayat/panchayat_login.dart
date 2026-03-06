@@ -206,9 +206,10 @@ class _PanchayatLoginState extends State<PanchayatLogin> {
                                 "Admin@1234",
                                 UserType.panchayat.id,
                                 () {
-                                  Navigator.pushReplacementNamed(
+                                  Navigator.pushNamedAndRemoveUntil(
                                     context,
                                     AppConstants.navigateToPanchayatLandingScreen,
+                                        (route) => false,
                                   );
                                 },
                                 (errorMessage) {

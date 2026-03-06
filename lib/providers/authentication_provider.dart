@@ -79,20 +79,32 @@ class AuthenticationProvider extends ChangeNotifier {
           _loginResponse!.token.toString(),
         );
         _localStorage.saveString(
-          AppConstants.prefState,
+          AppConstants.prefStateId,
           _loginResponse!.result!.loginResult!.stateId.toString(),
+        );  _localStorage.saveString(
+          AppConstants.prefStateName,
+          _loginResponse!.result!.loginResult!.stateName.toString(),
         );
         _localStorage.saveString(
-          AppConstants.prefDistrict,
+          AppConstants.prefDistrictId,
           _loginResponse!.result!.loginResult!.districtId.toString(),
+        );    _localStorage.saveString(
+          AppConstants.prefDistrictName,
+          _loginResponse!.result!.loginResult!.districtName.toString(),
         );
         _localStorage.saveString(
           AppConstants.prefBlockId,
           _loginResponse!.result!.loginResult!.blockId.toString(),
+        );    _localStorage.saveString(
+          AppConstants.prefBlockName,
+          _loginResponse!.result!.loginResult!.blockName.toString(),
         );
         _localStorage.saveString(
           AppConstants.prefPanchayatId,
           _loginResponse!.result!.loginResult!.panchayatId.toString(),
+        );        _localStorage.saveString(
+          AppConstants.prefPanchayatName,
+          _loginResponse!.result!.loginResult!.panchayatName.toString(),
         );
         _localStorage.saveInt(
           AppConstants.prefUserId,
