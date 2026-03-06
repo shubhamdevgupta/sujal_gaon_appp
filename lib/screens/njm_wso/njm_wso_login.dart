@@ -156,7 +156,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
                               return;
                             }
 
-                            provider.loginNjmFtkUser(
+                            provider.loginNjmFtkUserByOtp(
                               mobile,
                               UserType.njmp.id,
                               () {
@@ -252,9 +252,9 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
       return;
     }
 
-   await provider.panchayatLoginUser(
+   await provider.loginNjmFtkUserByPassword(
       mobile,
-      provider.generateSha512Pass(password),
+      password,
       UserType.njmp.id,
           () {
         Navigator.pushNamedAndRemoveUntil(

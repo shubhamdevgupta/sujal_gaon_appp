@@ -232,7 +232,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
       return;
     }
 
-    provider.loginNjmFtkUser(
+    provider.loginNjmFtkUserByOtp(
       mobile,
       UserType.ftk.id,
       () {

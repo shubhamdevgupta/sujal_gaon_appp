@@ -8,6 +8,7 @@ import 'package:jal_sanchalan/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
+import '../../service/local_storage_service.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
 import '../../utils/enum/user_type.dart';
@@ -21,68 +22,37 @@ class NjmWsoLandingpage extends StatefulWidget {
 
 class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   final session = UserSessionManager();
-  bool _passwordDialogShown = false;
+  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      print("----->>> ${session.userId}");
-      context.read<AuthenticationProvider>().fetchNjmFtkDashboard(
-        session.userId,
-      );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+      final provider = context.read<AuthenticationProvider>();
+
+      await provider.fetchDeviceId();
+      await session.init();
+
+      /// CASE 1: Password login already stored userId
+      if (session.userId != 0) {
+        await provider.fetchNjmFtkDashboard(session.userId);
+        return;
+      }
+      print("-----  ${_localStorage.getInt(AppConstants.prefIsPassUpdated)}");
+
+      if (_localStorage.getInt(AppConstants.prefIsPassUpdated)==0) {
+        _showPasswordDialog();
+      } else {
+        await provider.fetchNjmFtkDashboard(session.userId);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthenticationProvider>();
-        authProvider.fetchDeviceId();
-    /// STEP 1: Force password update if required
-    if (!_passwordDialogShown &&
-        authProvider.njmFtkLoginResponse?.isPwdUpdate == 0) {
-
-      _passwordDialogShown = true;
-
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-
-        final res = authProvider.njmFtkLoginResponse!;
-
-        await showCreatePasswordDialog(
-          context,
-          name: res.name ?? "",
-          email: res.email ?? "",
-          mobile: res.mobileNumber ?? "",
-          onSubmit: (password) async {
-
-            if (password.isEmpty) {
-              ToastHelper.showErrorSnackBar(
-                  context, "Please enter valid password");
-              return;
-            }
-
-            /// update password API
-            await authProvider.updateNjmFtkPasswords(
-              res.regId!,
-              UserType.njmp.id,
-              res.mobileNumber!,
-              res.mobileNumber!,
-              authProvider.generateSha512Pass(password),
-              res.regId!,
-              authProvider.deviceId!,
-            );
-
-            /// STEP 2: call dashboard API only after password update
-            if (authProvider.updateNjmFtkPassword?.status == true) {
-
-              await authProvider.fetchNjmFtkDashboard(
-                session.userId,
-              );
-            }
-          },
-        );
-      });
-    }
 
     return PopScope(
       canPop: false,
@@ -120,7 +90,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   AppConstants.navigateToPreLoginScreen,
-                      (route) => false,
+                  (route) => false,
                 );
               },
             ),
@@ -140,54 +110,49 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
           child: Stack(
             children: [
-
               /// STEP 3: show dashboard only when dashboard data available
               authProvider.njmFtkDashboardResponse == null
                   ? const SizedBox()
                   : SingleChildScrollView(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 20),
 
-                    const SizedBox(height: 20),
+                          _buildWelcomeCard(),
 
-                    _buildWelcomeCard(),
+                          const SizedBox(height: 20),
 
-                    const SizedBox(height: 20),
+                          _dashboardCard(context),
 
-                    _dashboardCard(context),
-
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    ),
 
               /// Loader
-              LoaderUtils.conditionalLoader(
-                isLoading: authProvider.isLoading,
-              ),
+              LoaderUtils.conditionalLoader(isLoading: authProvider.isLoading),
             ],
           ),
         ),
       ),
     );
   }
-  Future<void> showCreatePasswordDialog(
-      BuildContext context,{
-        required String name,
-        required String email,
-        required String mobile,
-        required Function(String password) onSubmit,
-      }) async {
 
+  Future<void> showCreatePasswordDialog(
+    BuildContext context, {
+    required String name,
+    required String email,
+    required String mobile,
+    required Function(String password) onSubmit,
+  }) async {
     final passwordController = TextEditingController();
 
     await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
-
         return WillPopScope(
           onWillPop: () async => false,
 
@@ -205,7 +170,6 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Text("Name: $name"),
                 const SizedBox(height: 6),
 
@@ -231,19 +195,19 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
             ),
 
             actions: [
-
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1565C0),
                 ),
 
                 onPressed: () async {
-
                   final password = passwordController.text.trim();
 
                   if (password.isEmpty) {
                     ToastHelper.showErrorSnackBar(
-                        context, "Please enter password");
+                      context,
+                      "Please enter password",
+                    );
                     return;
                   }
 
@@ -256,13 +220,47 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                   "Submit",
                   style: TextStyle(color: Colors.white),
                 ),
-              )
+              ),
             ],
           ),
         );
       },
     );
   }
+
+  void _showPasswordDialog() {
+    final provider = context.read<AuthenticationProvider>();
+    final res = provider.njmFtkLoginResponse!;
+
+    showCreatePasswordDialog(
+      context,
+      name: res.name ?? "",
+      email: res.email ?? "",
+      mobile: res.mobileNumber ?? "",
+      onSubmit: (password) async {
+        if (password.isEmpty) {
+          ToastHelper.showErrorSnackBar(context, "Enter valid password");
+          return;
+        }
+
+        await provider.updateNjmFtkPasswords(
+          res.regId!,
+          UserType.njmp.id,
+          res.mobileNumber!,
+          res.mobileNumber!,
+          provider.generateSha512Pass(password),
+          res.regId!,
+          provider.deviceId!,
+        );
+
+        if (provider.updateNjmFtkPassword?.status == true) {
+          /// After password update load dashboard
+          await provider.fetchNjmFtkDashboard(provider.updateNjmFtkPassword!.userId??0);
+        }
+      },
+    );
+  }
+
   Widget _dashboardCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
@@ -451,7 +449,8 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 title: "District",
                 value: "${provider.njmFtkDashboardResponse!.districtName}",
                 subTitle: "LGD Code",
-                subTitleValue: "${provider.njmFtkDashboardResponse!.districtLgdCode}",
+                subTitleValue:
+                    "${provider.njmFtkDashboardResponse!.districtLgdCode}",
               ),
             ],
           ),
@@ -470,7 +469,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 value: "${provider.njmFtkDashboardResponse!.blockName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                "${provider.njmFtkDashboardResponse!.blockLgdCode}",
+                    "${provider.njmFtkDashboardResponse!.blockLgdCode}",
               ),
 
               _verticalDivider(),
@@ -482,7 +481,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 value: "${provider.njmFtkDashboardResponse!.panchayatName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                "${provider.njmFtkDashboardResponse!.panchayatLgdCode}",
+                    "${provider.njmFtkDashboardResponse!.panchayatLgdCode}",
               ),
             ],
           ),
@@ -509,7 +508,6 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           /// 🔹 Top Row → Icon + Title
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -590,8 +588,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                   SizedBox(height: 6),
 
                   Text(
-                    "${provider.njmFtkDashboardResponse!.firstName ??
-                        ""}${provider.njmFtkDashboardResponse!.lastName ?? ""}",
+                    "${provider.njmFtkDashboardResponse!.firstName ?? ""}${provider.njmFtkDashboardResponse!.lastName ?? ""}",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -622,22 +619,20 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   Future<bool> _showExitDialog() async {
     final shouldExit = await showDialog<bool>(
       context: context,
-      builder: (context) =>
-          AlertDialog(
-            title: const Text("Exit App"),
-            content: const Text(
-                "Are you sure you want to exit the application?"),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text("No"),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text("Yes"),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text("Exit App"),
+        content: const Text("Are you sure you want to exit the application?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("No"),
           ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text("Yes"),
+          ),
+        ],
+      ),
     );
 
     if (shouldExit == true) {
