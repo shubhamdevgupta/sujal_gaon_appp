@@ -420,9 +420,9 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
        await provider.registerNjmFTK(
           regId: 0,
           userTypeId: UserType.njmp.id,
-          stateId: int.parse(_localStorage.getString(AppConstants.prefState)!),
+          stateId: int.parse(_localStorage.getString(AppConstants.prefStateId)!),
           districtId: int.parse(
-            _localStorage.getString(AppConstants.prefDistrict)!,
+            _localStorage.getString(AppConstants.prefDistrictId)!,
           ),
           blockId: int.parse(
             _localStorage.getString(AppConstants.prefBlockId)!,

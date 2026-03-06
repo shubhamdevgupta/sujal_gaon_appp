@@ -28,7 +28,7 @@ class _VwscListScreenState extends State<VwscMemberList> {
 
       await provider.fetchVwscMemberList(
         session.userId,
-        int.parse(storageService.getString(AppConstants.prefState)!),
+        int.parse(storageService.getString(AppConstants.prefStateId)!),
         int.parse(storageService.getString(AppConstants.prefPanchayatId)!),
       );
     });

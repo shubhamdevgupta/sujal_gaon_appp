@@ -33,8 +33,19 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AuthenticationProvider>();
-    return WillPopScope(
-      onWillPop: _showExitDialog,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        Future.microtask(() async {
+          bool shouldExit = await _showExitDialog();
+
+          if (shouldExit) {
+            SystemNavigator.pop();
+          }
+        });
+      },
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,

@@ -7,10 +7,14 @@ class AppConstants {
   static const String prefUserId = 'userId';
   static const String prefUserTypeId = 'userTypeId';
   static const String prefRegId = 'regId';
-  static const String prefState = 'stateId';
-  static const String prefDistrict = 'districtId';
+  static const String prefStateId = 'stateId';
+  static const String prefStateName = 'stateName';
+  static const String prefDistrictId = 'districtId';
+  static const String prefDistrictName = 'districtName';
   static const String prefBlockId = 'blockId';
+  static const String prefBlockName = 'blockName';
   static const String prefPanchayatId = 'panchayatId';
+  static const String prefPanchayatName = 'panchayatName';
   static const String prefLastUpdateCheckTime = 'last_update_check_time';
 
 
