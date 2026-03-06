@@ -4,121 +4,168 @@ class UserCard extends StatelessWidget {
   final String name;
   final String email;
   final String village;
+  final String phone;
+  final String trainingLevel;
+  final String address;
 
   const UserCard({
     super.key,
     required this.name,
     required this.email,
     required this.village,
+    required this.phone,
+    required this.trainingLevel,
+    required this.address,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(18),
+      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
+        borderRadius: BorderRadius.circular(18),
+
+        /// TRANSPARENT GRADIENT
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(.2),
+            const Color(0xFFE3F2FD).withOpacity(.75),
+            const Color(0xFFBBDEFB).withOpacity(.55),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFF1F8FF),
-            Color(0xFFE3F2FD),
-          ],
         ),
+
+        border: Border.all(
+          color: const Color(0xFF1976D2).withOpacity(.25),
+          width: 1.2,
+        ),
+
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.08),
-            blurRadius: 15,
-            offset: const Offset(0, 6),
-          ),
+            color: Colors.blue.withOpacity(.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          )
         ],
       ),
-      child: Row(
+
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          /// 🔵 Avatar
-          Container(
-            height: 55,
-            width: 55,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-              ),
-            ),
-            child: const Icon(
-              Icons.person,
-              color: Colors.white,
-              size: 28,
-            ),
-          ),
-
-          const SizedBox(width: 16),
-
-          /// 🔵 Details Section
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-
-                /// Name
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0D47A1),
+          /// HEADER
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF42A5F5), Color(0xFF1565C0)],
                   ),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-
-                const SizedBox(height: 10),
-
-                /// Email Row
-                _infoRow(
-                  icon: Icons.email_outlined,
-                  text: email,
+                child: const Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 22,
                 ),
+              ),
 
-                const SizedBox(height: 6),
+              const SizedBox(width: 12),
 
-                /// Village Row
-                _infoRow(
-                  icon: Icons.location_on_outlined,
-                  text: village,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+
+                    const SizedBox(height: 2),
+
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on,
+                            size: 14, color: Colors.redAccent),
+                        const SizedBox(width: 4),
+
+                        Text(
+                          village,
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
 
-          /// Arrow Icon
-          const Icon(
-            Icons.arrow_forward_ios_rounded,
-            size: 16,
-            color: Colors.blueGrey,
-          ),
+          const SizedBox(height: 12),
+
+          const Divider(),
+
+          const SizedBox(height: 4),
+
+          /// DETAILS
+          _infoRow(Icons.phone, "Phone", phone, Colors.green),
+          _infoRow(Icons.school, "Training", trainingLevel, Colors.orange),
+          _infoRow(Icons.email, "Email", email, Colors.blue),
+          _infoRow(Icons.home, "Address", address, Colors.redAccent),
         ],
       ),
     );
   }
 
-  Widget _infoRow({required IconData icon, required String text}) {
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: Colors.blueGrey),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Text(
-            text,
+  Widget _infoRow(
+      IconData icon, String label, String value, Color iconColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, size: 16, color: iconColor),
+          ),
+
+          const SizedBox(width: 10),
+
+          Text(
+            "$label:",
             style: const TextStyle(
+              fontWeight: FontWeight.w600,
               fontSize: 13,
-              color: Colors.black87,
             ),
           ),
-        ),
-      ],
+
+          const SizedBox(width: 6),
+
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey.shade700,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

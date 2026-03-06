@@ -412,12 +412,76 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
     );
   }
 
+  // ======== validations=============
+
+  bool _validateForm(VwscProvider provider, MasterProvider masterProvider) {
+    // Village validation
+    if (masterProvider.selectedVillageId == null ||
+        masterProvider.selectedVillageId!.isEmpty) {
+      ToastHelper.showErrorSnackBar(context, "Please select village");
+      return false;
+    }
+
+    // Habitation validation
+    if (masterProvider.selectedHabitationIds.isEmpty) {
+      ToastHelper.showErrorSnackBar(context, "Please select at least one habitation");
+      return false;
+    }
+
+    // Name validation
+    if (provider.nameController.text.trim().isEmpty) {
+      ToastHelper.showErrorSnackBar(context, "Please enter operator name");
+      return false;
+    }
+
+    // Mobile validation
+    String mobile = provider.phoneController.text.trim();
+    if (mobile.isEmpty) {
+      ToastHelper.showErrorSnackBar(context, "Please enter mobile number");
+      return false;
+    }
+
+    if (mobile.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(mobile)) {
+      ToastHelper.showErrorSnackBar(context, "Enter valid 10 digit mobile number");
+      return false;
+    }
+
+    // Email validation (optional)
+/*    String email = provider.emailController.text.trim();
+    if (email.isNotEmpty) {
+      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(email)) {
+        ToastHelper.showErrorSnackBar(context, "Enter valid email address");
+        return false;
+      }
+    }*/
+
+    // Address validation
+    if (provider.addressController.text.trim().isEmpty) {
+      ToastHelper.showErrorSnackBar(context, "Please enter address");
+      return false;
+    }
+
+    // Training Level validation
+    if (provider.selectedLevelId == null) {
+      ToastHelper.showErrorSnackBar(context, "Please select training level");
+      return false;
+    }
+
+    return true;
+  }
+
   // ================= BUTTON =================
 
   Widget _submitButton(VwscProvider provider, MasterProvider masterProvider) {
     return InkWell(
-      onTap: () async{
-       await provider.registerNjmFTK(
+      onTap: () async {
+
+        /// 🔴 VALIDATION CHECK
+        if (!_validateForm(provider, masterProvider)) {
+          return;
+        }
+
+        await provider.registerNjmFTK(
           regId: 0,
           userTypeId: UserType.njmp.id,
           stateId: int.parse(_localStorage.getString(AppConstants.prefStateId)!),

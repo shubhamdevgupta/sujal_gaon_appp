@@ -44,6 +44,9 @@ class _FtkSghPageState extends State<FtkSghPage> {
               name: "${user.firstName} ${user.lastName}",
               email: user.email ?? "",
               village: user.villageName ?? "",
+              phone:  "9599460671",
+              trainingLevel:  "State Level",
+              address: user.address ?? "",
             );
           },
         ),
