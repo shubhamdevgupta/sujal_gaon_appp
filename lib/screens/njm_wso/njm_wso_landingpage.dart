@@ -35,6 +35,8 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
       await provider.fetchDeviceId();
       await session.init();
 
+
+
       /// CASE 1: Password login already stored userId
       if (session.userId != 0) {
         await provider.fetchNjmFtkDashboard(session.userId);
