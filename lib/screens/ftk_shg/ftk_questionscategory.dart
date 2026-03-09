@@ -176,82 +176,6 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
                                   /// Title
                                   const SizedBox(height: 12),
 
-                                  /// Assets Title
-                                  const Text(
-                                    "Assets Involved",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 12),
-
-                                  Wrap(
-                                    spacing: 10,
-                                    runSpacing: 10,
-                                    children: provider
-                                        .habitationAssetResponse!
-                                        .assetList!
-                                        .map((asset) {
-                                      return Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 14,
-                                          vertical: 10,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(12),
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Colors.blue.shade50,
-                                              Colors.white,
-                                            ],
-                                          ),
-                                          border: Border.all(
-                                            color: Colors.blue.shade200,
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.blue
-                                                  .withOpacity(0.08),
-                                              blurRadius: 6,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            /// Asset Icon
-                                            Icon(
-                                              _getAssetIcon(
-                                                asset.assetTypeId,
-                                              ),
-                                              size: 18,
-                                              color: Colors.blue.shade700,
-                                            ),
-
-                                            const SizedBox(width: 6),
-
-                                            /// Asset Name
-                                            Text(
-                                              asset.assetType ?? "",
-                                              style: const TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    })
-                                        .toList(),
-                                  ),
-
-                                  const SizedBox(height: 12),
-
                                   const Text(
                                     "Flow Path",
                                     style: TextStyle(
@@ -260,6 +184,7 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
                                       color: Colors.blue,
                                     ),
                                   ),
+                                  const SizedBox(height: 12),
 
                                   /// Flow Items
                                   Column(
@@ -312,6 +237,48 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
                                       );
                                     }),
                                   ),
+                                  /// Assets Title
+                                  const Text(
+                                    "Assets Involved",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 12),
+
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: provider.habitationAssetResponse!.assetList!
+                                        .map((asset) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(bottom: 8),
+                                        child: Row(
+                                          children: [
+
+                                            const Icon(
+                                              Icons.circle,
+                                              size: 8,
+                                              color: Colors.blue,
+                                            ),
+
+                                            const SizedBox(width: 8),
+
+                                            Text(
+                                              "${asset.assetType} (AssetId: ${asset.assetId})",
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
+                                  )
+
                                 ],
                               ),
                             );
