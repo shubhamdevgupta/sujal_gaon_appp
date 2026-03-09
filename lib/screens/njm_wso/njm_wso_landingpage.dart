@@ -146,7 +146,8 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
     required String email,
     required String mobile,
     required Function(String password) onSubmit,
-  }) async {
+  }) async
+  {
     final passwordController = TextEditingController();
 
     await showDialog(

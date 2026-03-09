@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/authentication_provider.dart';
 import '../../utils/app_constants.dart';
+import '../../utils/toast_helper.dart';
 
 class FtkShgLogin extends StatefulWidget {
   const FtkShgLogin({super.key});
@@ -149,7 +150,29 @@ class _FtkShgLogin extends State<FtkShgLogin> {
                         _mainButton(
                           text: "Send OTP",
                           isLoading: authProvider.isLoading,
-                          onTap: sendOTP,
+                          onTap: () {
+                            final provider = context.read<AuthenticationProvider>();
+                            String mobile = mobileController.text.trim();
+
+                            if (mobile.length != 10) {
+                              showMessage("Enter valid mobile number");
+                              return;
+                            }
+
+                            provider.loginNjmFtkUserByOtp(
+                              mobile,
+                              UserType.ftk.id,
+                                  () {
+                                showMessage("OTP Sent Successfully");
+                                setState(() {
+                                  isOtpSent = true;
+                                });
+                              },
+                                  (error) {
+                                showMessage(error ?? "Failed to send OTP");
+                              },
+                            );
+                          },
                         )
                       else ...[
                         const Text("Enter OTP"),
@@ -164,7 +187,29 @@ class _FtkShgLogin extends State<FtkShgLogin> {
                         _mainButton(
                           text: "Verify OTP",
                           isLoading: authProvider.isLoading,
-                          onTap: verifyOTP,
+                          onTap: () {
+                            final provider = context
+                                .read<AuthenticationProvider>();
+
+                            String enteredOtp = otpController.text.trim();
+
+                            if (enteredOtp.length != 6) {
+                              showMessage("Enter valid OTP");
+                              return;
+                            }
+                            provider.verifyOtp(
+                              enteredOtp,
+                                  () {
+                                Navigator.pushNamed(
+                                  context,
+                                  AppConstants.navigateToFtkLandingpage,
+                                );
+                              },
+                                  (error) {
+                                showMessage(error);
+                              },
+                            );
+                          },
                         ),
                       ],
                     ],
@@ -199,7 +244,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
 
   // ===================== LOGIC ======================
 
-  void loginWithPassword() {
+  void loginWithPassword() async{
     final provider = context.read<AuthenticationProvider>();
 
     String mobile = mobileController.text.trim();
@@ -210,18 +255,27 @@ class _FtkShgLogin extends State<FtkShgLogin> {
       return;
     }
 
-   /* provider.panchayatLoginUser(
+    await provider.loginNjmFtkUserByPassword(
       mobile,
       password,
-      "1",
-      () {
-        Navigator.pushNamed(context, AppConstants.navigateToNJMLandingScreen);
+      UserType.ftk.id,
+          () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppConstants.navigateToFtkLandingpage,
+              (route) => false,
+        );
       },
-      (error) {
-        showMessage(error ?? "Login Failed");
+          (errorMessage) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+        ToastHelper.showToastMessage(errorMessage);
       },
-    );*/
+    );
+
   }
+
 
   void sendOTP() {
     final provider = context.read<AuthenticationProvider>();

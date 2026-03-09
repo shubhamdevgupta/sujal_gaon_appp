@@ -264,10 +264,10 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
         );
       },
           (errorMessage) {
+        print("error caught here ---- $errorMessage");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorMessage)),
         );
-        ToastHelper.showToastMessage(errorMessage);
       },
     );
 

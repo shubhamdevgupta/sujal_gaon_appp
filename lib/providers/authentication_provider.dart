@@ -223,7 +223,8 @@ class AuthenticationProvider extends ChangeNotifier {
     int userTypeId,
     Function() onSuccess,
     Function onFailure,
-  ) async {
+  ) async
+  {
     _isLoading = true;
     notifyListeners();
     try {
@@ -248,7 +249,7 @@ class AuthenticationProvider extends ChangeNotifier {
         await session.init();
         onSuccess();
       } else {
-        errorMsg = _njmFtkLoginResponse?.message;
+        errorMsg = _passwordLoginResponse?.message;
         onFailure(errorMsg);
       }
     } catch (e, stackTrace) {
@@ -258,7 +259,7 @@ class AuthenticationProvider extends ChangeNotifier {
         e as Exception,
         stackTrace: stackTrace,
       );
-      _njmFtkLoginResponse = null;
+      _passwordLoginResponse = null;
     } finally {
       _isLoading = false;
       notifyListeners();
