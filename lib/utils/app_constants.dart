@@ -5,7 +5,10 @@ class AppConstants {
   static const String prefIsLoggedIn = 'isLoggedIn';
   static const String prefToken = 'token';
   static const String prefUserId = 'userId';
+  static const String prefIsPassUpdated = 'passUpdated';
   static const String prefUserTypeId = 'userTypeId';
+  static const String prefUserName = 'userName';
+  static const String prefUserEmail = 'email';
   static const String prefRegId = 'regId';
   static const String prefStateId = 'stateId';
   static const String prefStateName = 'stateName';

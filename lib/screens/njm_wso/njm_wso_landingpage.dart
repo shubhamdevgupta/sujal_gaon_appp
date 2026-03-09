@@ -4,11 +4,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jal_sanchalan/utils/loader_utils.dart';
+import 'package:jal_sanchalan/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
+import '../../service/local_storage_service.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
+import '../../utils/enum/user_type.dart';
 
 class NjmWsoLandingpage extends StatefulWidget {
   const NjmWsoLandingpage({super.key});
@@ -19,20 +22,38 @@ class NjmWsoLandingpage extends StatefulWidget {
 
 class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   final session = UserSessionManager();
+  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AuthenticationProvider>().fetchNjmFtkDashboard(
-        session.regId,
-      );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+      final provider = context.read<AuthenticationProvider>();
+
+      await provider.fetchDeviceId();
+      await session.init();
+
+      /// CASE 1: Password login already stored userId
+      if (session.userId != 0) {
+        await provider.fetchNjmFtkDashboard(session.userId);
+        return;
+      }
+      print("-----  ${_localStorage.getInt(AppConstants.prefIsPassUpdated)}");
+
+      if (_localStorage.getInt(AppConstants.prefIsPassUpdated)==0) {
+        _showPasswordDialog();
+      } else {
+        await provider.fetchNjmFtkDashboard(session.userId);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<AuthenticationProvider>();
+    final authProvider = context.watch<AuthenticationProvider>();
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
@@ -40,31 +61,18 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
         Future.microtask(() async {
           bool shouldExit = await _showExitDialog();
-
           if (shouldExit) {
             SystemNavigator.pop();
           }
         });
       },
+
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
           backgroundColor: const Color(0xFF1565C0),
           automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.logout, color: Colors.white),
-              onPressed: () async {
-                await context.read<AuthenticationProvider>().logoutUser();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  AppConstants.navigateToPreLoginScreen,
-                  (route) => false,
-                );
-              },
-            ),
-          ],
           title: const Text(
             "Sujal Gaon",
             style: TextStyle(
@@ -73,48 +81,184 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
               fontWeight: FontWeight.w600,
             ),
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout, color: Colors.white),
+              onPressed: () async {
+                await context.read<AuthenticationProvider>().logoutUser();
+
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppConstants.navigateToPreLoginScreen,
+                  (route) => false,
+                );
+              },
+            ),
+          ],
         ),
+
         body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF64B5F6), Colors.blue.shade50],
+              colors: [const Color(0xFF64B5F6), Colors.blue.shade50],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
+
           child: Stack(
             children: [
-              provider.njmFtkDashboardResponse == null
-                  ? SizedBox()
+              /// STEP 3: show dashboard only when dashboard data available
+              authProvider.njmFtkDashboardResponse == null
+                  ? const SizedBox()
                   : SingleChildScrollView(
                       padding: const EdgeInsets.all(10),
-
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          /*_buildCustomHeader(),*/
-                          // ================= WELCOME =================
                           const SizedBox(height: 20),
 
                           _buildWelcomeCard(),
 
-                          SizedBox(height: 20),
-                          // ================= DASHBOARD =================
+                          const SizedBox(height: 20),
+
                           _dashboardCard(context),
 
                           const SizedBox(height: 16),
-
-                          //_listCard(context),
                         ],
                       ),
                     ),
-              LoaderUtils.conditionalLoader(isLoading: provider.isLoading),
+
+              /// Loader
+              LoaderUtils.conditionalLoader(isLoading: authProvider.isLoading),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> showCreatePasswordDialog(
+    BuildContext context, {
+    required String name,
+    required String email,
+    required String mobile,
+    required Function(String password) onSubmit,
+  }) async
+  {
+    final passwordController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+
+            title: const Text(
+              "Create Password",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Name: $name"),
+                const SizedBox(height: 6),
+
+                Text("Email: $email"),
+                const SizedBox(height: 6),
+
+                Text("Mobile: $mobile"),
+
+                const SizedBox(height: 20),
+
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Enter Password",
+                    prefixIcon: const Icon(Icons.lock),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1565C0),
+                ),
+
+                onPressed: () async {
+                  final password = passwordController.text.trim();
+
+                  if (password.isEmpty) {
+                    ToastHelper.showErrorSnackBar(
+                      context,
+                      "Please enter password",
+                    );
+                    return;
+                  }
+
+                  await onSubmit(password);
+
+                  Navigator.pop(context);
+                },
+
+                child: const Text(
+                  "Submit",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showPasswordDialog() {
+    final provider = context.read<AuthenticationProvider>();
+    final res = provider.njmFtkLoginResponse!;
+
+    showCreatePasswordDialog(
+      context,
+      name: res.name ?? "",
+      email: res.email ?? "",
+      mobile: res.mobileNumber ?? "",
+      onSubmit: (password) async {
+        if (password.isEmpty) {
+          ToastHelper.showErrorSnackBar(context, "Enter valid password");
+          return;
+        }
+
+        await provider.updateNjmFtkPasswords(
+          res.regId!,
+          UserType.njmp.id,
+          res.mobileNumber!,
+          res.mobileNumber!,
+          provider.generateSha512Pass(password),
+          res.regId!,
+          provider.deviceId!,
+        );
+
+        if (provider.updateNjmFtkPassword?.status == true) {
+          /// After password update load dashboard
+          await provider.fetchNjmFtkDashboard(provider.updateNjmFtkPassword!.userId??0);
+        }
+      },
     );
   }
 
@@ -304,9 +448,10 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 icon: Icons.place,
                 color: Color(0xFFE53935),
                 title: "District",
-                value: "${provider.njmFtkDashboardResponse!.districtLgdCode}",
+                value: "${provider.njmFtkDashboardResponse!.districtName}",
                 subTitle: "LGD Code",
-                subTitleValue: "0000",
+                subTitleValue:
+                    "${provider.njmFtkDashboardResponse!.districtLgdCode}",
               ),
             ],
           ),
@@ -477,9 +622,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Exit App"),
-        content: const Text(
-          "Are you sure you want to exit the application?",
-        ),
+        content: const Text("Are you sure you want to exit the application?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -495,14 +638,15 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
     if (shouldExit == true) {
       if (Platform.isAndroid) {
-        SystemNavigator.pop();   // 🔥 closes app
+        SystemNavigator.pop(); // 🔥 closes app
       } else if (Platform.isIOS) {
-        exit(0);  // not recommended by Apple but works
+        exit(0); // not recommended by Apple but works
       }
     }
 
     return false; // 🔥 prevent default pop
   }
+
   Widget _verticalDivider() {
     return Container(
       width: 1,

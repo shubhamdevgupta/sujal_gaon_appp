@@ -6,9 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
+import '../../service/local_storage_service.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
+import '../../utils/enum/user_type.dart';
 import '../../utils/loader_utils.dart';
+import '../../utils/toast_helper.dart';
 
 class FtkLandingpage extends StatefulWidget {
   const FtkLandingpage({super.key});
@@ -19,14 +22,29 @@ class FtkLandingpage extends StatefulWidget {
 
 class _FtkLandingpageState extends State<FtkLandingpage> {
   final session = UserSessionManager();
+  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AuthenticationProvider>().fetchNjmFtkDashboard(
-        session.regId,
-      );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = context.read<AuthenticationProvider>();
+
+      await provider.fetchDeviceId();
+      await session.init();
+
+      /// CASE 1: Password login already stored userId
+      if (session.userId != 0) {
+        await provider.fetchNjmFtkDashboard(session.userId);
+        return;
+      }
+      print("-----  ${_localStorage.getInt(AppConstants.prefIsPassUpdated)}");
+
+      if (_localStorage.getInt(AppConstants.prefIsPassUpdated) == 0) {
+        _showPasswordDialog();
+      } else {
+        await provider.fetchNjmFtkDashboard(session.userId);
+      }
     });
   }
 
@@ -63,15 +81,15 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.logout, color: Colors.white),
-              onPressed: ()async {
+              onPressed: () async {
                 await context.read<AuthenticationProvider>().logoutUser();
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   AppConstants.navigateToPreLoginScreen,
-                      (route) => false,
+                  (route) => false,
                 );
               },
-            )
+            ),
           ],
         ),
         body: Container(
@@ -89,30 +107,30 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
               provider.njmFtkDashboardResponse == null
                   ? SizedBox()
                   : SingleChildScrollView(
-                padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /*_buildCustomHeader(),*/
-                    // ================= WELCOME =================
-                    const SizedBox(height: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /*_buildCustomHeader(),*/
+                          // ================= WELCOME =================
+                          const SizedBox(height: 20),
 
-                    _buildWelcomeCard(),
+                          _buildWelcomeCard(),
 
-                    SizedBox(height: 20),
-                    // ================= DASHBOARD =================
-                    _dashboardCard(context),
+                          SizedBox(height: 20),
+                          // ================= DASHBOARD =================
+                          _dashboardCard(context),
 
-                    const SizedBox(height: 16),
+                          const SizedBox(height: 16),
 
-                    //_listCard(context),
-                  ],
-                ),
-              ),
+                          //_listCard(context),
+                        ],
+                      ),
+                    ),
               LoaderUtils.conditionalLoader(isLoading: provider.isLoading),
             ],
-          )
+          ),
         ),
       ),
     );
@@ -306,8 +324,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                 icon: Icons.account_balance,
                 color: Color(0xFF1976D2),
                 title: "State",
-                value:
-                    "${provider.njmFtkDashboardResponse!.stateName}",
+                value: "${provider.njmFtkDashboardResponse!.stateName}",
               ),
 
               _verticalDivider(),
@@ -316,10 +333,10 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                 icon: Icons.place,
                 color: Color(0xFFE53935),
                 title: "District",
-                value:
-                    "${provider.njmFtkDashboardResponse!.districtName}",
+                value: "${provider.njmFtkDashboardResponse!.districtName}",
                 subTitle: "LGD Code",
-                subTitleValue: "${provider.njmFtkDashboardResponse!.districtLgdCode}",
+                subTitleValue:
+                    "${provider.njmFtkDashboardResponse!.districtLgdCode}",
               ),
             ],
           ),
@@ -335,10 +352,10 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                 icon: Icons.apartment,
                 color: Color(0xFF8D6E63),
                 title: "Block",
-                value:
-                    "${provider.njmFtkDashboardResponse!.blockName}",
+                value: "${provider.njmFtkDashboardResponse!.blockName}",
                 subTitle: "LGD Code",
-                subTitleValue: "${provider.njmFtkDashboardResponse!.blockLgdCode}",
+                subTitleValue:
+                    "${provider.njmFtkDashboardResponse!.blockLgdCode}",
               ),
 
               _verticalDivider(),
@@ -347,10 +364,10 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                 icon: Icons.home,
                 color: Color(0xFF00796B),
                 title: "GP",
-                value:
-                    "${provider.njmFtkDashboardResponse!.panchayatName}",
+                value: "${provider.njmFtkDashboardResponse!.panchayatName}",
                 subTitle: "LGD Code",
-                subTitleValue: "${provider.njmFtkDashboardResponse!.panchayatLgdCode}",
+                subTitleValue:
+                    "${provider.njmFtkDashboardResponse!.panchayatLgdCode}",
               ),
             ],
           ),
@@ -504,9 +521,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Exit App"),
-        content: const Text(
-          "Are you sure you want to exit the application?",
-        ),
+        content: const Text("Are you sure you want to exit the application?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -530,4 +545,127 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
 
     return false;
   }
+  void _showPasswordDialog() {
+
+    final provider = context.read<AuthenticationProvider>();
+    final res = provider.njmFtkLoginResponse!;
+
+    showCreatePasswordDialog(
+      context,
+      name: res.name ?? "",
+      email: res.email ?? "",
+      mobile: res.mobileNumber ?? "",
+      onSubmit: (password) async {
+        if (password.isEmpty) {
+          ToastHelper.showErrorSnackBar(context, "Enter valid password");
+          return;
+        }
+
+        await provider.updateNjmFtkPasswords(
+          res.regId!,
+          UserType.ftk.id,
+          res.mobileNumber!,
+          res.mobileNumber!,
+          provider.generateSha512Pass(password),
+          res.regId!,
+          provider.deviceId!,
+        );
+
+        if (provider.updateNjmFtkPassword?.status == true) {
+          /// After password update load dashboard
+          await provider.fetchNjmFtkDashboard(provider.updateNjmFtkPassword!.userId??0);
+        }
+      },
+    );
+  }
+
+  Future<void> showCreatePasswordDialog(
+      BuildContext context, {
+        required String name,
+        required String email,
+        required String mobile,
+        required Function(String password) onSubmit,
+      }) async
+  {
+    final passwordController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+
+            title: const Text(
+              "Create Password",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Name: $name"),
+                const SizedBox(height: 6),
+
+                Text("Email: $email"),
+                const SizedBox(height: 6),
+
+                Text("Mobile: $mobile"),
+
+                const SizedBox(height: 20),
+
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Enter Password",
+                    prefixIcon: const Icon(Icons.lock),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1565C0),
+                ),
+
+                onPressed: () async {
+                  final password = passwordController.text.trim();
+
+                  if (password.isEmpty) {
+                    ToastHelper.showErrorSnackBar(
+                      context,
+                      "Please enter password",
+                    );
+                    return;
+                  }
+
+                  await onSubmit(password);
+
+                  Navigator.pop(context);
+                },
+
+                child: const Text(
+                  "Submit",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }

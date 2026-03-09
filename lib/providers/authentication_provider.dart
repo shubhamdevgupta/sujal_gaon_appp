@@ -4,12 +4,15 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/models/njm_ftk_dashboard_response.dart';
 import 'package:jal_sanchalan/models/njm_ftk_login_response.dart';
+import 'package:jal_sanchalan/models/password_login.dart';
+import 'package:jal_sanchalan/models/update_password.dart';
 
 import '../models/panchayat/panchayat_login_response.dart';
 import '../repository/authentication_repository.dart';
 import '../service/local_storage_service.dart';
 import '../utils/app_constants.dart';
 import '../utils/auth/user_session_manager.dart';
+import '../utils/device_utils.dart';
 import '../utils/global_exception_handler.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
@@ -17,23 +20,46 @@ class AuthenticationProvider extends ChangeNotifier {
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
 
+  String? _deviceId;
+
+  String? get deviceId => _deviceId;
+
+  Future<void> fetchDeviceId() async {
+    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
+    debugPrint('Device ID: $_deviceId');
+    notifyListeners();
+  }
+
   bool _isLoggedIn = false;
+
   bool get isLoggedIn => _isLoggedIn;
 
   var randomOne = 0, randomTwo = 0, captchResult = 0;
 
   PanchayatLoginResponse? _loginResponse;
+
   PanchayatLoginResponse? get loginResponse => _loginResponse;
 
   PanchayatResult? _panchayatResult;
+
   PanchayatResult? get panchayatResult => _panchayatResult;
 
   NjmFtkLoginResponse? _njmFtkLoginResponse;
 
   NjmFtkLoginResponse? get njmFtkLoginResponse => _njmFtkLoginResponse;
 
+  PasswordLoginResponse? _passwordLoginResponse;
+
+  PasswordLoginResponse? get passwordLoginResponse => _passwordLoginResponse;
+
   NjmFtkDashboardResponse? _njmFtkDashboardResponse;
-  NjmFtkDashboardResponse? get njmFtkDashboardResponse => _njmFtkDashboardResponse;
+
+  NjmFtkDashboardResponse? get njmFtkDashboardResponse =>
+      _njmFtkDashboardResponse;
+
+  UpdateNjmFtkPassword? _updateNjmFtkPassword;
+
+  UpdateNjmFtkPassword? get updateNjmFtkPassword => _updateNjmFtkPassword;
 
   String? _generatedOtp;
 
@@ -51,9 +77,9 @@ class AuthenticationProvider extends ChangeNotifier {
 
   // Method to login user
   Future<void> panchayatLoginUser(
-    userName,
-    password,
-    userTypeId,
+    String userName,
+    String password,
+    int userTypeId,
     Function() onSuccess,
     Function onFailure,
   ) async {
@@ -68,12 +94,11 @@ class AuthenticationProvider extends ChangeNotifier {
         userTypeId,
       );
       if (_loginResponse?.status == true) {
-
         await _localStorage.clearAll();
 
         await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
         onSuccess();
-        _panchayatResult=_loginResponse!.result;
+        _panchayatResult = _loginResponse!.result;
         _localStorage.saveString(
           AppConstants.prefToken,
           _loginResponse!.token.toString(),
@@ -81,28 +106,32 @@ class AuthenticationProvider extends ChangeNotifier {
         _localStorage.saveString(
           AppConstants.prefStateId,
           _loginResponse!.result!.loginResult!.stateId.toString(),
-        );  _localStorage.saveString(
+        );
+        _localStorage.saveString(
           AppConstants.prefStateName,
           _loginResponse!.result!.loginResult!.stateName.toString(),
         );
         _localStorage.saveString(
           AppConstants.prefDistrictId,
           _loginResponse!.result!.loginResult!.districtId.toString(),
-        );    _localStorage.saveString(
+        );
+        _localStorage.saveString(
           AppConstants.prefDistrictName,
           _loginResponse!.result!.loginResult!.districtName.toString(),
         );
         _localStorage.saveString(
           AppConstants.prefBlockId,
           _loginResponse!.result!.loginResult!.blockId.toString(),
-        );    _localStorage.saveString(
+        );
+        _localStorage.saveString(
           AppConstants.prefBlockName,
           _loginResponse!.result!.loginResult!.blockName.toString(),
         );
         _localStorage.saveString(
           AppConstants.prefPanchayatId,
           _loginResponse!.result!.loginResult!.panchayatId.toString(),
-        );        _localStorage.saveString(
+        );
+        _localStorage.saveString(
           AppConstants.prefPanchayatName,
           _loginResponse!.result!.loginResult!.panchayatName.toString(),
         );
@@ -111,16 +140,15 @@ class AuthenticationProvider extends ChangeNotifier {
           _loginResponse!.userId ?? 0,
         );
 
-        _localStorage.saveInt(
-          AppConstants.prefUserTypeId,
-          userTypeId,
-        );
-      await  session.init();
+        _localStorage.saveInt(AppConstants.prefUserTypeId, userTypeId);
+        await session.init();
       } else {
         errorMsg = _loginResponse?.message;
         onFailure(errorMsg);
       }
     } catch (e, stackTrace) {
+      debugPrint("---- $e >>> $stackTrace");
+
       GlobalExceptionHandler.handleException(
         e as Exception,
         stackTrace: stackTrace,
@@ -132,8 +160,8 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> loginNjmFtkUser(
-    loginId,
+  Future<void> loginNjmFtkUserByOtp(
+    mobileNumber,
     userTypeId,
     Function() onSuccess,
     Function onFailure,
@@ -142,8 +170,8 @@ class AuthenticationProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _njmFtkLoginResponse = await _authRepository.loginNjmFtkUser(
-        loginId,
+      _njmFtkLoginResponse = await _authRepository.loginNjmFtkUserByOtp(
+        mobileNumber,
         userTypeId,
       );
       if (_njmFtkLoginResponse?.status == true) {
@@ -151,26 +179,33 @@ class AuthenticationProvider extends ChangeNotifier {
         await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
 
         _generatedOtp = _njmFtkLoginResponse?.otp.toString();
-      await  _localStorage.saveInt(
-          AppConstants.prefRegId,
-          _njmFtkLoginResponse!.regId,
+
+        _localStorage.saveInt(AppConstants.prefUserTypeId, userTypeId);
+        _localStorage.saveString(
+          AppConstants.prefUserName,
+          _njmFtkLoginResponse!.name!,
         );
         _localStorage.saveString(
-          AppConstants.prefToken,
-          _njmFtkLoginResponse!.token.toString(),
+          AppConstants.prefUserEmail,
+          _njmFtkLoginResponse!.email!,
         );
-
         _localStorage.saveInt(
-          AppConstants.prefUserTypeId,
-          userTypeId,
+          AppConstants.prefIsPassUpdated,
+          _njmFtkLoginResponse!.isPwdUpdate!,
         );
-      await  session.init();
+        _localStorage.saveInt(
+          AppConstants.prefUserId,
+          _njmFtkLoginResponse!.userId!,
+        );
+        await session.init();
         onSuccess();
       } else {
         errorMsg = _njmFtkLoginResponse?.message;
         onFailure(errorMsg);
       }
     } catch (e, stackTrace) {
+      debugPrint("---- $e >>> $stackTrace");
+
       GlobalExceptionHandler.handleException(
         e as Exception,
         stackTrace: stackTrace,
@@ -182,12 +217,61 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchNjmFtkDashboard(regId) async {
+  Future<void> loginNjmFtkUserByPassword(
+    String mobileNumber,
+    String password,
+    int userTypeId,
+    Function() onSuccess,
+    Function onFailure,
+  ) async
+  {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      _passwordLoginResponse = await _authRepository.loginNjmFtkUserByPassword(
+        mobileNumber,
+        generateSha512Pass(password),
+        userTypeId,
+      );
+      if (_passwordLoginResponse?.status == true) {
+        await _localStorage.clearAll();
+        await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
+        _localStorage.saveInt(AppConstants.prefUserTypeId, userTypeId);
+        _localStorage.saveInt(
+          AppConstants.prefUserId,
+          _passwordLoginResponse!.userId!,
+        );
+        _localStorage.saveInt(
+          AppConstants.prefIsPassUpdated,
+          _passwordLoginResponse!.isPwdUpdated ?? 0,
+        );
+        debugPrint("!!!!!  ${_passwordLoginResponse!.isPwdUpdated}");
+        await session.init();
+        onSuccess();
+      } else {
+        errorMsg = _passwordLoginResponse?.message;
+        onFailure(errorMsg);
+      }
+    } catch (e, stackTrace) {
+      debugPrint("---- $e >>> $stackTrace");
+
+      GlobalExceptionHandler.handleException(
+        e as Exception,
+        stackTrace: stackTrace,
+      );
+      _passwordLoginResponse = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchNjmFtkDashboard(int userID) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      var rawResponse = await _authRepository.fetchNjmFtkDashboard(regId);
+      var rawResponse = await _authRepository.fetchNjmFtkDashboard(userID);
       if (rawResponse.status == true) {
         _njmFtkDashboardResponse = rawResponse;
       } else {
@@ -205,18 +289,44 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  String trim(String value) => value.trim();
+  Future<void> updateNjmFtkPasswords(
+    int regId,
+    int userTypeId,
+    String mobileNumber,
+    String loginId,
+    String password,
+    int createdBy,
+    String ipAddress,
+  ) async {
+    _isLoading = true;
+    notifyListeners();
 
-  String sha512Base64(String input) {
-    final List<int> bytes = utf8.encode(input);
-    final Digest sha512Hash = sha512.convert(bytes);
-    return base64Encode(sha512Hash.bytes);
-  }
-
-  String encryptPassword(String password, String salt) {
-    String hash1 = sha512Base64(trim(password));
-    String hash2 = sha512Base64(salt + hash1);
-    return hash2;
+    try {
+      var rawResponse = await _authRepository.updateNjmFtkPassword(
+        regId,
+        userTypeId,
+        mobileNumber,
+        loginId,
+        password,
+        createdBy,
+        ipAddress,
+      );
+      if (rawResponse.status == true) {
+        _updateNjmFtkPassword = rawResponse;
+        await _localStorage.saveInt(
+          AppConstants.prefUserId,
+          _updateNjmFtkPassword!.userId!,
+        );
+      } else {
+        errorMsg = rawResponse.message;
+      }
+    } catch (e, stackTrace) {
+      debugPrint("**** $e ***$stackTrace");
+      _updateNjmFtkPassword = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   String generatePasswordHash(String password) {
@@ -224,6 +334,11 @@ class AuthenticationProvider extends ChangeNotifier {
     final md5Hash = md5.convert(passwordBytes).toString();
     final sha256Hash = sha256.convert(utf8.encode(md5Hash)).toString();
 
+    return sha256Hash;
+  }
+
+  String generateSha512Pass(String password) {
+    final sha256Hash = sha512.convert(utf8.encode(password)).toString();
     return sha256Hash;
   }
 
@@ -245,8 +360,10 @@ class AuthenticationProvider extends ChangeNotifier {
       onFailure("Invalid OTP");
     }
   }
+
   Future<void> checkLoginStatus() async {
-    _isLoggedIn = await _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
+    _isLoggedIn =
+        await _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
     notifyListeners();
   }
 
@@ -258,6 +375,7 @@ class AuthenticationProvider extends ChangeNotifier {
     await session.clearPref();
     notifyListeners();
   }
+
   void togglePasswordVisibility() {
     _isShownPassword = !_isShownPassword;
     notifyListeners();
