@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/repository/vwsc/vwsc_repo.dart';
 
-import '../../models/ftk_sgh/NjmFtkRegistrationResponse.dart';
+import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
 import '../../utils/device_utils.dart';
 

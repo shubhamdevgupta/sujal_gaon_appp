@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
@@ -24,7 +25,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = context.watch<AuthenticationProvider>();
+    final njmFtkProvider = context.watch<NjmFtkProvider>();
 
     return Scaffold(
       backgroundColor: const Color(0xFFEAF4FF),
@@ -116,13 +117,13 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
                       const SizedBox(height: 6),
                       TextField(
                         controller: passwordController,
-                        obscureText: !authProvider.isShownPassword,
+                        obscureText: !njmFtkProvider.isShownPassword,
                         decoration: _inputDecoration(
                           "Enter Password",
                           Icons.lock,
                           suffix: IconButton(
                             icon: Icon(
-                              authProvider.isShownPassword
+                              njmFtkProvider.isShownPassword
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                             ),
@@ -136,7 +137,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
 
                       _mainButton(
                         text: "Login",
-                        isLoading: authProvider.isLoading,
+                        isLoading: njmFtkProvider.isLoading,
                         onTap: loginWithPassword,
                       ),
                     ],
@@ -146,9 +147,9 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
                       if (!isOtpSent)
                         _mainButton(
                           text: "Send OTP",
-                          isLoading: authProvider.isLoading,
+                          isLoading: njmFtkProvider.isLoading,
                           onTap: () {
-                            final provider = context.read<AuthenticationProvider>();
+                            final provider = context.read<NjmFtkProvider>();
                             String mobile = mobileController.text.trim();
 
                             if (mobile.length != 10) {
@@ -183,10 +184,10 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
                         const SizedBox(height: 20),
                         _mainButton(
                           text: "Verify OTP",
-                          isLoading: authProvider.isLoading,
+                          isLoading: njmFtkProvider.isLoading,
                           onTap: () {
                             final provider = context
-                                .read<AuthenticationProvider>();
+                                .read<NjmFtkProvider>();
 
                             String enteredOtp = otpController.text.trim();
 
@@ -242,7 +243,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
   // ===================== LOGIC ======================
 
   void loginWithPassword() async{
-    final provider = context.read<AuthenticationProvider>();
+    final provider = context.read<NjmFtkProvider>();
 
     String mobile = mobileController.text.trim();
     String password = passwordController.text.trim();

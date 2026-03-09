@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
 import 'package:jal_sanchalan/utils/loader_utils.dart';
 import 'package:jal_sanchalan/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ import '../../service/local_storage_service.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
 import '../../utils/enum/user_type.dart';
+import '../widgets/app_dropdown.dart';
 
 class NjmWsoLandingpage extends StatefulWidget {
   const NjmWsoLandingpage({super.key});
@@ -29,30 +31,28 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-
-      final provider = context.read<AuthenticationProvider>();
+      final provider = context.read<NjmFtkProvider>();
 
       await provider.fetchDeviceId();
       await session.init();
 
       /// CASE 1: Password login already stored userId
       if (session.userId != 0) {
-        await provider.fetchNjmFtkDashboard(session.userId);
+        await provider.fetchNjmFtkDashboard(session.userId, UserType.njmp.id);
         return;
       }
-      print("-----  ${_localStorage.getInt(AppConstants.prefIsPassUpdated)}");
 
-      if (_localStorage.getInt(AppConstants.prefIsPassUpdated)==0) {
+      if (_localStorage.getInt(AppConstants.prefIsPassUpdated) == 0) {
         _showPasswordDialog();
       } else {
-        await provider.fetchNjmFtkDashboard(session.userId);
+        await provider.fetchNjmFtkDashboard(session.userId, UserType.njmp.id);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = context.watch<AuthenticationProvider>();
+    final njmFtkProvider = context.watch<NjmFtkProvider>();
 
     return PopScope(
       canPop: false,
@@ -111,7 +111,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
           child: Stack(
             children: [
               /// STEP 3: show dashboard only when dashboard data available
-              authProvider.njmFtkDashboardResponse == null
+              njmFtkProvider.njmFtkDashboardResponse == null
                   ? const SizedBox()
                   : SingleChildScrollView(
                       padding: const EdgeInsets.all(10),
@@ -132,7 +132,9 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                     ),
 
               /// Loader
-              LoaderUtils.conditionalLoader(isLoading: authProvider.isLoading),
+              LoaderUtils.conditionalLoader(
+                isLoading: njmFtkProvider.isLoading,
+              ),
             ],
           ),
         ),
@@ -146,8 +148,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
     required String email,
     required String mobile,
     required Function(String password) onSubmit,
-  }) async
-  {
+  }) async {
     final passwordController = TextEditingController();
 
     await showDialog(
@@ -230,7 +231,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   }
 
   void _showPasswordDialog() {
-    final provider = context.read<AuthenticationProvider>();
+    final provider = context.read<NjmFtkProvider>();
     final res = provider.njmFtkLoginResponse!;
 
     showCreatePasswordDialog(
@@ -256,13 +257,18 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
         if (provider.updateNjmFtkPassword?.status == true) {
           /// After password update load dashboard
-          await provider.fetchNjmFtkDashboard(provider.updateNjmFtkPassword!.userId??0);
+          await provider.fetchNjmFtkDashboard(
+            provider.updateNjmFtkPassword!.userId ?? 0,
+            UserType.njmp.id,
+          );
         }
       },
     );
   }
 
   Widget _dashboardCard(BuildContext context) {
+    final provider = context.read<NjmFtkProvider>();
+
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -323,6 +329,31 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                   _buildLocationCard(),
 
                   SizedBox(height: 20),
+                  Text(
+                    'Select Habitation',
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  ),
+                  SizedBox(height: 2),
+
+                  AppDropdown(
+                    hint: "Select Habitation",
+                    items: provider!.njmFtkDashboardResponse!.habitationList!
+                        .map((e) => e.habitationName ?? "")
+                        .toList(),
+                    onChanged: (value) {
+                      final selected = provider
+                          .njmFtkDashboardResponse!
+                          .habitationList!
+                          .firstWhere((e) => e.habitationName == value);
+
+                      provider.setSelectedHabitationId(selected.habitationId);
+
+                      print("Habitation Name: ${selected.habitationName}");
+                      print("Habitation Id: ${selected.habitationId}");
+                    },
+                  ),
+
+                  SizedBox(height: 15),
                   _registerCard(context),
                 ],
               ),
@@ -334,9 +365,19 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   }
 
   Widget _registerCard(BuildContext context) {
+    final provider = context.watch<NjmFtkProvider>();
+
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, AppConstants.navigateToNjmCategory);
+        if (provider.selectedHabitationId != 0 &&
+            provider.selectedHabitationId != null) {
+          Navigator.pushNamed(context, AppConstants.navigateToNjmCategory);
+        } else {
+          ToastHelper.showErrorSnackBar(
+            context,
+            "please select Habitation First !!",
+          );
+        }
       },
 
       child: Container(
@@ -402,7 +443,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   }
 
   Widget _buildLocationCard() {
-    final provider = context.watch<AuthenticationProvider>();
+    final provider = context.watch<NjmFtkProvider>();
 
     return Container(
       margin: const EdgeInsets.only(top: 10),
@@ -451,7 +492,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 value: "${provider.njmFtkDashboardResponse!.districtName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.districtLgdCode}",
+                    "${provider.njmFtkDashboardResponse!.districtLgdcode}",
               ),
             ],
           ),
@@ -470,7 +511,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 value: "${provider.njmFtkDashboardResponse!.blockName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.blockLgdCode}",
+                    "${provider.njmFtkDashboardResponse!.blockLgdcode}",
               ),
 
               _verticalDivider(),
@@ -482,7 +523,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 value: "${provider.njmFtkDashboardResponse!.panchayatName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.panchayatLgdCode}",
+                    "${provider.njmFtkDashboardResponse!.panchayatLgdcode}",
               ),
             ],
           ),
@@ -554,7 +595,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   }
 
   Widget _buildWelcomeCard() {
-    final provider = context.watch<AuthenticationProvider>();
+    final provider = context.watch<NjmFtkProvider>();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(22),

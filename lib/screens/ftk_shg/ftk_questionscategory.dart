@@ -1,8 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/njm_ftk_provider.dart';
+import '../../service/local_storage_service.dart';
 import '../../utils/app_constants.dart';
+import '../../utils/auth/user_session_manager.dart';
 
 
 class FtkQuestionscategory extends StatefulWidget {
@@ -13,7 +17,19 @@ class FtkQuestionscategory extends StatefulWidget {
 }
 
 class _NjmQuestionscategory extends State<FtkQuestionscategory> {
+  final session = UserSessionManager();
+  final LocalStorageService _localStorage = LocalStorageService();
+  @override
+  void initState() {
+    super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = context.read<NjmFtkProvider>();
+
+      await provider.fetchHabitationAssetsID(31, 1213773, session.userId);
+      // await provider.fetchHabitationAssetsID(_localStorage.getInt(AppConstants.prefStateId)!, provider.habitationId!, session.userId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +55,6 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
         ),
         child: Stack(
           children: [
-
-            /// Background Image
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/bg_water.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
 
             /// Main UI
             SafeArea(
@@ -111,6 +117,208 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       children: [
 
+                        Consumer<NjmFtkProvider>(
+                          builder: (context, provider, child) {
+                            final flowPath = provider
+                                .habitationAssetResponse!
+                                .flowPathList!
+                                .first
+                                .flowPath;
+                            final serviceArea = provider
+                                .habitationAssetResponse!
+                                .serviceArea!
+                                .habitationServicearea;
+
+                            if (flowPath == null || serviceArea == null) {
+                              return const SizedBox();
+                            }
+
+                            final flowItems = flowPath.split("->");
+
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 20),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(18),
+                                color: Colors.white.withOpacity(0.85),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.blue.withOpacity(0.15),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 5),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  /// Title
+                                  const Text(
+                                    "Habitation Service Area",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 12),
+
+                                  /// Flow Items
+                                  Text(
+                                    serviceArea,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+
+                                  /// Title
+                                  const SizedBox(height: 12),
+
+                                  /// Assets Title
+                                  const Text(
+                                    "Assets Involved",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 12),
+
+                                  Wrap(
+                                    spacing: 10,
+                                    runSpacing: 10,
+                                    children: provider
+                                        .habitationAssetResponse!
+                                        .assetList!
+                                        .map((asset) {
+                                      return Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                          vertical: 10,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(12),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.blue.shade50,
+                                              Colors.white,
+                                            ],
+                                          ),
+                                          border: Border.all(
+                                            color: Colors.blue.shade200,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.blue
+                                                  .withOpacity(0.08),
+                                              blurRadius: 6,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            /// Asset Icon
+                                            Icon(
+                                              _getAssetIcon(
+                                                asset.assetTypeId,
+                                              ),
+                                              size: 18,
+                                              color: Colors.blue.shade700,
+                                            ),
+
+                                            const SizedBox(width: 6),
+
+                                            /// Asset Name
+                                            Text(
+                                              asset.assetType ?? "",
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    })
+                                        .toList(),
+                                  ),
+
+                                  const SizedBox(height: 12),
+
+                                  const Text(
+                                    "Flow Path",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+
+                                  /// Flow Items
+                                  Column(
+                                    children: List.generate(flowItems.length, (
+                                        index,
+                                        ) {
+                                      return Row(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          /// Circle
+                                          Column(
+                                            children: [
+                                              Container(
+                                                width: 10,
+                                                height: 10,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.blue,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+
+                                              if (index != flowItems.length - 1)
+                                                Container(
+                                                  width: 2,
+                                                  height: 30,
+                                                  color: Colors.blue.shade200,
+                                                ),
+                                            ],
+                                          ),
+
+                                          const SizedBox(width: 10),
+
+                                          /// Text
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                bottom: 20,
+                                              ),
+                                              child: Text(
+                                                flowItems[index].trim(),
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+
+
                         CategoryCard(
                           icon: Icons.person_outline,
                           title: "Basic Details",
@@ -120,8 +328,6 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
                               context,
                               AppConstants.navigateToBasicDetailsForm,
                             );
-
-
                           },
                         ),
 
@@ -181,6 +387,21 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
 }
 
 /// ================= CARD WIDGET =================
+
+IconData _getAssetIcon(String? type) {
+  switch (type) {
+    case "source":
+      return Icons.water;
+    case "pmp":
+      return Icons.settings_input_component;
+    case "ohsr":
+      return Icons.storage;
+    case "disinfection":
+      return Icons.science;
+    default:
+      return Icons.device_unknown;
+  }
+}
 
 class CategoryCard extends StatelessWidget {
   final IconData icon;
