@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
 import 'package:jal_sanchalan/utils/enum/user_type.dart';
 import 'package:provider/provider.dart';
 import '../../providers/authentication_provider.dart';
@@ -28,7 +29,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = context.watch<AuthenticationProvider>();
+    final njmFtkProvider = context.watch<NjmFtkProvider>();
 
     return Scaffold(
       backgroundColor: const Color(0xFFEAF4FF),
@@ -119,13 +120,13 @@ class _FtkShgLogin extends State<FtkShgLogin> {
                       const SizedBox(height: 6),
                       TextField(
                         controller: passwordController,
-                        obscureText: !authProvider.isShownPassword,
+                        obscureText: !njmFtkProvider.isShownPassword,
                         decoration: _inputDecoration(
                           "Enter Password",
                           Icons.lock,
                           suffix: IconButton(
                             icon: Icon(
-                              authProvider.isShownPassword
+                              njmFtkProvider.isShownPassword
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                             ),
@@ -139,7 +140,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
 
                       _mainButton(
                         text: "Login",
-                        isLoading: authProvider.isLoading,
+                        isLoading: njmFtkProvider.isLoading,
                         onTap: loginWithPassword,
                       ),
                     ],
@@ -149,9 +150,9 @@ class _FtkShgLogin extends State<FtkShgLogin> {
                       if (!isOtpSent)
                         _mainButton(
                           text: "Send OTP",
-                          isLoading: authProvider.isLoading,
+                          isLoading: njmFtkProvider.isLoading,
                           onTap: () {
-                            final provider = context.read<AuthenticationProvider>();
+                            final provider = context.read<NjmFtkProvider>();
                             String mobile = mobileController.text.trim();
 
                             if (mobile.length != 10) {
@@ -186,10 +187,10 @@ class _FtkShgLogin extends State<FtkShgLogin> {
                         const SizedBox(height: 20),
                         _mainButton(
                           text: "Verify OTP",
-                          isLoading: authProvider.isLoading,
+                          isLoading: njmFtkProvider.isLoading,
                           onTap: () {
                             final provider = context
-                                .read<AuthenticationProvider>();
+                                .read<NjmFtkProvider>();
 
                             String enteredOtp = otpController.text.trim();
 
@@ -245,7 +246,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
   // ===================== LOGIC ======================
 
   void loginWithPassword() async{
-    final provider = context.read<AuthenticationProvider>();
+    final provider = context.read<NjmFtkProvider>();
 
     String mobile = mobileController.text.trim();
     String password = passwordController.text.trim();
@@ -278,7 +279,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
 
 
   void sendOTP() {
-    final provider = context.read<AuthenticationProvider>();
+    final provider = context.read<NjmFtkProvider>();
     String mobile = mobileController.text.trim();
 
     if (mobile.length != 10) {
@@ -302,7 +303,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
   }
 
   void verifyOTP() {
-    final provider = context.read<AuthenticationProvider>();
+    final provider = context.read<NjmFtkProvider>();
 
     String enteredOtp = otpController.text.trim();
 

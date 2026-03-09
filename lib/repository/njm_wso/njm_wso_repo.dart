@@ -1,5 +1,5 @@
 import 'dart:convert';
-import '../../models/ftk_sgh/NjmFtkRegistrationResponse.dart';
+import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
 import '../../models/njm_wso/njm_wso_groundwatersource_response.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
 import '../../service/base_api_service.dart';

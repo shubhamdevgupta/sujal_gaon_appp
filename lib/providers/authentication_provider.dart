@@ -2,10 +2,6 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/models/njm_ftk_dashboard_response.dart';
-import 'package:jal_sanchalan/models/njm_ftk_login_response.dart';
-import 'package:jal_sanchalan/models/password_login.dart';
-import 'package:jal_sanchalan/models/update_password.dart';
 
 import '../models/panchayat/panchayat_login_response.dart';
 import '../repository/authentication_repository.dart';
@@ -43,23 +39,6 @@ class AuthenticationProvider extends ChangeNotifier {
   PanchayatResult? _panchayatResult;
 
   PanchayatResult? get panchayatResult => _panchayatResult;
-
-  NjmFtkLoginResponse? _njmFtkLoginResponse;
-
-  NjmFtkLoginResponse? get njmFtkLoginResponse => _njmFtkLoginResponse;
-
-  PasswordLoginResponse? _passwordLoginResponse;
-
-  PasswordLoginResponse? get passwordLoginResponse => _passwordLoginResponse;
-
-  NjmFtkDashboardResponse? _njmFtkDashboardResponse;
-
-  NjmFtkDashboardResponse? get njmFtkDashboardResponse =>
-      _njmFtkDashboardResponse;
-
-  UpdateNjmFtkPassword? _updateNjmFtkPassword;
-
-  UpdateNjmFtkPassword? get updateNjmFtkPassword => _updateNjmFtkPassword;
 
   String? _generatedOtp;
 
@@ -160,205 +139,12 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> loginNjmFtkUserByOtp(
-    mobileNumber,
-    userTypeId,
-    Function() onSuccess,
-    Function onFailure,
-  ) async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      _njmFtkLoginResponse = await _authRepository.loginNjmFtkUserByOtp(
-        mobileNumber,
-        userTypeId,
-      );
-      if (_njmFtkLoginResponse?.status == true) {
-        await _localStorage.clearAll();
-        await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
-
-        _generatedOtp = _njmFtkLoginResponse?.otp.toString();
-
-        _localStorage.saveInt(AppConstants.prefUserTypeId, userTypeId);
-        _localStorage.saveString(
-          AppConstants.prefUserName,
-          _njmFtkLoginResponse!.name!,
-        );
-        _localStorage.saveString(
-          AppConstants.prefUserEmail,
-          _njmFtkLoginResponse!.email!,
-        );
-        _localStorage.saveInt(
-          AppConstants.prefIsPassUpdated,
-          _njmFtkLoginResponse!.isPwdUpdate!,
-        );
-        _localStorage.saveInt(
-          AppConstants.prefUserId,
-          _njmFtkLoginResponse!.userId!,
-        );
-        await session.init();
-        onSuccess();
-      } else {
-        errorMsg = _njmFtkLoginResponse?.message;
-        onFailure(errorMsg);
-      }
-    } catch (e, stackTrace) {
-      debugPrint("---- $e >>> $stackTrace");
-
-      GlobalExceptionHandler.handleException(
-        e as Exception,
-        stackTrace: stackTrace,
-      );
-      _njmFtkLoginResponse = null;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> loginNjmFtkUserByPassword(
-    String mobileNumber,
-    String password,
-    int userTypeId,
-    Function() onSuccess,
-    Function onFailure,
-  ) async
-  {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      _passwordLoginResponse = await _authRepository.loginNjmFtkUserByPassword(
-        mobileNumber,
-        generateSha512Pass(password),
-        userTypeId,
-      );
-      if (_passwordLoginResponse?.status == true) {
-        await _localStorage.clearAll();
-        await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
-        _localStorage.saveInt(AppConstants.prefUserTypeId, userTypeId);
-        _localStorage.saveInt(
-          AppConstants.prefUserId,
-          _passwordLoginResponse!.userId!,
-        );
-        _localStorage.saveInt(
-          AppConstants.prefIsPassUpdated,
-          _passwordLoginResponse!.isPwdUpdated ?? 0,
-        );
-        debugPrint("!!!!!  ${_passwordLoginResponse!.isPwdUpdated}");
-        await session.init();
-        onSuccess();
-      } else {
-        errorMsg = _passwordLoginResponse?.message;
-        onFailure(errorMsg);
-      }
-    } catch (e, stackTrace) {
-      debugPrint("---- $e >>> $stackTrace");
-
-      GlobalExceptionHandler.handleException(
-        e as Exception,
-        stackTrace: stackTrace,
-      );
-      _passwordLoginResponse = null;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> fetchNjmFtkDashboard(int userID) async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      var rawResponse = await _authRepository.fetchNjmFtkDashboard(userID);
-      if (rawResponse.status == true) {
-        _njmFtkDashboardResponse = rawResponse;
-      } else {
-        errorMsg = rawResponse.msg;
-      }
-    } catch (e, stackTrace) {
-      GlobalExceptionHandler.handleException(
-        e as Exception,
-        stackTrace: stackTrace,
-      );
-      _njmFtkLoginResponse = null;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> updateNjmFtkPasswords(
-    int regId,
-    int userTypeId,
-    String mobileNumber,
-    String loginId,
-    String password,
-    int createdBy,
-    String ipAddress,
-  ) async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      var rawResponse = await _authRepository.updateNjmFtkPassword(
-        regId,
-        userTypeId,
-        mobileNumber,
-        loginId,
-        password,
-        createdBy,
-        ipAddress,
-      );
-      if (rawResponse.status == true) {
-        _updateNjmFtkPassword = rawResponse;
-        await _localStorage.saveInt(
-          AppConstants.prefUserId,
-          _updateNjmFtkPassword!.userId!,
-        );
-      } else {
-        errorMsg = rawResponse.message;
-      }
-    } catch (e, stackTrace) {
-      debugPrint("**** $e ***$stackTrace");
-      _updateNjmFtkPassword = null;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
   String generatePasswordHash(String password) {
     final passwordBytes = utf8.encode(password);
     final md5Hash = md5.convert(passwordBytes).toString();
     final sha256Hash = sha256.convert(utf8.encode(md5Hash)).toString();
 
     return sha256Hash;
-  }
-
-  String generateSha512Pass(String password) {
-    final sha256Hash = sha512.convert(utf8.encode(password)).toString();
-    return sha256Hash;
-  }
-
-  void verifyOtp(
-    String enteredOtp,
-    Function() onSuccess,
-    Function(String) onFailure,
-  ) {
-    print("-------- ${session.regId}");
-    if (_generatedOtp == null) {
-      onFailure("Please request OTP first");
-      return;
-    }
-
-    if (enteredOtp == _generatedOtp) {
-      _isLoggedIn = true;
-      onSuccess();
-    } else {
-      onFailure("Invalid OTP");
-    }
   }
 
   Future<void> checkLoginStatus() async {

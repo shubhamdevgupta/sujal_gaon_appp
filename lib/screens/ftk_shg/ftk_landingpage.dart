@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
@@ -12,6 +13,7 @@ import '../../utils/auth/user_session_manager.dart';
 import '../../utils/enum/user_type.dart';
 import '../../utils/loader_utils.dart';
 import '../../utils/toast_helper.dart';
+import '../widgets/app_dropdown.dart';
 
 class FtkLandingpage extends StatefulWidget {
   const FtkLandingpage({super.key});
@@ -28,14 +30,14 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final provider = context.read<AuthenticationProvider>();
+      final provider = context.read<NjmFtkProvider>();
 
       await provider.fetchDeviceId();
       await session.init();
 
       /// CASE 1: Password login already stored userId
       if (session.userId != 0) {
-        await provider.fetchNjmFtkDashboard(session.userId);
+        await provider.fetchNjmFtkDashboard(session.userId, UserType.ftk.id);
         return;
       }
       print("-----  ${_localStorage.getInt(AppConstants.prefIsPassUpdated)}");
@@ -43,14 +45,14 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
       if (_localStorage.getInt(AppConstants.prefIsPassUpdated) == 0) {
         _showPasswordDialog();
       } else {
-        await provider.fetchNjmFtkDashboard(session.userId);
+        await provider.fetchNjmFtkDashboard(session.userId, UserType.ftk.id);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<AuthenticationProvider>();
+    final provider = context.watch<NjmFtkProvider>();
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
@@ -137,81 +139,98 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
   }
 
   Widget _dashboardCard(BuildContext context) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            // Navigate to dashboard screen
-          },
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(22),
-              gradient: LinearGradient(
-                colors: [Colors.white, Colors.blue.shade200],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+    final provider = context.read<NjmFtkProvider>();
 
-              // Outer shadow
-              boxShadow: [BoxShadow(color: Colors.white)],
-            ),
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+        gradient: LinearGradient(
+          colors: [Colors.white, Colors.blue.shade200],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
 
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(22),
+        // Outer shadow
+        boxShadow: [BoxShadow(color: Colors.white)],
+      ),
+
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22),
+
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
 
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
+                  // Header
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.dashboard_customize,
+                        color: Colors.blue,
+                        size: 26,
+                      ),
 
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Header
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.dashboard_customize,
-                              color: Colors.blue,
-                              size: 26,
-                            ),
+                      const SizedBox(width: 8),
 
-                            const SizedBox(width: 8),
-
-                            const Text(
-                              "Dashboard",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                      const Text(
+                        "Dashboard",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 8),
-
-                        const Text(
-                          "Overview of Your FTK Area",
-                          style: TextStyle(color: Colors.black87, fontSize: 13),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // ================= INNER WHITE CARD =================
-                        _buildLocationCard(),
-
-                        SizedBox(height: 20),
-                        _registerCard(context),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 8),
+
+                  const Text(
+                    "Overview of Your FTK Area",
+                    style: TextStyle(color: Colors.black87, fontSize: 13),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // ================= INNER WHITE CARD =================
+                  _buildLocationCard(),
+
+                  SizedBox(height: 20),
+
+                  Text(
+                    'Select Habitation',
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  ),
+                  SizedBox(height: 2),
+
+                  AppDropdown(
+                    hint: "Select Habitation",
+                    items: provider.njmFtkDashboardResponse!.habitationList!
+                        .map((e) => e.habitationName ?? "")
+                        .toList(),
+                    onChanged: (value) {
+                      final selected = provider
+                          .njmFtkDashboardResponse!
+                          .habitationList!
+                          .firstWhere((e) => e.habitationName == value);
+
+                      provider.setSelectedHabitationId(selected.habitationId);
+                    },
+                  ),
+
+                  SizedBox(height: 20),
+
+                  _registerCard(context),
                 ],
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -287,7 +306,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
   }
 
   Widget _buildLocationCard() {
-    final provider = context.watch<AuthenticationProvider>();
+    final provider = context.watch<NjmFtkProvider>();
 
     return Container(
       margin: const EdgeInsets.only(top: 10),
@@ -336,7 +355,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                 value: "${provider.njmFtkDashboardResponse!.districtName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.districtLgdCode}",
+                    "${provider.njmFtkDashboardResponse!.districtLgdcode}",
               ),
             ],
           ),
@@ -355,7 +374,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                 value: "${provider.njmFtkDashboardResponse!.blockName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.blockLgdCode}",
+                    "${provider.njmFtkDashboardResponse!.blockLgdcode}",
               ),
 
               _verticalDivider(),
@@ -367,7 +386,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                 value: "${provider.njmFtkDashboardResponse!.panchayatName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.panchayatLgdCode}",
+                    "${provider.njmFtkDashboardResponse!.panchayatLgdcode}",
               ),
             ],
           ),
@@ -377,11 +396,6 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
           const Divider(),
 
           const SizedBox(height: 5),
-
-          // ================= STATS =================
-          /*   Row(
-            children: const [_statBox("Villages", "12"), _statBox("VWSC", "4")],
-          ),*/
         ],
       ),
     );
@@ -444,7 +458,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
   }
 
   Widget _buildWelcomeCard() {
-    final provider = context.watch<AuthenticationProvider>();
+    final provider = context.watch<NjmFtkProvider>();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(22),
@@ -545,9 +559,9 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
 
     return false;
   }
-  void _showPasswordDialog() {
 
-    final provider = context.read<AuthenticationProvider>();
+  void _showPasswordDialog() {
+    final provider = context.read<NjmFtkProvider>();
     final res = provider.njmFtkLoginResponse!;
 
     showCreatePasswordDialog(
@@ -573,20 +587,22 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
 
         if (provider.updateNjmFtkPassword?.status == true) {
           /// After password update load dashboard
-          await provider.fetchNjmFtkDashboard(provider.updateNjmFtkPassword!.userId??0);
+          await provider.fetchNjmFtkDashboard(
+            provider.updateNjmFtkPassword!.userId ?? 0,
+            UserType.ftk.id,
+          );
         }
       },
     );
   }
 
   Future<void> showCreatePasswordDialog(
-      BuildContext context, {
-        required String name,
-        required String email,
-        required String mobile,
-        required Function(String password) onSubmit,
-      }) async
-  {
+    BuildContext context, {
+    required String name,
+    required String email,
+    required String mobile,
+    required Function(String password) onSubmit,
+  }) async {
     final passwordController = TextEditingController();
 
     await showDialog(
@@ -667,5 +683,4 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
       },
     );
   }
-
 }
