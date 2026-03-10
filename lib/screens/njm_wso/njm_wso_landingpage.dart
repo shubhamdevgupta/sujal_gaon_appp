@@ -334,9 +334,6 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
         child: Row(
           children: [
-            const Icon(Icons.app_registration, color: Colors.white, size: 28),
-
-            const SizedBox(width: 12),
 
             const Expanded(
               child: Column(
@@ -344,19 +341,12 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "NJM/WSO ",
+                    "Proceed",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                     ),
-                  ),
-
-                  SizedBox(height: 4),
-
-                  Text(
-                    "Nal Jal Mitra / Water Supply Operator Operations",
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),

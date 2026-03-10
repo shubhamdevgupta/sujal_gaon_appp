@@ -61,50 +61,6 @@ class _NjmCategory extends State<NjmCategory> {
                 children: [
                   const SizedBox(height: 15),
 
-                  /// Header
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                        child: Column(
-                          children: const [
-                            Icon(
-                              Icons.water_drop,
-                              size: 40,
-                              color: Colors.blue,
-                            ),
-
-                            SizedBox(height: 10),
-
-                            Text(
-                              "Nal Jal Mitra/Water Supply Operator Operations",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-
-                            SizedBox(height: 5),
-
-                            Text(
-                              "(Water Quality Monitoring & User Charge Collection)",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
                   /// Category List
                   Expanded(
                     child: ListView(
@@ -166,8 +122,69 @@ class _NjmCategory extends State<NjmCategory> {
                                     ),
                                   ),
 
-                                  /// Title
                                   const SizedBox(height: 12),
+
+           /*                       const Text(
+                                    "Flow Path",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+
+                                  /// Flow Items
+                                  Column(
+                                    children: List.generate(flowItems.length, (
+                                        index,
+                                        ) {
+                                      return Row(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          /// Circle
+                                          Column(
+                                            children: [
+                                              Container(
+                                                width: 10,
+                                                height: 10,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.blue,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+
+                                              if (index != flowItems.length - 1)
+                                                Container(
+                                                  width: 2,
+                                                  height: 30,
+                                                  color: Colors.blue.shade200,
+                                                ),
+                                            ],
+                                          ),
+
+                                          const SizedBox(width: 10),
+
+                                          /// Text
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                bottom: 20,
+                                              ),
+                                              child: Text(
+                                                flowItems[index].trim(),
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  ),*/
+                                  /// Title
 
                                   /// Assets Title
                                   const Text(
@@ -242,66 +259,7 @@ class _NjmCategory extends State<NjmCategory> {
 
                                   const SizedBox(height: 12),
 
-                                  const Text(
-                                    "Flow Path",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue,
-                                    ),
-                                  ),
 
-                                  /// Flow Items
-                                  Column(
-                                    children: List.generate(flowItems.length, (
-                                      index,
-                                    ) {
-                                      return Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          /// Circle
-                                          Column(
-                                            children: [
-                                              Container(
-                                                width: 10,
-                                                height: 10,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.blue,
-                                                  shape: BoxShape.circle,
-                                                ),
-                                              ),
-
-                                              if (index != flowItems.length - 1)
-                                                Container(
-                                                  width: 2,
-                                                  height: 30,
-                                                  color: Colors.blue.shade200,
-                                                ),
-                                            ],
-                                          ),
-
-                                          const SizedBox(width: 10),
-
-                                          /// Text
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                bottom: 20,
-                                              ),
-                                              child: Text(
-                                                flowItems[index].trim(),
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }),
-                                  ),
                                 ],
                               ),
                             );
