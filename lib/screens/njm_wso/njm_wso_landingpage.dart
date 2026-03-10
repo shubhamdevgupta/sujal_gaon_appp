@@ -12,6 +12,7 @@ import '../../providers/authentication_provider.dart';
 import '../../service/local_storage_service.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
+import '../../utils/custom_password_set.dart';
 import '../../utils/enum/user_type.dart';
 import '../widgets/app_dropdown.dart';
 
@@ -25,7 +26,7 @@ class NjmWsoLandingpage extends StatefulWidget {
 class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   final session = UserSessionManager();
   final LocalStorageService _localStorage = LocalStorageService();
-
+  bool passwordMatch = true;
   @override
   void initState() {
     super.initState();
@@ -51,7 +52,6 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     final njmFtkProvider = context.watch<NjmFtkProvider>();
@@ -144,104 +144,19 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
     );
   }
 
-  Future<void> showCreatePasswordDialog(
-    BuildContext context, {
-    required String name,
-    required String email,
-    required String mobile,
-    required Function(String password) onSubmit,
-  }) async {
-    final passwordController = TextEditingController();
 
-    await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return WillPopScope(
-          onWillPop: () async => false,
-
-          child: AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-
-            title: const Text(
-              "Create Password",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Name: $name"),
-                const SizedBox(height: 6),
-
-                Text("Email: $email"),
-                const SizedBox(height: 6),
-
-                Text("Mobile: $mobile"),
-
-                const SizedBox(height: 20),
-
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter Password",
-                    prefixIcon: const Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            actions: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1565C0),
-                ),
-
-                onPressed: () async {
-                  final password = passwordController.text.trim();
-
-                  if (password.isEmpty) {
-                    ToastHelper.showErrorSnackBar(
-                      context,
-                      "Please enter password",
-                    );
-                    return;
-                  }
-
-                  await onSubmit(password);
-
-                  Navigator.pop(context);
-                },
-
-                child: const Text(
-                  "Submit",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   void _showPasswordDialog() {
     final provider = context.read<NjmFtkProvider>();
     final res = provider.njmFtkLoginResponse!;
 
-    showCreatePasswordDialog(
+    CreatePasswordDialog.show(
       context,
       name: res.name ?? "",
       email: res.email ?? "",
       mobile: res.mobileNumber ?? "",
       onSubmit: (password) async {
+
         if (password.isEmpty) {
           ToastHelper.showErrorSnackBar(context, "Enter valid password");
           return;
@@ -258,10 +173,23 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
         );
 
         if (provider.updateNjmFtkPassword?.status == true) {
-          /// After password update load dashboard
+
+          /// ✅ Success Toast
+          ToastHelper.showSuccessSnackBar(
+            context,
+            "Password created successfully",
+          );
+
+          /// Load dashboard
           await provider.fetchNjmFtkDashboard(
             provider.updateNjmFtkPassword!.userId ?? 0,
             UserType.njmp.id,
+          );
+        } else {
+          /// ❌ Error Toast
+          ToastHelper.showErrorSnackBar(
+            context,
+            "Failed to create password. Please try again.",
           );
         }
       },
@@ -371,6 +299,10 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
     return GestureDetector(
       onTap: () {
+
+
+
+
         if (provider.selectedHabitationId != 0 &&
             provider.selectedHabitationId != null) {
           Navigator.pushNamed(context, AppConstants.navigateToNjmCategory);

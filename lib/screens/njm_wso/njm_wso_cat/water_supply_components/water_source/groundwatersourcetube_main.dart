@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
-import '../../../../providers/njm_wso/njm_wso_provider.dart';
+import '../../../../../providers/njm_wso/njm_wso_provider.dart';
 
 class GroundWaterPumpForm extends StatefulWidget {
   const GroundWaterPumpForm({super.key});
@@ -181,6 +181,10 @@ class _GroundWaterPumpFormState
                 ],
               ),
               const SizedBox(height: 22),
+
+              _submitButton(),
+              const SizedBox(height: 22),
+
 
               // ================= OPERATION =================
               _sectionCard(

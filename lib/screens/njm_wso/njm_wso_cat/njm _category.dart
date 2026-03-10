@@ -180,68 +180,65 @@ class _NjmCategory extends State<NjmCategory> {
                                   ),
 
                                   const SizedBox(height: 12),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: provider.habitationAssetResponse!.assetList!.length,
+                                    itemBuilder: (context, index) {
+                                      final asset = provider.habitationAssetResponse!.assetList![index];
 
-                                  Wrap(
-                                    spacing: 10,
-                                    runSpacing: 10,
-                                    children: provider
-                                        .habitationAssetResponse!
-                                        .assetList!
-                                        .map((asset) {
-                                          return Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 14,
-                                              vertical: 10,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              gradient: LinearGradient(
-                                                colors: [
-                                                  Colors.blue.shade50,
-                                                  Colors.white,
-                                                ],
-                                              ),
-                                              border: Border.all(
-                                                color: Colors.blue.shade200,
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.blue
-                                                      .withOpacity(0.08),
-                                                  blurRadius: 6,
-                                                  offset: const Offset(0, 3),
-                                                ),
+                                      return Padding(
+                                        padding: const EdgeInsets.only(bottom: 10),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 14,
+                                            vertical: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(12),
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.blue.shade50,
+                                                Colors.white,
                                               ],
                                             ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                /// Asset Icon
-                                                Icon(
-                                                  _getAssetIcon(
-                                                    asset.assetTypeId,
-                                                  ),
-                                                  size: 18,
-                                                  color: Colors.blue.shade700,
-                                                ),
-
-                                                const SizedBox(width: 6),
-
-                                                /// Asset Name
-                                                Text(
-                                                  asset.assetType ?? "",
-                                                  style: const TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
+                                            border: Border.all(
+                                              color: Colors.blue.shade200,
                                             ),
-                                          );
-                                        })
-                                        .toList(),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.blue.withOpacity(0.08),
+                                                blurRadius: 6,
+                                                offset: const Offset(0, 3),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              /// Asset Icon
+                                              Icon(
+                                                _getAssetIcon(asset.assetTypeId),
+                                                size: 18,
+                                                color: Colors.blue.shade700,
+                                              ),
+
+                                              const SizedBox(width: 6),
+
+                                              /// Asset Name
+                                              Text(
+                                                asset.assetType ?? "",
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
+
 
                                   const SizedBox(height: 12),
 
@@ -311,7 +308,7 @@ class _NjmCategory extends State<NjmCategory> {
                           },
                         ),
 
-                        CategoryCard(
+                       /* CategoryCard(
                           icon: Icons.location_on_outlined,
                           title: "Basic Details",
                           subtitle: "Administrative & Location Information",
@@ -321,7 +318,7 @@ class _NjmCategory extends State<NjmCategory> {
                               AppConstants.navigateToGroundWaterPumpForm,
                             );
                           },
-                        ),
+                        ),*/
 
                         CategoryCard(
                           icon: Icons.science_outlined,
