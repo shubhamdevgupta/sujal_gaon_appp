@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/utils/app_constants.dart';
+import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
@@ -392,7 +393,7 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
             headPumpUnit: 'm',
             isFlowMeterInstalled: provider.Isflow_meter_yesnoId! ,
             createdBy: session.userId,
-            createdIp: provider.deviceId.toString()
+            createdIp: DeviceInfoUtil.deviceId
 
         );
       },

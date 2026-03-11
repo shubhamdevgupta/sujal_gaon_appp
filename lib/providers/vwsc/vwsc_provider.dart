@@ -3,7 +3,6 @@ import 'package:jal_sanchalan/repository/vwsc/vwsc_repo.dart';
 
 import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
-import '../../utils/device_utils.dart';
 
 class VwscProvider extends ChangeNotifier {
   final VwscRepo _vwscRepo = VwscRepo();
@@ -21,8 +20,9 @@ class VwscProvider extends ChangeNotifier {
   TextEditingController appointAuthConroller = TextEditingController();
 
   Njmftkregistrationresponse? _njmftkregistrationresponse;
-  Njmftkregistrationresponse? get njmFtkRegistrationResponse => _njmftkregistrationresponse;
 
+  Njmftkregistrationresponse? get njmFtkRegistrationResponse =>
+      _njmftkregistrationresponse;
 
   final Map<String, int> levelTranningMap = {
     "Not Trained": 1,
@@ -31,10 +31,11 @@ class VwscProvider extends ChangeNotifier {
   };
 
   String? _selectedLevelLabel;
+
   String? get selectedLevelLabel => _selectedLevelLabel;
 
-
   int? _selectedLevelId;
+
   int? get selectedLevelId => _selectedLevelId;
 
   void setSelectedLevel(String? label) {
@@ -53,6 +54,7 @@ class VwscProvider extends ChangeNotifier {
   DateTime? _toDate;
 
   DateTime? get fromDate => _fromDate;
+
   DateTime? get toDate => _toDate;
 
   void setFromDate(DateTime date) {
@@ -64,17 +66,13 @@ class VwscProvider extends ChangeNotifier {
     _toDate = date;
     notifyListeners();
   }
-  String? _deviceId;
-  String? get deviceId => _deviceId;
-
 
   Future<void> fetchNjmFtkUser(
     int userTypeId,
     int userId,
     int stateId,
     int regId,
-  ) async
-  {
+  ) async {
     _isLoading = true;
     notifyListeners();
 
@@ -119,8 +117,7 @@ class VwscProvider extends ChangeNotifier {
     required String validatedFrom,
     required String validatedTo,
     required String habitationIds,
-  }) async
-  {
+  }) async {
     _isLoading = true;
     notifyListeners();
 
@@ -151,7 +148,7 @@ class VwscProvider extends ChangeNotifier {
       if (response.status == true) {
         _njmftkregistrationresponse = response;
       } else {
-        _njmftkregistrationresponse=null;
+        _njmftkregistrationresponse = null;
         debugPrint("Registration Failed: ${response.message}");
       }
     } catch (e) {
@@ -162,17 +159,11 @@ class VwscProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchDeviceId() async {
-    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
-    debugPrint('Device ID: $_deviceId');
-    notifyListeners();
-  }
-
   void clearData() {
     _isLoading = false;
     _njmftkregistrationresponse = null;
-    _fromDate=null;
-    _toDate=null;
+    _fromDate = null;
+    _toDate = null;
 
     nameController.clear();
     phoneController.clear();
@@ -180,5 +171,4 @@ class VwscProvider extends ChangeNotifier {
     addressController.clear();
     notifyListeners();
   }
-
 }

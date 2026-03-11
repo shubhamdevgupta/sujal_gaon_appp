@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
 import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
+import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:jal_sanchalan/utils/loader_utils.dart';
 import 'package:jal_sanchalan/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
@@ -34,12 +35,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = context.read<NjmFtkProvider>();
-
-      await provider.fetchDeviceId();
       await session.init();
-
-
-
       /// CASE 1: Password login already stored userId
       if (session.userId != 0) {
         await provider.fetchNjmFtkDashboard(session.userId, UserType.njmp.id);
@@ -170,7 +166,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
           res.mobileNumber!,
           provider.generateSha512Pass(password),
           res.regId!,
-          provider.deviceId!,
+          DeviceInfoUtil.deviceId,
         );
 
         if (provider.updateNjmFtkPassword?.status == true) {
@@ -546,17 +542,17 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
                 children: [
                   Text(
-                    "Welcome Back 👋",
+                    "Welcome Back 👋 \nNJM/WSO User",
                     style: TextStyle(color: Colors.white70),
                   ),
 
-                  SizedBox(height: 6),
+                  SizedBox(height: 2),
 
                   Text(
                     "${provider.njmFtkDashboardResponse!.firstName ?? ""}${provider.njmFtkDashboardResponse!.lastName ?? ""}",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

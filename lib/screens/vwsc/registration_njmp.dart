@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
 import 'package:jal_sanchalan/service/local_storage_service.dart';
 import 'package:jal_sanchalan/utils/app_constants.dart';
+import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:jal_sanchalan/utils/enum/user_type.dart';
 import 'package:provider/provider.dart';
 
@@ -503,7 +504,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
           gender: '',
           address: provider.addressController.text,
           levelTrainingId: provider.selectedLevelId!,
-          ipAddress: provider.deviceId.toString(),
+          ipAddress: DeviceInfoUtil.deviceId,
           createdBy: session.userId,
           validatedFrom: formatDate(provider.fromDate),
           validatedTo: formatDate(provider.toDate),

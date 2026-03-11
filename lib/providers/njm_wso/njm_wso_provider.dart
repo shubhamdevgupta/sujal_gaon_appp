@@ -65,9 +65,6 @@ class NjmWsoProvider extends ChangeNotifier {
   String? get Isflow_meter_yesno => _Isflow_meter_yesno;
   int? get Isflow_meter_yesnoId => _Isflow_meter_yesnoId;
 
-  String? _deviceId;
-  String? get deviceId => _deviceId;
-
   GroundWaterPumpResponse? _groundWaterResponse;
   GroundWaterPumpResponse? get groundWaterResponse => _groundWaterResponse;
 
@@ -203,24 +200,6 @@ class NjmWsoProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
-  }
-  Future<void> fetchDeviceId() async {
-    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
-    debugPrint('Device ID: $_deviceId');
-    notifyListeners();
-  }
-
-  void clearData() {
-    _isLoading = false;
-    _njmftkregistrationresponse = null;
-    _fromDate=null;
-    _toDate=null;
-
-    nameController.clear();
-    phoneController.clear();
-    emailController.clear();
-    addressController.clear();
-    notifyListeners();
   }
 
   void setSelectedHabitationId(int? value) {

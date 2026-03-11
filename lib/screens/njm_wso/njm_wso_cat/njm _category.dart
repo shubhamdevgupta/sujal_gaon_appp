@@ -4,7 +4,6 @@ import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utils/app_constants.dart';
-import '../../../service/local_storage_service.dart';
 import '../../../utils/auth/user_session_manager.dart';
 
 class NjmCategory extends StatefulWidget {
@@ -16,7 +15,6 @@ class NjmCategory extends StatefulWidget {
 
 class _NjmCategory extends State<NjmCategory> {
   final session = UserSessionManager();
-  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {

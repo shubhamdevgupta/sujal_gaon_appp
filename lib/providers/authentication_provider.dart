@@ -16,16 +16,6 @@ class AuthenticationProvider extends ChangeNotifier {
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
 
-  String? _deviceId;
-
-  String? get deviceId => _deviceId;
-
-  Future<void> fetchDeviceId() async {
-    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
-    debugPrint('Device ID: $_deviceId');
-    notifyListeners();
-  }
-
   bool _isLoggedIn = false;
 
   bool get isLoggedIn => _isLoggedIn;

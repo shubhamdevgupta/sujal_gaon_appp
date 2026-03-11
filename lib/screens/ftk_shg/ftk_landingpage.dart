@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
+import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
@@ -32,7 +33,6 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = context.read<NjmFtkProvider>();
 
-      await provider.fetchDeviceId();
       await session.init();
 
       /// CASE 1: Password login already stored userId
@@ -582,7 +582,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
           res.mobileNumber!,
           provider.generateSha512Pass(password),
           res.regId!,
-          provider.deviceId!,
+          DeviceInfoUtil.deviceId,
         );
 
         if (provider.updateNjmFtkPassword?.status == true) {

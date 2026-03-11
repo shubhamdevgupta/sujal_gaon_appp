@@ -10,6 +10,7 @@ import 'package:jal_sanchalan/service/local_storage_service.dart';
 import 'package:jal_sanchalan/utils/AppUtil.dart';
 import 'package:jal_sanchalan/utils/app_constants.dart';
 import 'package:jal_sanchalan/screens/app_routes.dart';
+import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -18,6 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppUtil.init(); // <-- Load version at startup
   await LocalStorageService.init();
+  await DeviceInfoUtil.init();
 
   runApp(
     MultiProvider(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/master_provider.dart';
@@ -524,7 +525,6 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
   // ================= SUBMIT BUTTON =================
 
   Widget _submitButton(VwscProvider provider, MasterProvider masterProvider) {
-    provider.fetchDeviceId();
     return InkWell(
       onTap: () async {
 
@@ -553,7 +553,7 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
           gender: '',
           address: provider.addressController.text,
           levelTrainingId: 0,
-          ipAddress: provider.deviceId.toString(),
+          ipAddress: DeviceInfoUtil.deviceId,
           createdBy: session.userId,
           validatedFrom: formatDate(provider.fromDate),
           validatedTo: formatDate(provider.toDate),

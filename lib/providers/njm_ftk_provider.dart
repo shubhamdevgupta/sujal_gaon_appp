@@ -20,21 +20,11 @@ class NjmFtkProvider extends ChangeNotifier {
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
 
-  String? _deviceId;
-
-  String? get deviceId => _deviceId;
-
   bool _isShownPassword = false;
   bool get isShownPassword => _isShownPassword;
 
   bool _isLoggedIn = false;
   bool get isLoggedIn => _isLoggedIn;
-
-  Future<void> fetchDeviceId() async {
-    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
-    debugPrint('Device ID: $_deviceId');
-    notifyListeners();
-  }
 
   NjmFtkLoginResponse? _njmFtkLoginResponse;
 
