@@ -101,7 +101,7 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
   @override
   Widget build(BuildContext context) {
     final njm_wsoProvider = context.watch<NjmWsoProvider>();
-    final Asset asset = ModalRoute.of(context)!.settings.arguments as Asset;
+    final SjlAllAsset asset = ModalRoute.of(context)!.settings.arguments as SjlAllAsset;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
@@ -372,7 +372,7 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
   }
 
   // ================= SUBMIT =================
-  Widget _submitButton(NjmWsoProvider provider,Asset asset) {
+  Widget _submitButton(NjmWsoProvider provider,SjlAllAsset asset) {
     return InkWell(
       onTap: () {
         provider.insertOrUpdateGroundWaterPumpHouse(
