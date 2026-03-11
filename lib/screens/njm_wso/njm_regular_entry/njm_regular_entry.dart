@@ -1,12 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/models/njm_ftk_response/habitation_assest.dart';
 import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utils/app_constants.dart';
-import '../../../providers/njm_ftk_provider.dart';
 import '../../../service/local_storage_service.dart';
 import '../../../utils/auth/user_session_manager.dart';
 
@@ -28,7 +25,7 @@ class _NjmRegularEntry extends State<NjmRegularEntry> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = context.read<NjmWsoProvider>();
 
-      await provider.fetchHabitationAssetsID(31, 1213773, session.userId);
+      await provider.fetchHabitationAssetsID(31, 1030748, session.userId);
       // await provider.fetchHabitationAssetsID(_localStorage.getInt(AppConstants.prefStateId)!, provider.habitationId!, session.userId);
     });
   }
@@ -57,122 +54,25 @@ class _NjmRegularEntry extends State<NjmRegularEntry> {
         ),
         child: Stack(
           children: [
-            /// Main UI
-            SafeArea(
-              child: Column(
-                children: [
-                  const SizedBox(height: 15),
-
-                  /// Category List
-                  Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+            SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(12),
+                child: Consumer<NjmWsoProvider>(
+                  builder: (context, provider, child) {
+                    final serviceArea = provider
+                        .habitationAssetResponse?.sjlHabitationServiceArea?.habitationServicearea;
+                    if (serviceArea == null) {
+                      return const SizedBox();
+                    }
+                    return Column(
                       children: [
-                        Consumer<NjmWsoProvider>(
-                          builder: (context, provider, child) {
-                            final flowPath = provider
-                                .habitationAssetResponse!
-                                .flowPathList!
-                                .first
-                                .flowPath;
-                            final serviceArea = provider
-                                .habitationAssetResponse!
-                                .serviceArea!
-                                .habitationServicearea;
-
-                            if (flowPath == null || serviceArea == null) {
-                              return const SizedBox();
-                            }
-
-                            final flowItems = flowPath.split("->");
-
-                            return Column(
-                              children: [
-                                buildHabitationCard(serviceArea),
-                                SizedBox(height: 5),
-
-                                buildAssetsCard(provider),
-                              ],
-                            );
-                          },
-                        ),
-
-                        /* CategoryCard(
-                          icon: Icons.location_on_outlined,
-                          title: "Basic Details",
-                          subtitle: "Administrative & Location Information",
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppConstants.navigateToGroundWaterPumpForm,
-                            );
-                          },
-                        ),*/
-
-                        CategoryCard(
-                          icon: Icons.science_outlined,
-                          title: "Water Supply Components",
-                          subtitle: "Source & Pump Operations Monitoring",
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppConstants.navigateToWscCategory,
-                            );
-                          },
-                        ),
-
-                        CategoryCard(
-                          icon: Icons.verified_outlined,
-                          title: "Distribution & Supply",
-                          subtitle: "Reservoir Filling & Outlet Supply",
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppConstants.navigateToDistributionSupplyForm,
-                            );
-                          },
-                        ),
-
-                        CategoryCard(
-                          icon: Icons.water_drop_outlined,
-                          title: "Disinfection / Chlorination",
-                          subtitle: "Treatment & Water Quality Control",
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppConstants.navigateToDisinfectionForm,
-                            );
-                          },
-                        ),
-
-                        CategoryCard(
-                          icon: Icons.report_problem_outlined,
-                          title: "Non-Supply & Disruptions",
-                          subtitle: "Service Interruptions & Compliance Alerts",
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppConstants.navigateToNonSupplyForm,
-                            );
-                          },
-                        ),
-
-                        /*      CategoryCard(
-                          icon: Icons.report_problem_outlined,
-                          title: "Escalation & Alerts (System Generated)",
-                          subtitle: "Service Interruptions & Compliance Alerts",
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppConstants.navigateToEscalationAlertsScreen,
-                            );
-                          },
-                        ),*/
-                        const SizedBox(height: 20),
+                        buildHabitationCard(serviceArea),
+                        SizedBox(height: 5),
+                        buildAssetsCard(provider),
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -181,246 +81,154 @@ class _NjmRegularEntry extends State<NjmRegularEntry> {
     );
   }
 }
+Widget buildHabitationCard(String serviceArea) {
+  const Color habitationThemeColor = Color(0xFF1565C0); // Deep JJM Blue
 
-Widget buildServiceAreaCard(String serviceArea, NjmWsoProvider provider) {
   return Container(
-    margin: const EdgeInsets.only(bottom: 20),
-    padding: const EdgeInsets.all(12),
+    margin: const EdgeInsets.symmetric( vertical: 5),
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(20),
-      color: Colors.white.withOpacity(.92),
-      border: Border.all(color: Colors.blue.shade100),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.blue.withOpacity(.08),
-          blurRadius: 12,
-          offset: const Offset(0, 6),
-        ),
-      ],
+      borderRadius: BorderRadius.circular(24),
+      gradient: LinearGradient(
+        colors: [const Color(0xFFE3F2FD), Colors.white],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+      border: Border.all(color: Colors.blue.shade100.withOpacity(0.5)),
     ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// HEADER
-            Row(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+      child: Row(
+        children: [
+          /// ICON WITH SOFT GLOW (Matches Asset Card Icon Style)
+          Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+              color: habitationThemeColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: const Icon(
+                Icons.location_on_rounded,
+                color: habitationThemeColor,
+                size: 26
+            ),
+          ),
+          const SizedBox(width: 16),
+
+          /// TEXT CONTENT
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade100,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.location_on_outlined,
-                    color: Colors.blue,
-                    size: 20,
-                  ),
-                ),
-
-                const SizedBox(width: 10),
-
                 const Text(
                   "Habitation Service Area",
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Colors.blue,
+                    letterSpacing: 0.5,
+                    color: Colors.blue, // Label style
                   ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  serviceArea,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                    color: Color(0xFF263238), // Deep charcoal for readability
+                  ),
+                  // Prevents overflow if the name is very long
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
+          ),
 
-            const SizedBox(height: 10),
-
-            /// VALUE FIELD
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.blue.shade100),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.tag, size: 16, color: Colors.grey.shade600),
-
-                  const SizedBox(width: 8),
-
-                  Expanded(
-                    child: Text(
-                      serviceArea,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 10),
-
-        /// DIVIDER
-        Divider(color: Colors.blue.shade100, thickness: 1),
-
-        const SizedBox(height: 10),
-
-        /// ASSET TITLE
-        Row(
-          children: const [
-            Icon(Icons.account_tree_outlined, size: 18, color: Colors.blue),
-            SizedBox(width: 6),
-            Text(
-              "Assets Involved",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: Colors.blue,
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 12),
-
-        buildAssetList(provider),
-      ],
+          /// DECORATIVE ELEMENT (Optional: Small checkmark or map icon)
+          Icon(
+            Icons.map_outlined,
+            color: habitationThemeColor.withOpacity(0.2),
+            size: 20,
+          ),
+        ],
+      ),
     ),
   );
 }
-
-Widget buildHabitationCard(String serviceArea) {
+Widget buildAssetsCard(NjmWsoProvider provider) {
   return Container(
-    margin: const EdgeInsets.only(bottom: 14),
-    padding: const EdgeInsets.all(14),
+    margin: const EdgeInsets.symmetric( vertical: 5),
+    padding: const EdgeInsets.only(right: 10, left: 10, top: 10),
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(18),
-      color: Colors.white.withOpacity(.95),
-      border: Border.all(color: Colors.blue.shade100),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.blue.withOpacity(.08),
-          blurRadius: 10,
-          offset: const Offset(0, 4),
-        ),
-      ],
+      borderRadius: BorderRadius.circular(24),
+      gradient: LinearGradient(
+        colors: [const Color(0xFFE3F2FD), Colors.white],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+      border: Border.all(color: Colors.blue.shade100.withOpacity(0.5)),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade100,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(
-                Icons.location_on_outlined,
-                color: Colors.blue,
-                size: 20,
-              ),
-            ),
-
-            const SizedBox(width: 10),
-
+            const Icon(Icons.waves_rounded, size: 20, color: Color(0xFF1976D2)),
+            const SizedBox(width: 8),
             const Text(
-              "Habitation Service Area",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: Colors.blue,
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 12),
-
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade50,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Text(
-            serviceArea,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget buildAssetsCard(NjmWsoProvider provider) {
-  return Container(
-    padding: const EdgeInsets.all(14),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(18),
-      color: Colors.white.withOpacity(.95),
-      border: Border.all(color: Colors.blue.shade100),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.blue.withOpacity(.08),
-          blurRadius: 10,
-          offset: const Offset(0, 4),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Icon(Icons.account_tree_outlined, size: 18, color: Colors.blue),
-            SizedBox(width: 6),
-            Text(
               "Assets Involved",
               style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: Colors.blue,
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF1565C0),
               ),
             ),
           ],
         ),
-
-        const SizedBox(height: 12),
-
+        const SizedBox(height: 16),
         buildAssetList(provider),
       ],
     ),
   );
 }
-
+final List<Map<String, dynamic>> dummyPumpInventory = [
+  {
+    "assetId": 310161109,
+  },
+  {
+    "assetId": 310161110,
+  },
+];
 Widget buildAssetList(NjmWsoProvider provider) {
+
+  /// Dummy Pump Inventory Data
+  final List<Map<String, dynamic>> dummyPumpInventory = [
+    {"assetId": 310161109},
+    {"assetId": 310161110},
+  ];
+
   return ListView.builder(
     shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
-    itemCount: provider.habitationAssetResponse!.assetList!.length,
+    itemCount: provider.habitationAssetResponse!.sjlAllAssetList!.length,
     itemBuilder: (context, index) {
-      Asset asset = provider.habitationAssetResponse!.assetList![index];
 
-      if (asset.assetTypeId == "0") {
-        return buildSourceAssetCard(context, asset);
-      } else {
-        return buildNormalAssetCard(context, asset);
-      }
+      SjlAllAsset asset = provider.habitationAssetResponse!.sjlAllAssetList![index];
+
+      /// Source UI
+      return buildNormalAssetCard(
+        context,
+        asset,
+        dummyPumpInventory,
+        index, // important for expansion state
+      );
     },
   );
 }
 
-Widget buildSourceAssetCard(BuildContext context, Asset asset) {
+Widget buildSourceAssetCard(BuildContext context, SjlAllAsset asset) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 12),
     child: Container(
@@ -461,9 +269,9 @@ Widget buildSourceAssetCard(BuildContext context, Asset asset) {
             color: Colors.blue.shade100,
             onTap: () {
               Navigator.pushNamed(
-                  context,
-                  AppConstants.navigateToGroundwatersourcetubeMain,
-                  arguments: asset
+                context,
+                AppConstants.navigateToGroundwatersourcetubeMain,
+                arguments: asset,
               );
             },
           ),
@@ -523,69 +331,126 @@ Widget _sourceActionTile({
     ),
   );
 }
+bool isPumpExpanded = false;
+Map<int, bool> expandedAssets = {};
 
-Widget buildNormalAssetCard(BuildContext context, asset) {
-  return Container(
-    margin: const EdgeInsets.only(bottom: 12),
-    child: InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: () {
-        _navigateToAssetForm(context, asset.assetTypeId);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+Widget buildNormalAssetCard(
+    BuildContext context,
+    SjlAllAsset asset,
+    List dummyPumpInventory,
+    int index,
+    ) {
+  // Constant Blue theme as requested
+  const Color themeColor = Color(0xFF1976D2);
+
+  return StatefulBuilder(
+    builder: (BuildContext context, StateSetter setState) {
+      bool isExpanded = expandedAssets[index] ?? false;
+      String typeName = asset.assetType ?? "N/A";
+      // Convert assetTypeId to String for your switch-case logic
+      String assetTypeId = asset.assetTypeId?.toString() ?? "";
+
+      return AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.blue.shade200),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: isExpanded ? themeColor.withOpacity(0.3) : Colors.grey.shade200),
           boxShadow: [
-            BoxShadow(
-              color: Colors.blue.withOpacity(.05),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
+            BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 8, offset: const Offset(0, 2)),
           ],
         ),
-        child: Row(
+        child: Column(
           children: [
-            /// ICON
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                _getAssetIcon(asset.assetTypeId),
-                size: 18,
-                color: Colors.blue,
-              ),
-            ),
-
-            const SizedBox(width: 10),
-
-            /// TITLE
-            Expanded(
-              child: Text(
-                asset.assetType ?? "",
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+            /// --- HEADER ---
+            InkWell(
+              onTap: () => setState(() => expandedAssets[index] = !isExpanded),
+              borderRadius: BorderRadius.circular(16),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  children: [
+                    CircleAvatar(radius: 18, backgroundColor: themeColor.withOpacity(0.1), child: Icon(_getAssetIcon(asset.assetTypeId), color: themeColor, size: 18)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(typeName, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1C1E))),
+                          Text("${dummyPumpInventory.length} Active Units", style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                        ],
+                      ),
+                    ),
+                    Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: themeColor, size: 20),
+                  ],
                 ),
               ),
             ),
 
-            /// ARROW BUTTON
-            Icon(Icons.chevron_right, color: Colors.grey.shade600),
+            /// --- SUB-ASSET CARDS ---
+            if (isExpanded)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                child: Column(
+                  children: dummyPumpInventory.map((pump) {
+                    return Container(
+                      margin: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.blue.shade100),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Asset ID: ${pump["assetId"]}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Icon(Icons.water_drop, size: 12, color: themeColor),
+                                    const SizedBox(width: 4),
+                                    const Text("Capacity: 2.5 MLD", style: TextStyle(fontSize: 11, color: Colors.grey)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _navigateToAssetForm(context, assetTypeId),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: themeColor,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                            ),
+                            child: const Text("Add", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
           ],
         ),
-      ),
-    ),
+      );
+    },
   );
 }
-
 void _navigateToAssetForm(BuildContext context, String assetTypeId) {
   switch (assetTypeId) {
+    case "0":
+      Navigator.pushNamed(context, AppConstants.navigateToGroundwatersourcetubeMain);
+      break;
+    case "10":
+      Navigator.pushNamed(context, AppConstants.navigateToGroundwatersourcetubeMain);
+      break;
     case "2":
       Navigator.pushNamed(context, AppConstants.navigateToPumpsForm);
       break;
@@ -595,129 +460,30 @@ void _navigateToAssetForm(BuildContext context, String assetTypeId) {
     case "11":
       Navigator.pushNamed(context, AppConstants.navigateToDisinfectionForm);
       break;
+    case "5":
+      Navigator.pushNamed(context, AppConstants.navigateToDisinfectionForm);
+      break;
     default:
       break;
   }
 }
 
 /// ================= CARD WIDGET =================
-IconData _getAssetIcon(String? type) {
+IconData _getAssetIcon(int? type) {
   switch (type) {
-    case "source":
+    case 0:
       return Icons.water;
-    case "pmp":
+    case 2:
       return Icons.settings_input_component;
-    case "ohsr":
+    case 8:
       return Icons.storage;
-    case "disinfection":
+    case 11:
       return Icons.science;
+    case 4:
+      return Icons.pending_actions_sharp;
+    case 5:
+      return Icons.water_drop_sharp;
     default:
       return Icons.device_unknown;
-  }
-}
-
-class CategoryCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  const CategoryCard({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: InkWell(
-            onTap: onTap,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.white.withOpacity(0.9),
-                    Colors.blue.shade50.withOpacity(0.2),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.blue.withOpacity(0.18),
-                    blurRadius: 20,
-                    spreadRadius: 1,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.1),
-                  width: 1,
-                ),
-              ),
-
-              child: Row(
-                children: [
-                  /// Icon Box
-                  Container(
-                    height: 48,
-                    width: 48,
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(icon, color: Colors.blue.shade700, size: 26),
-                  ),
-
-                  const SizedBox(width: 14),
-
-                  /// Text
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-
-                        const SizedBox(height: 4),
-
-                        Text(
-                          subtitle,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const Icon(Icons.chevron_right, color: Colors.grey),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
