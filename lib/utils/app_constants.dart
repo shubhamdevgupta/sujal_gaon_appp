@@ -65,5 +65,6 @@ class AppConstants {
   static const String navigateToDisinfectionForm = '/DisinfectionForm ';
   static const String navigateToNonSupplyForm = '/NonSupplyForm ';
   static const String navigateToEscalationAlertsScreen = '/EscalationAlertsScreen ';
+  static const String navigateToNjmRegularEntry = '/NjmRegularEntry ';
 
 }

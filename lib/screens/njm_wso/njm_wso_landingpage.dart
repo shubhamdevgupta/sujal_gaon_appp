@@ -313,54 +313,110 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
         }
       },
 
-      child: Container(
-        height: 90,
-        padding: const EdgeInsets.all(8),
+      child: Column(
+        children: [
+          Container (
+            height: 60,
+            padding: const EdgeInsets.all(8),
 
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
 
-          gradient: const LinearGradient(
-            colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+              gradient: const LinearGradient(
+                colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+
+              boxShadow: [
+                BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
+              ],
+            ),
+
+            child: Row(
+              children: [
+
+                const Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Proceed  ",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ],
+            ),
           ),
 
-          boxShadow: [
-            BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
-          ],
-        ),
+          SizedBox(height: 10,),
 
-        child: Row(
-          children: [
+          Container (
+            height: 60,
+            padding: const EdgeInsets.all(8),
 
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Proceed",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+
+              gradient: const LinearGradient(
+                colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+
+              boxShadow: [
+                BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
+              ],
+            ),
+
+            child: Row(
+              children: [
+
+                const Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Regular Entry",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-                size: 16,
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

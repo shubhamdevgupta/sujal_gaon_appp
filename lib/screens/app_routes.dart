@@ -21,6 +21,7 @@ import 'ftk_shg/question_cat/locationform.dart';
 import 'ftk_shg/question_cat/monthlychargecollection.dart';
 import 'ftk_shg/question_cat/saniSanitaryinspection.dart';
 import 'ftk_shg/question_cat/watersampledataform.dart';
+import 'njm_wso/njm_regular_entry/njm_regular_entry.dart';
 import 'njm_wso/njm_wso_cat/disinfection_chlorination.dart';
 import 'njm_wso/njm_wso_cat/distribution_supply.dart';
 import 'njm_wso/njm_wso_cat/escaltion_alters.dart';
@@ -80,6 +81,7 @@ class AppRoutes {
       AppConstants.navigateToDisinfectionForm: (context) => const DisinfectionForm(),
       AppConstants.navigateToNonSupplyForm: (context) => const NonSupplyForm(),
       AppConstants.navigateToEscalationAlertsScreen: (context) => const EscalationAlertsScreen(),
+      AppConstants.navigateToNjmRegularEntry: (context) => const NjmRegularEntry(),
 
     };
   }
