@@ -136,7 +136,7 @@ class _NjmCategory extends State<WscCategory> {
 
                             Navigator.pushNamed(
                               context,
-                              AppConstants.navigateToGroundWaterPumpForm,
+                              AppConstants.navigateToGroundwatersourcetubeMain,
                             );
                             // TODO
                           },

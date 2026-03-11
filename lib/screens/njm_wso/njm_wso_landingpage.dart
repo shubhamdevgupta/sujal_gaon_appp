@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
+import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
 import 'package:jal_sanchalan/utils/loader_utils.dart';
 import 'package:jal_sanchalan/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
@@ -198,6 +199,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
   Widget _dashboardCard(BuildContext context) {
     final provider = context.read<NjmFtkProvider>();
+    final njmWsoProvider = context.read<NjmWsoProvider>();
 
     return Container(
       padding: const EdgeInsets.all(8),
@@ -276,7 +278,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                           .habitationList!
                           .firstWhere((e) => e.habitationName == value);
 
-                      provider.setSelectedHabitationId(selected.habitationId);
+                      njmWsoProvider.setSelectedHabitationId(selected.habitationId);
 
                       print("Habitation Name: ${selected.habitationName}");
                       print("Habitation Id: ${selected.habitationId}");
@@ -295,16 +297,13 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   }
 
   Widget _registerCard(BuildContext context) {
-    final provider = context.watch<NjmFtkProvider>();
+    final njmWsoProvider = context.watch<NjmWsoProvider>();
 
     return GestureDetector(
       onTap: () {
 
-
-
-
-        if (provider.selectedHabitationId != 0 &&
-            provider.selectedHabitationId != null) {
+        if (njmWsoProvider.selectedHabitationId != 0 &&
+            njmWsoProvider.selectedHabitationId != null) {
           Navigator.pushNamed(context, AppConstants.navigateToNjmCategory);
         } else {
           ToastHelper.showErrorSnackBar(

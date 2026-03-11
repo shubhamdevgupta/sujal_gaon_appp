@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:jal_sanchalan/utils/app_constants.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
+import '../../../../../models/njm_ftk_response/habitation_assest.dart';
 import '../../../../../providers/njm_wso/njm_wso_provider.dart';
+import '../../../../../service/local_storage_service.dart';
+import '../../../../../utils/auth/user_session_manager.dart';
 
-class GroundWaterPumpForm extends StatefulWidget {
-  const GroundWaterPumpForm({super.key});
+class GroundwatersourcetubeMain extends StatefulWidget {
+
+  const GroundwatersourcetubeMain({super.key});
 
   @override
-  State<GroundWaterPumpForm> createState() =>
-      _GroundWaterPumpFormState();
+  State<GroundwatersourcetubeMain> createState() =>
+      _GroundwatersourcetubeMain();
 }
 
-class _GroundWaterPumpFormState
-    extends State<GroundWaterPumpForm> {
+class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
+
+  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
 
   String? pumpType;
   String? locationType;
@@ -86,15 +93,23 @@ class _GroundWaterPumpFormState
   // ================= UI =================
 
   @override
+  void initState() {
+      session.init();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final njm_wsoProvider = context.watch<NjmWsoProvider>();
+    final Asset asset = ModalRoute.of(context)!.settings.arguments as Asset;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
 
       appBar: AppBar(
         backgroundColor: const Color(0xFF1976D2),
         title: const Text(
-          "Ground Water Source",
+          "Ground Water Source ",
           style: TextStyle(color: Colors.white),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -121,7 +136,7 @@ class _GroundWaterPumpFormState
                 children: [
 
                   _dropdown(
-                    "Level of Training",
+                    "Type of Pump",
                     value: njm_wsoProvider.selectedtypesofpump,
                     items: njm_wsoProvider.typesofpumpMap.keys.toList(),
                     onChanged: (value) {
@@ -182,61 +197,11 @@ class _GroundWaterPumpFormState
               ),
               const SizedBox(height: 22),
 
-              _submitButton(),
-              const SizedBox(height: 22),
-
-
-              // ================= OPERATION =================
-              _sectionCard(
-                icon: Icons.access_time,
-                title: "Pump Operation",
-                children: [
-
-                  _input(
-                    "Pump Start Time (HH:MM)",
-                    controller: njm_wsoProvider.startTimeController,
-                    onChanged: (_) =>
-                        _calculatePumpingHours(),
-                  ),
-
-                  _input(
-                    "Pump Stop Time (HH:MM)",
-                    controller: njm_wsoProvider.stopTimeController,
-                    onChanged: (_) =>
-                        _calculatePumpingHours(),
-                  ),
-
-                  _input(
-                    "Pumping Hours (Auto)",
-                    controller: njm_wsoProvider.pumpingHoursController,
-                    readOnly: true,
-                  ),
-                ],
-              ),
+              _submitButton(njm_wsoProvider,asset),
 
 
 
-              const SizedBox(height: 22),
 
-              // ================= VOLUME =================
-              _sectionCard(
-                icon: Icons.analytics,
-                title: "Auto Calculated Volume",
-                children: [
-
-                  _input(
-                    "Volume Supplied (KL / m3)",
-                    controller: njm_wsoProvider.volumeController,
-                    readOnly: true,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 30),
-
-              _submitButton(),
-
-              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -407,26 +372,50 @@ class _GroundWaterPumpFormState
   }
 
   // ================= SUBMIT =================
+  Widget _submitButton(NjmWsoProvider provider,Asset asset) {
+    return InkWell(
+      onTap: () {
+        provider.insertOrUpdateGroundWaterPumpHouse(
+            id: 0,
+            stateId: _localStorage.getInt(AppConstants.prefStateId)!,
+            rpwssId: 4514525,
+            outVillageId: 0,
+            assetId: asset.assetId!,
+            assetTypeId: 0,
+            assetType: "Source",
+            habitationId: provider.habitationId!,
+            typeOfPumpId: provider.selectedtypesofpumpId! ,
+            feedingTypeId: 0,
+            dischargeOfPump: double.parse(provider.dischargeController.text),
+            dischargeUnit: 'm3/h',
+            headPump:  double.parse(provider.headController.text),
+            headPumpUnit: 'm',
+            isFlowMeterInstalled: provider.Isflow_meter_yesnoId! ,
+            createdBy: session.userId,
+            createdIp: provider.deviceId.toString()
 
-  Widget _submitButton() {
-    return Container(
-      width: double.infinity,
-      height: 56,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF1E88E5),
-            Color(0xFF1565C0),
-          ],
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF1E88E5),
+              Color(0xFF1565C0),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(30),
         ),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: const Center(
-        child: Text(
-          "Save Pump Entry",
-          style: TextStyle(
+        child: const Center(
+          child: Text(
+            "Save Pump Entry",
+            style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.w600),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ),
     );

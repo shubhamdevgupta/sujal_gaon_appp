@@ -114,76 +114,8 @@ class _GroundwatersourcetubeRegular
           child: Column(
             children: [
 
-              // ================= CONFIGURATION =================
-              _sectionCard(
-                icon: Icons.settings,
-                title: "Pump Configuration",
-                children: [
-
-                  _dropdown(
-                    "Level of Training",
-                    value: njm_wsoProvider.selectedtypesofpump,
-                    items: njm_wsoProvider.typesofpumpMap.keys.toList(),
-                    onChanged: (value) {
-                      njm_wsoProvider.setSelectedtypesofpump(value);
-                    },
-                  ),
 
 
-
-                  _input(
-                    "Discharge of Pump (m3/h)",
-                    controller: njm_wsoProvider.dischargeController,
-                    keyboard: TextInputType.number,
-                  ),
-
-                  _input(
-                    "Head of Pump (m)",
-                    controller: njm_wsoProvider.headController,
-                    keyboard: TextInputType.number,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 22),
-
-              // ================= FLOW METER =================
-              _sectionCard(
-                icon: Icons.speed,
-                title: "Flow Meter Details",
-                children: [
-
-                  _dropdown(
-                    "Flow Meter Installed?",
-                    value: njm_wsoProvider.Isflow_meter_yesno,
-                    items: njm_wsoProvider.yesnoMap.keys.toList(),
-                    onChanged: (value) {
-                      njm_wsoProvider.setIsflowmeteryesno(value);
-                    },
-                  ),
-
-
-                  if (flowMeterInstalled == "Yes") ...[
-                    _input(
-                      "Flow Meter Reading (Start)",
-                      controller: flowStartController,
-                      keyboard: TextInputType.number,
-                      onChanged: (_) => _calculateVolume(),
-                    ),
-
-                    _input(
-                      "Flow Meter Reading (Stop)",
-                      controller: njm_wsoProvider.flowStopController,
-                      keyboard: TextInputType.number,
-                      onChanged: (_) => _calculateVolume(),
-                    ),
-                  ],
-                ],
-              ),
-              const SizedBox(height: 22),
-
-              _submitButton(),
-              const SizedBox(height: 22),
 
 
               // ================= OPERATION =================

@@ -80,25 +80,7 @@ class NjmFtkRepository {
     }
   }
 
-  Future<HabitationAssetResponse> fetchHabitationAssetsID(
-      int stateID,
-      int habitationId,
-      int userId,
-      ) async {
-    try {
-      final response = await _apiService.get(
-        'SJL_get_habitation_asset_detail?stateid=$stateID&habitationid=$habitationId&userid=$userId',
-      );
 
-      return HabitationAssetResponse.fromJson(response);
-    } catch (e, stackTrace) {
-      GlobalExceptionHandler.handleException(
-        e as Exception,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
-  }
 
   Future<UpdateNjmFtkPassword> updateNjmFtkPassword(
       int regId,

@@ -26,7 +26,7 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = context.read<NjmFtkProvider>();
 
-      await provider.fetchHabitationAssetsID(31, 1213773, session.userId);
+     // await provider.fetchHabitationAssetsID(31, 1213773, session.userId);
       // await provider.fetchHabitationAssetsID(_localStorage.getInt(AppConstants.prefStateId)!, provider.habitationId!, session.userId);
     });
   }
@@ -112,6 +112,7 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
                   const SizedBox(height: 20),
 
                   /// Category List
+/*
                   Expanded(
                     child: ListView(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -343,6 +344,7 @@ class _NjmQuestionscategory extends State<FtkQuestionscategory> {
                       ],
                     ),
                   ),
+*/
                 ],
               ),
             ),

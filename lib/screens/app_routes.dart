@@ -70,7 +70,7 @@ class AppRoutes {
       AppConstants.navigateToNJMWSOLandingPage: (context) => NjmWsoLandingpage(),
       AppConstants.navigateToNjmCategory: (context) => const NjmCategory(),
       AppConstants.navigateToWscCategory: (context) => const WscCategory(),
-      AppConstants.navigateToGroundWaterPumpForm: (context) => const GroundWaterPumpForm(),
+      AppConstants.navigateToGroundwatersourcetubeMain: (context) => const GroundwatersourcetubeMain(),
       AppConstants.navigateToGroundwatersourcetubeRegular: (context) => const GroundwatersourcetubeRegular(),
       AppConstants.navigateToPumpsForm: (context) => const PumpsForm(),
       AppConstants.navigateToOHSRForm: (context) => const OHSRForm(),

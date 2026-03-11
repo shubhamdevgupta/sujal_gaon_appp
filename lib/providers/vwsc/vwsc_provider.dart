@@ -31,9 +31,10 @@ class VwscProvider extends ChangeNotifier {
   };
 
   String? _selectedLevelLabel;
-  int? _selectedLevelId;
-
   String? get selectedLevelLabel => _selectedLevelLabel;
+
+
+  int? _selectedLevelId;
   int? get selectedLevelId => _selectedLevelId;
 
   void setSelectedLevel(String? label) {

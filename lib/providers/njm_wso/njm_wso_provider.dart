@@ -3,9 +3,11 @@ import 'package:jal_sanchalan/repository/njm_wso/njm_wso_repo.dart';
 import 'package:jal_sanchalan/repository/vwsc/vwsc_repo.dart';
 
 import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
+import '../../models/njm_ftk_response/habitation_assest.dart';
 import '../../models/njm_wso/njm_wso_groundwatersource_response.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
 import '../../utils/device_utils.dart';
+import '../../utils/global_exception_handler.dart';
 
 class NjmWsoProvider extends ChangeNotifier {
   final NjmWsoRepo _njmWsoRepo = NjmWsoRepo();
@@ -25,6 +27,7 @@ class NjmWsoProvider extends ChangeNotifier {
   Njmftkregistrationresponse? _njmftkregistrationresponse;
   Njmftkregistrationresponse? get njmFtkRegistrationResponse => _njmftkregistrationresponse;
 
+  String? errorMsg = '';
 
   DateTime? _fromDate;
   DateTime? _toDate;
@@ -36,6 +39,8 @@ class NjmWsoProvider extends ChangeNotifier {
   String? locationType;
   String? flowMeterInstalled;
 
+  int? selectedHabitationId;
+  int? get habitationId => selectedHabitationId;
 
   String? _selectedtypesofpump;
   int? _selectedtypesofpumpId;
@@ -66,7 +71,8 @@ class NjmWsoProvider extends ChangeNotifier {
   GroundWaterPumpResponse? _groundWaterResponse;
   GroundWaterPumpResponse? get groundWaterResponse => _groundWaterResponse;
 
-
+  HabitationAssetResponse? _habitationAssetResponse;
+  HabitationAssetResponse? get habitationAssetResponse => _habitationAssetResponse;
   final Map<String, int> typesofpumpMap = {
     "Submersible": 1,
     "Horizontal": 2,
@@ -172,6 +178,32 @@ class NjmWsoProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> fetchHabitationAssetsID(
+      int stateID,
+      int habitationId,
+      int userId,
+      ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      var rawResponse = await _njmWsoRepo.fetchHabitationAssetsID(stateID, habitationId, userId,);
+      if (rawResponse.status == true) {
+        _habitationAssetResponse = rawResponse;
+      } else {
+        errorMsg = rawResponse.msg;
+      }
+    } catch (e, stackTrace) {
+      GlobalExceptionHandler.handleException(
+        e as Exception,
+        stackTrace: stackTrace,
+      );
+      _habitationAssetResponse = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
   Future<void> fetchDeviceId() async {
     _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
     debugPrint('Device ID: $_deviceId');
@@ -191,4 +223,8 @@ class NjmWsoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setSelectedHabitationId(int? value) {
+    selectedHabitationId = value;
+    notifyListeners();
+  }
 }

@@ -52,9 +52,6 @@ class NjmFtkProvider extends ChangeNotifier {
   UpdateNjmFtkPassword? _updateNjmFtkPassword;
   UpdateNjmFtkPassword? get updateNjmFtkPassword => _updateNjmFtkPassword;
 
-  HabitationAssetResponse? _habitationAssetResponse;
-  HabitationAssetResponse? get habitationAssetResponse => _habitationAssetResponse;
-
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
@@ -63,8 +60,6 @@ class NjmFtkProvider extends ChangeNotifier {
 
   String? get generatedOtp => _generatedOtp;
 
-  int? selectedHabitationId;
-  int? get habitationId => selectedHabitationId;
 
   String? errorMsg = '';
 
@@ -238,32 +233,7 @@ class NjmFtkProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchHabitationAssetsID(
-    int stateID,
-    int habitationId,
-    int userId,
-  ) async {
-    _isLoading = true;
-    notifyListeners();
 
-    try {
-      var rawResponse = await _njmFtkRepository.fetchHabitationAssetsID(stateID, habitationId, userId,);
-      if (rawResponse.status == true) {
-        _habitationAssetResponse = rawResponse;
-      } else {
-        errorMsg = rawResponse.msg;
-      }
-    } catch (e, stackTrace) {
-      GlobalExceptionHandler.handleException(
-        e as Exception,
-        stackTrace: stackTrace,
-      );
-      _habitationAssetResponse = null;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
 
   Future<void> updateNjmFtkPasswords(
     int regId,
@@ -333,8 +303,4 @@ class NjmFtkProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedHabitationId(int? value) {
-    selectedHabitationId = value;
-    notifyListeners();
-  }
 }
