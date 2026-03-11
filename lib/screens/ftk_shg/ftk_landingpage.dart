@@ -207,7 +207,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                   ),
                   SizedBox(height: 2),
 
-                  AppDropdown(
+         /*         AppDropdown(
                     hint: "Select Habitation",
                     items: provider.njmFtkDashboardResponse!.habitationList!
                         .map((e) => e.habitationName ?? "")
@@ -220,7 +220,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
 
                       provider.setSelectedHabitationId(selected.habitationId);
                     },
-                  ),
+                  ),*/
 
                   SizedBox(height: 20),
 

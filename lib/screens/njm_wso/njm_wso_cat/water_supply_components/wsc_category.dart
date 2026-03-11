@@ -136,7 +136,21 @@ class _NjmCategory extends State<WscCategory> {
 
                             Navigator.pushNamed(
                               context,
-                              AppConstants.navigateToGroundWaterPumpForm,
+                              AppConstants.navigateToGroundwatersourcetubeMain,
+                            );
+                            // TODO
+                          },
+                        ),
+
+                        CategoryCard(
+                          icon: Icons.location_on_outlined,
+                          title: "Ground water source Tube wells / Bore wells/ Dug wells",
+                          subtitle: "Up to Habitation",
+                          onTap: () {
+
+                            Navigator.pushNamed(
+                              context,
+                              AppConstants.navigateToGroundwatersourcetubeRegular,
                             );
                             // TODO
                           },

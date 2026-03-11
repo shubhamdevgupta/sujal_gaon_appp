@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
 import 'package:jal_sanchalan/screens/ftk_shg/ftk_landingpage.dart';
+import 'package:jal_sanchalan/screens/njm_wso/njm_wso_cat/water_supply_components/water_source/groundwatersourcetube_regular.dart';
 import 'package:jal_sanchalan/screens/panchayat/vwsc_member_list.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_login.dart';
@@ -26,7 +27,7 @@ import 'njm_wso/njm_wso_cat/escaltion_alters.dart';
 import 'njm_wso/njm_wso_cat/njm _category.dart';
 import 'njm_wso/njm_wso_cat/nonsupply_distruptions.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/gls_reservoir.dart';
-import 'njm_wso/njm_wso_cat/water_supply_components/groundwatersourcetube_form.dart';
+import 'njm_wso/njm_wso_cat/water_supply_components/water_source/groundwatersourcetube_main.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/wsc_category.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/overhead_service.dart';
 import 'njm_wso/njm_wso_cat/water_supply_components/pumps_form.dart';
@@ -69,7 +70,8 @@ class AppRoutes {
       AppConstants.navigateToNJMWSOLandingPage: (context) => NjmWsoLandingpage(),
       AppConstants.navigateToNjmCategory: (context) => const NjmCategory(),
       AppConstants.navigateToWscCategory: (context) => const WscCategory(),
-      AppConstants.navigateToGroundWaterPumpForm: (context) => const GroundWaterPumpForm(),
+      AppConstants.navigateToGroundwatersourcetubeMain: (context) => const GroundwatersourcetubeMain(),
+      AppConstants.navigateToGroundwatersourcetubeRegular: (context) => const GroundwatersourcetubeRegular(),
       AppConstants.navigateToPumpsForm: (context) => const PumpsForm(),
       AppConstants.navigateToOHSRForm: (context) => const OHSRForm(),
       AppConstants.navigateToGSRForm: (context) => const GSRForm(),

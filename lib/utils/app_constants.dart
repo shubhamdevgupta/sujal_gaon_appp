@@ -55,7 +55,8 @@ class AppConstants {
   static const String navigateToNJMWSOLandingPage = '/NjmWsoLandingPage';
   static const String navigateToNjmCategory = '/NjmCategory ';
   static const String navigateToWscCategory = '/WscCategory ';
-  static const String navigateToGroundWaterPumpForm = '/GroundWaterPumpForm ';
+  static const String navigateToGroundwatersourcetubeMain = '/GroundwatersourcetubeMain ';
+  static const String navigateToGroundwatersourcetubeRegular = '/GroundwatersourcetubeRegular ';
   static const String navigateToPumpsForm = '/PumpsForm ';
   static const String navigateToOHSRForm = '/OHSRForm ';
   static const String navigateToGSRForm = '/GSRForm ';
