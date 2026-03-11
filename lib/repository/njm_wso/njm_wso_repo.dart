@@ -7,8 +7,8 @@ import '../../service/base_api_service.dart';
 import '../../utils/global_exception_handler.dart';
 
 class NjmWsoRepo {
-  final BaseApiService _apiService = BaseApiService();
-
+  final BaseApiService _apiService;
+  NjmWsoRepo(this._apiService);
 
   Future<GroundWaterPumpResponse> insertOrUpdateGroundWaterPumpHouse(
       int id,

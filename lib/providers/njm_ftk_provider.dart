@@ -4,7 +4,6 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/repository/njm_ftk_repository.dart';
 
-import '../models/njm_ftk_response/habitation_assest.dart';
 import '../models/njm_ftk_response/njm_ftk_dashboard_response.dart';
 import '../models/njm_ftk_response/njm_ftk_login_response.dart';
 import '../models/njm_ftk_response/password_login.dart';
@@ -12,18 +11,21 @@ import '../models/update_password.dart';
 import '../service/local_storage_service.dart';
 import '../utils/app_constants.dart';
 import '../utils/auth/user_session_manager.dart';
-import '../utils/device_utils.dart';
 import '../utils/global_exception_handler.dart';
 
 class NjmFtkProvider extends ChangeNotifier {
-  final NjmFtkRepository _njmFtkRepository = NjmFtkRepository();
+  final NjmFtkRepository _njmFtkRepository;
+  NjmFtkProvider(this._njmFtkRepository);
+
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
 
   bool _isShownPassword = false;
+
   bool get isShownPassword => _isShownPassword;
 
   bool _isLoggedIn = false;
+
   bool get isLoggedIn => _isLoggedIn;
 
   NjmFtkLoginResponse? _njmFtkLoginResponse;
@@ -40,6 +42,7 @@ class NjmFtkProvider extends ChangeNotifier {
       _njmFtkDashboardResponse;
 
   UpdateNjmFtkPassword? _updateNjmFtkPassword;
+
   UpdateNjmFtkPassword? get updateNjmFtkPassword => _updateNjmFtkPassword;
 
   bool _isLoading = false;
@@ -49,7 +52,6 @@ class NjmFtkProvider extends ChangeNotifier {
   String? _generatedOtp;
 
   String? get generatedOtp => _generatedOtp;
-
 
   String? errorMsg = '';
 
@@ -223,8 +225,6 @@ class NjmFtkProvider extends ChangeNotifier {
     }
   }
 
-
-
   Future<void> updateNjmFtkPasswords(
     int regId,
     int userTypeId,
@@ -266,10 +266,10 @@ class NjmFtkProvider extends ChangeNotifier {
   }
 
   void verifyOtp(
-      String enteredOtp,
-      Function() onSuccess,
-      Function(String) onFailure,
-      ) {
+    String enteredOtp,
+    Function() onSuccess,
+    Function(String) onFailure,
+  ) {
     print("-------- ${session.regId}");
     if (_generatedOtp == null) {
       onFailure("Please request OTP first");
@@ -283,6 +283,7 @@ class NjmFtkProvider extends ChangeNotifier {
       onFailure("Invalid OTP");
     }
   }
+
   String generateSha512Pass(String password) {
     final sha256Hash = sha512.convert(utf8.encode(password)).toString();
     return sha256Hash;
@@ -292,5 +293,4 @@ class NjmFtkProvider extends ChangeNotifier {
     _isShownPassword = !_isShownPassword;
     notifyListeners();
   }
-
 }

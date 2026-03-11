@@ -5,8 +5,8 @@ import '../../service/base_api_service.dart';
 import '../../utils/global_exception_handler.dart';
 
 class VwscRepo {
-  final BaseApiService _apiService = BaseApiService();
-
+  final BaseApiService _apiService;
+  VwscRepo(this._apiService);
 
   Future<Njmftkregistrationresponse> registerNjmFTK(
       int regId,

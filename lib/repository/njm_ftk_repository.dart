@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import '../models/njm_ftk_response/habitation_assest.dart';
 import '../models/njm_ftk_response/njm_ftk_dashboard_response.dart';
 import '../models/njm_ftk_response/njm_ftk_login_response.dart';
 import '../models/njm_ftk_response/password_login.dart';
@@ -9,14 +8,14 @@ import '../service/base_api_service.dart';
 import '../utils/global_exception_handler.dart';
 
 class NjmFtkRepository {
-  final BaseApiService _apiService = BaseApiService();
-
+  final BaseApiService _apiService;
+  NjmFtkRepository(this._apiService);
 
   Future<PasswordLoginResponse> loginNjmFtkUserByPassword(
-      String username,
-      String password,
-      int userTypeId,
-      ) async {
+    String username,
+    String password,
+    int userTypeId,
+  ) async {
     try {
       final response = await _apiService.post(
         'NJMPLogin',
@@ -37,11 +36,10 @@ class NjmFtkRepository {
     }
   }
 
-
   Future<NjmFtkLoginResponse> loginNjmFtkUserByOtp(
-      String mobileNumber,
-      int userTypeId,
-      ) async {
+    String mobileNumber,
+    int userTypeId,
+  ) async {
     try {
       final response = await _apiService.post(
         'SJL_SendOTP',
@@ -62,9 +60,9 @@ class NjmFtkRepository {
   }
 
   Future<NjmFtkDashboardResponse> fetchNjmFtkDashboard(
-      int userId,
-      int userTypeId,
-      ) async {
+    int userId,
+    int userTypeId,
+  ) async {
     try {
       final response = await _apiService.get(
         'SJL_Get_dashboard_list?UserId=$userId&UserTypeId=$userTypeId',
@@ -80,18 +78,15 @@ class NjmFtkRepository {
     }
   }
 
-
-
   Future<UpdateNjmFtkPassword> updateNjmFtkPassword(
-      int regId,
-      int userTypeId,
-      String mobileNumber,
-      String loginId,
-      String password,
-      int createdBy,
-      String ipAddress,
-
-      ) async {
+    int regId,
+    int userTypeId,
+    String mobileNumber,
+    String loginId,
+    String password,
+    int createdBy,
+    String ipAddress,
+  ) async {
     try {
       final response = await _apiService.post(
         'SJL_GenerateLoginId_password',
@@ -115,5 +110,4 @@ class NjmFtkRepository {
       rethrow;
     }
   }
-
 }

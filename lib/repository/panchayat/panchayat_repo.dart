@@ -4,8 +4,8 @@ import '../../service/base_api_service.dart';
 import '../../utils/global_exception_handler.dart';
 
 class PanchayatRepo {
-  final BaseApiService _apiService = BaseApiService();
-
+  final BaseApiService _apiService;
+  PanchayatRepo(this._apiService);
   Future<VwscListResponse> fetchVwscList(
     int userId,
     int stateId,

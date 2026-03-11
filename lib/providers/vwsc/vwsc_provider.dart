@@ -5,7 +5,8 @@ import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
 
 class VwscProvider extends ChangeNotifier {
-  final VwscRepo _vwscRepo = VwscRepo();
+  final VwscRepo _vwscRepo;
+  VwscProvider(this._vwscRepo);
 
   bool _isLoading = false;
 

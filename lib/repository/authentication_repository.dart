@@ -11,7 +11,8 @@ import '../service/base_api_service.dart';
 import '../utils/global_exception_handler.dart';
 
 class AuthenticaitonRepository {
-  final BaseApiService _apiService = BaseApiService();
+  final BaseApiService _apiService;
+  AuthenticaitonRepository(this._apiService);
 
   Future<PanchayatLoginResponse> panchayatLoginUser(
     String username,

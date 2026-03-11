@@ -11,7 +11,8 @@ import '../repository/master_repositary.dart';
 
 class MasterProvider extends ChangeNotifier {
 
-  final MasterRepositary _masterRepositary = MasterRepositary();
+  final MasterRepositary _masterRepositary ;
+  MasterProvider(this._masterRepositary);
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;

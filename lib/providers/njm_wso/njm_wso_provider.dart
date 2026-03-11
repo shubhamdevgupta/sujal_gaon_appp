@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/repository/njm_wso/njm_wso_repo.dart';
-import 'package:jal_sanchalan/repository/vwsc/vwsc_repo.dart';
 
 import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
 import '../../models/njm_ftk_response/habitation_assest.dart';
 import '../../models/njm_wso/njm_wso_groundwatersource_response.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
-import '../../utils/device_utils.dart';
 import '../../utils/global_exception_handler.dart';
 
 class NjmWsoProvider extends ChangeNotifier {
-  final NjmWsoRepo _njmWsoRepo = NjmWsoRepo();
+  final NjmWsoRepo _njmWsoRepo;
+
+  NjmWsoProvider(this._njmWsoRepo);
 
   bool _isLoading = false;
 
@@ -25,7 +25,9 @@ class NjmWsoProvider extends ChangeNotifier {
   TextEditingController appointAuthConroller = TextEditingController();
 
   Njmftkregistrationresponse? _njmftkregistrationresponse;
-  Njmftkregistrationresponse? get njmFtkRegistrationResponse => _njmftkregistrationresponse;
+
+  Njmftkregistrationresponse? get njmFtkRegistrationResponse =>
+      _njmftkregistrationresponse;
 
   String? errorMsg = '';
 
@@ -33,6 +35,7 @@ class NjmWsoProvider extends ChangeNotifier {
   DateTime? _toDate;
 
   DateTime? get fromDate => _fromDate;
+
   DateTime? get toDate => _toDate;
 
   String? pumpType;
@@ -40,12 +43,14 @@ class NjmWsoProvider extends ChangeNotifier {
   String? flowMeterInstalled;
 
   int? selectedHabitationId;
+
   int? get habitationId => selectedHabitationId;
 
   String? _selectedtypesofpump;
   int? _selectedtypesofpumpId;
 
   String? get selectedtypesofpump => _selectedtypesofpump;
+
   int? get selectedtypesofpumpId => _selectedtypesofpumpId;
 
   final dischargeController = TextEditingController();
@@ -63,19 +68,22 @@ class NjmWsoProvider extends ChangeNotifier {
   int? _Isflow_meter_yesnoId;
 
   String? get Isflow_meter_yesno => _Isflow_meter_yesno;
+
   int? get Isflow_meter_yesnoId => _Isflow_meter_yesnoId;
 
   GroundWaterPumpResponse? _groundWaterResponse;
+
   GroundWaterPumpResponse? get groundWaterResponse => _groundWaterResponse;
 
   HabitationAssetResponse? _habitationAssetResponse;
-  HabitationAssetResponse? get habitationAssetResponse => _habitationAssetResponse;
+
+  HabitationAssetResponse? get habitationAssetResponse =>
+      _habitationAssetResponse;
   final Map<String, int> typesofpumpMap = {
     "Submersible": 1,
     "Horizontal": 2,
     "vertical": 3,
   };
-
 
   void setSelectedtypesofpump(String? label) {
     _selectedtypesofpump = label;
@@ -89,13 +97,7 @@ class NjmWsoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  final Map<String, int> yesnoMap = {
-    "yes": 1,
-    "no": 2,
-  };
-
-
+  final Map<String, int> yesnoMap = {"yes": 1, "no": 2};
 
   void setIsflowmeteryesno(String? label) {
     _Isflow_meter_yesno = label;
@@ -118,6 +120,7 @@ class NjmWsoProvider extends ChangeNotifier {
     _toDate = date;
     notifyListeners();
   }
+
   Future<void> insertOrUpdateGroundWaterPumpHouse({
     required int id,
     required int stateId,
@@ -176,15 +179,19 @@ class NjmWsoProvider extends ChangeNotifier {
   }
 
   Future<void> fetchHabitationAssetsID(
-      int stateID,
-      int habitationId,
-      int userId,
-      ) async {
+    int stateID,
+    int habitationId,
+    int userId,
+  ) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      var rawResponse = await _njmWsoRepo.fetchHabitationAssetsID(stateID, habitationId, userId,);
+      var rawResponse = await _njmWsoRepo.fetchHabitationAssetsID(
+        stateID,
+        habitationId,
+        userId,
+      );
       if (rawResponse.status == true) {
         _habitationAssetResponse = rawResponse;
       } else {

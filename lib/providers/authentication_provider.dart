@@ -8,11 +8,12 @@ import '../repository/authentication_repository.dart';
 import '../service/local_storage_service.dart';
 import '../utils/app_constants.dart';
 import '../utils/auth/user_session_manager.dart';
-import '../utils/device_utils.dart';
 import '../utils/global_exception_handler.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
-  final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
+  final AuthenticaitonRepository _authRepository;
+  AuthenticationProvider(this._authRepository);
+
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
 
