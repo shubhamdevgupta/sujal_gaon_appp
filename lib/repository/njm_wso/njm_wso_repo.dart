@@ -65,6 +65,48 @@ class NjmWsoRepo {
     }
   }
 
+  Future<GroundWaterPumpResponse> insertPumpRegularEntry(
+    int id,
+    int stateId,
+    int tubeBoreWellId,
+    int isManualStartStop,
+    String pumpStartDateTime,
+    String pumpStopDateTime,
+    String flowMeterReading,
+    double flowMeterStart,
+    double flowMeterStop,
+    int createdBy,
+    String createdIp,
+  ) async
+  {
+    try {
+      final response = await _apiService.post(
+        'SJL_Insert_update_invnt_ground_water_tube_bore_well_Pumphouse_regular_entry',
+        body: jsonEncode({
+          "Id": id,
+          "TubeBoreWellId":tubeBoreWellId,
+          "StateId": stateId,
+          "IsManualStartStopEntry":isManualStartStop,
+          "PumpStartDateTime":pumpStartDateTime,
+          "PumpStopDateTime":pumpStartDateTime,
+          "FlowMeterReadingUnit":flowMeterReading,
+          "FlowMeterStart":flowMeterStart,
+          "FlowMeterStop":flowMeterStop,
+          "CreatedBy": createdBy,
+          "CreatedIp": createdIp,
+        }),
+      );
+
+      return GroundWaterPumpResponse.fromJson(response);
+    } catch (e, stackTrace) {
+      GlobalExceptionHandler.handleException(
+        e as Exception,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
   Future<HabitationAssetResponse> fetchHabitationAssetsID(
     int stateID,
     int habitationId,

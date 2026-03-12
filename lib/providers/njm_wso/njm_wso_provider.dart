@@ -49,11 +49,11 @@ class NjmWsoProvider extends ChangeNotifier {
 
   final dischargeController = TextEditingController();
   final headController = TextEditingController();
-  final startTimeController = TextEditingController();
-  final stopTimeController = TextEditingController();
+  final pumpStartTimeController = TextEditingController();
+  final pumpStopTimeController = TextEditingController();
 
-  final flowStartController = TextEditingController();
-  final flowStopController = TextEditingController();
+  final flowMeterStartController = TextEditingController();
+  final flowMeterStopController = TextEditingController();
 
   final pumpingHoursController = TextEditingController();
   final volumeController = TextEditingController();
@@ -61,6 +61,10 @@ class NjmWsoProvider extends ChangeNotifier {
   String? _Isflow_meter_yesno;
   int? _Isflow_meter_yesnoId;
 
+  String get pumpStartApi =>
+      _pumpStart?.toIso8601String() ?? "";
+  String get pumpStopApi =>
+      _pumpStop?.toIso8601String() ?? "";
   String? get Isflow_meter_yesno => _Isflow_meter_yesno;
 
   int? get Isflow_meter_yesnoId => _Isflow_meter_yesnoId;
@@ -70,14 +74,72 @@ class NjmWsoProvider extends ChangeNotifier {
   GroundWaterPumpResponse? get groundWaterResponse => _groundWaterResponse;
 
   HabitationAssetResponse? _habitationAssetResponse;
-  HabitationAssetResponse? get habitationAssetResponse => _habitationAssetResponse;
+
+  HabitationAssetResponse? get habitationAssetResponse =>
+      _habitationAssetResponse;
 
   GwTubeBoreWellPumpHouseResponse? _gwTubeBoreWellPumpHouseList;
-  GwTubeBoreWellPumpHouseResponse? get gwTubeBoreWellPumpHouseList => _gwTubeBoreWellPumpHouseList;
 
+  GwTubeBoreWellPumpHouseResponse? get gwTubeBoreWellPumpHouseList =>
+      _gwTubeBoreWellPumpHouseList;
 
   int? _selectedtypesofpumpId;
+
   int? get selectedtypesofpumpId => _selectedtypesofpumpId;
+
+
+  DateTime? _pumpStart;
+  DateTime? _pumpStop;
+
+  /// SET START TIME
+  void setPumpStart(DateTime dateTime) {
+
+    _pumpStart = dateTime;
+
+    pumpStartTimeController.text = _formatDateTime(dateTime);
+
+    _calculatePumpHours();
+
+    notifyListeners();
+  }
+
+  /// SET STOP TIME
+  void setPumpStop(DateTime dateTime) {
+
+    _pumpStop = dateTime;
+
+    pumpStopTimeController.text = _formatDateTime(dateTime);
+
+    _calculatePumpHours();
+
+    notifyListeners();
+  }
+
+  /// CALCULATE HOURS
+  void _calculatePumpHours() {
+
+    if (_pumpStart != null && _pumpStop != null) {
+
+      final diff = _pumpStop!.difference(_pumpStart!);
+
+      final hours = diff.inMinutes / 60;
+
+      pumpingHoursController.text = hours.toStringAsFixed(2);
+
+    }
+
+  }
+
+  /// FORMAT DATE
+  String _formatDateTime(DateTime dt) {
+
+    return "${dt.day.toString().padLeft(2,'0')}-"
+        "${dt.month.toString().padLeft(2,'0')}-"
+        "${dt.year} "
+        "${dt.hour.toString().padLeft(2,'0')}:"
+        "${dt.minute.toString().padLeft(2,'0')}";
+
+  }
 
   final Map<String, int> typesofpumpMap = {
     "Submersible": 1,
@@ -183,12 +245,57 @@ class NjmWsoProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> insertPumpRegularEntry({
+    required int id,
+    required int stateId,
+    required int tubeBoreWellId,
+    required int isManualStartStop,
+    required String pumpStartDateTime,
+    required String pumpStopDateTime,
+    required String flowMeterReading,
+    required double flowMeterStart,
+    required double flowMeterStop,
+    required int createdBy,
+    required String createdIp,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _njmWsoRepo.insertPumpRegularEntry(
+        id,
+        stateId,
+        tubeBoreWellId,
+        isManualStartStop,
+        pumpStartDateTime,
+        pumpStopDateTime,
+        flowMeterReading,
+        flowMeterStart,
+        flowMeterStop,
+        createdBy,
+        createdIp,
+      );
+
+      if (response.status == true) {
+        _groundWaterResponse = response;
+      } else {
+        _groundWaterResponse = null;
+        errorMsg = _groundWaterResponse!.message;
+        debugPrint("Insert/Update Failed: ${response.message}");
+      }
+    } catch (e) {
+      debugPrint("Insert/Update Error: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> fetchHabitationAssetsID(
     int stateID,
     int habitationId,
     int userId,
-  ) async
-  {
+  ) async {
     _isLoading = true;
     notifyListeners();
 
@@ -216,19 +323,24 @@ class NjmWsoProvider extends ChangeNotifier {
   }
 
   Future<void> getGroundWaterSourceList(
-      int userId,
-      int stateId,
-      int rpwssId,
-      int habitationId,
-      int assetId,
-      int assetTypeId,
-  ) async
-  {
+    int userId,
+    int stateId,
+    int rpwssId,
+    int habitationId,
+    int assetId,
+    int assetTypeId,
+  ) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      var rawResponse = await _njmWsoRepo.getGroundWaterSourceList(userId,stateId,rpwssId,habitationId,assetId,assetTypeId
+      var rawResponse = await _njmWsoRepo.getGroundWaterSourceList(
+        userId,
+        stateId,
+        rpwssId,
+        habitationId,
+        assetId,
+        assetTypeId,
       );
       if (rawResponse.status == true) {
         _gwTubeBoreWellPumpHouseList = rawResponse;

@@ -42,60 +42,6 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
   final pumpingHoursController = TextEditingController();
   final volumeController = TextEditingController();
 
-  // ================= CALCULATIONS =================
-
-  void _calculatePumpingHours() {
-    if (startTimeController.text.isEmpty ||
-        stopTimeController.text.isEmpty) return;
-
-    try {
-      final start = _parseTime(startTimeController.text);
-      final stop = _parseTime(stopTimeController.text);
-
-      final difference =
-          stop.difference(start).inMinutes / 60;
-
-      if (difference > 0) {
-        pumpingHoursController.text =
-            difference.toStringAsFixed(2);
-        _calculateVolume();
-      }
-    } catch (_) {}
-  }
-
-  DateTime _parseTime(String input) {
-    final parts = input.split(":");
-    return DateTime(
-        2024,
-        1,
-        1,
-        int.parse(parts[0]),
-        int.parse(parts[1]));
-  }
-
-  void _calculateVolume() {
-    double volume = 0;
-
-    if (flowMeterInstalled == "Yes") {
-      double start =
-          double.tryParse(flowStartController.text) ?? 0;
-      double stop =
-          double.tryParse(flowStopController.text) ?? 0;
-
-      volume = stop - start;
-    } else {
-      double discharge =
-          double.tryParse(dischargeController.text) ?? 0;
-      double hours =
-          double.tryParse(pumpingHoursController.text) ?? 0;
-
-      volume = discharge * hours;
-    }
-
-    volumeController.text = volume.toStringAsFixed(2);
-  }
-
-  // ================= UI =================
 
   @override
   void initState() {
@@ -169,7 +115,6 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
                 icon: Icons.speed,
                 title: "Flow Meter Details",
                 children: [
-
                   _dropdown(
                     "Flow Meter Installed?",
                     value: njm_wsoProvider.Isflow_meter_yesno,
@@ -178,23 +123,6 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
                       njm_wsoProvider.setIsFlowMeterYesNo(value);
                     },
                   ),
-
-
-                  if (flowMeterInstalled == "Yes") ...[
-                    _input(
-                      "Flow Meter Reading (Start)",
-                      controller: flowStartController,
-                      keyboard: TextInputType.number,
-                      onChanged: (_) => _calculateVolume(),
-                    ),
-
-                    _input(
-                      "Flow Meter Reading (Stop)",
-                      controller: njm_wsoProvider.flowStopController,
-                      keyboard: TextInputType.number,
-                      onChanged: (_) => _calculateVolume(),
-                    ),
-                  ],
                 ],
               ),
               const SizedBox(height: 22),
@@ -288,7 +216,8 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
         int? maxLength,
         bool readOnly = false,
         Function(String)? onChanged,
-      }) {
+      })
+  {
 
     List<TextInputFormatter>? formatters;
 
@@ -395,7 +324,8 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
   //TODO  remove the staic values from there
   Widget _submitButton(NjmWsoProvider provider,SjlAllAsset asset) {
     return InkWell(
-      onTap: () async{
+      onTap: () async
+      {
        await provider.insertOrUpdateGroundWaterPumpHouse(
             id: 0,
             stateId: 31,
@@ -421,10 +351,9 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
           message: provider.njmFtkRegistrationResponse?.message,
           onPressed: () {
 
-            Navigator.pushNamedAndRemoveUntil(
+            Navigator.pushNamed(
               context,
               AppConstants.navigateToNjmCategory,
-                  (route) => false,
             );
           },
         ):ToastHelper.showToastMessage(provider.errorMsg!);
