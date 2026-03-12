@@ -4,17 +4,19 @@ import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utils/app_constants.dart';
+import '../../../service/local_storage_service.dart';
 import '../../../utils/auth/user_session_manager.dart';
 
-class NjmCategory extends StatefulWidget {
-  const NjmCategory({super.key});
+class NjmRegularEntry extends StatefulWidget {
+  const NjmRegularEntry({super.key});
 
   @override
-  State<NjmCategory> createState() => _NjmCategory();
+  State<NjmRegularEntry> createState() => _NjmRegularEntry();
 }
 
-class _NjmCategory extends State<NjmCategory> {
+class _NjmRegularEntry extends State<NjmRegularEntry> {
   final session = UserSessionManager();
+  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
@@ -62,12 +64,10 @@ class _NjmCategory extends State<NjmCategory> {
                     if (serviceArea == null) {
                       return const SizedBox();
                     }
-
                     return Column(
                       children: [
                         buildHabitationCard(serviceArea),
                         SizedBox(height: 5),
-
                         buildAssetsCard(provider),
                       ],
                     );
@@ -81,7 +81,6 @@ class _NjmCategory extends State<NjmCategory> {
     );
   }
 }
-
 Widget buildHabitationCard(String serviceArea) {
   const Color habitationThemeColor = Color(0xFF1565C0); // Deep JJM Blue
 
@@ -158,7 +157,6 @@ Widget buildHabitationCard(String serviceArea) {
     ),
   );
 }
-
 Widget buildAssetsCard(NjmWsoProvider provider) {
   return Container(
     margin: const EdgeInsets.symmetric( vertical: 5),
@@ -195,7 +193,14 @@ Widget buildAssetsCard(NjmWsoProvider provider) {
     ),
   );
 }
-
+final List<Map<String, dynamic>> dummyPumpInventory = [
+  {
+    "assetId": 310161109,
+  },
+  {
+    "assetId": 310161110,
+  },
+];
 Widget buildAssetList(NjmWsoProvider provider) {
 
   /// Dummy Pump Inventory Data
@@ -210,24 +215,15 @@ Widget buildAssetList(NjmWsoProvider provider) {
     itemCount: provider.habitationAssetResponse!.sjlAllAssetList!.length,
     itemBuilder: (context, index) {
 
-      SjlAllAsset asset =
-      provider.habitationAssetResponse!.sjlAllAssetList![index];
+      SjlAllAsset asset = provider.habitationAssetResponse!.sjlAllAssetList![index];
 
       /// Source UI
-      if (asset.assetTypeId == "0") {
-        return buildSourceAssetCard(context, asset);
-      }
-
-
-
-      /// Other Assets
-      else {
-        return buildNormalAssetCard(
-          context,
-          asset,
-          dummyPumpInventory, index
-        );
-      }
+      return buildNormalAssetCard(
+        context,
+        asset,
+        dummyPumpInventory,
+        index, // important for expansion state
+      );
     },
   );
 }
@@ -337,6 +333,7 @@ Widget _sourceActionTile({
 }
 bool isPumpExpanded = false;
 Map<int, bool> expandedAssets = {};
+
 Widget buildNormalAssetCard(
     BuildContext context,
     SjlAllAsset asset,
@@ -446,19 +443,24 @@ Widget buildNormalAssetCard(
     },
   );
 }
-
 void _navigateToAssetForm(BuildContext context, String assetTypeId) {
   switch (assetTypeId) {
+    case "0":
+      Navigator.pushNamed(context, AppConstants.navigateToGroundwatersourcetubeMain);
+      break;
+    case "10":
+      Navigator.pushNamed(context, AppConstants.navigateToGroundwatersourcetubeMain);
+      break;
     case "2":
       Navigator.pushNamed(context, AppConstants.navigateToPumpsForm);
-      break;
-      case "0":
-      Navigator.pushNamed(context, AppConstants.navigateToGroundwatersourcetubeMain);
       break;
     case "8":
       Navigator.pushNamed(context, AppConstants.navigateToOHSRForm);
       break;
     case "11":
+      Navigator.pushNamed(context, AppConstants.navigateToDisinfectionForm);
+      break;
+    case "5":
       Navigator.pushNamed(context, AppConstants.navigateToDisinfectionForm);
       break;
     default:

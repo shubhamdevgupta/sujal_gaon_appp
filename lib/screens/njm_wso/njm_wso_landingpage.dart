@@ -97,15 +97,14 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
         ),
 
         body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [const Color(0xFF64B5F6), Colors.blue.shade50],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/icons/SJL_bg.png"),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
 
           child: Stack(
             children: [
@@ -295,69 +294,132 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
   Widget _registerCard(BuildContext context) {
     final njmWsoProvider = context.watch<NjmWsoProvider>();
 
-    return GestureDetector(
-      onTap: () {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: (){    if (njmWsoProvider.selectedHabitationId != 0 &&
+              njmWsoProvider.selectedHabitationId != null) {
+            Navigator.pushNamed(context, AppConstants.navigateToNjmCategory);
+          } else {
+            ToastHelper.showErrorSnackBar(
+              context,
+              "please select Habitation First !!",
+            );
+          }},
+          child: Container (
+            height: 60,
+            padding: const EdgeInsets.all(8),
 
-        if (njmWsoProvider.selectedHabitationId != 0 &&
-            njmWsoProvider.selectedHabitationId != null) {
-          Navigator.pushNamed(context, AppConstants.navigateToNjmCategory);
-        } else {
-          ToastHelper.showErrorSnackBar(
-            context,
-            "please select Habitation First !!",
-          );
-        }
-      },
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
 
-      child: Container(
-        height: 90,
-        padding: const EdgeInsets.all(8),
+              gradient: const LinearGradient(
+                colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
 
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
+              ],
+            ),
 
-          gradient: const LinearGradient(
-            colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+            child: Row(
+              children: [
 
-          boxShadow: [
-            BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
-          ],
-        ),
-
-        child: Row(
-          children: [
-
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Proceed",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
+                const Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Add Inventory  ",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        SizedBox(height: 10,),
+
+        GestureDetector(
+          onTap: () {    if (njmWsoProvider.selectedHabitationId != 0 &&
+              njmWsoProvider.selectedHabitationId != null) {
+            Navigator.pushNamed(context, AppConstants.navigateToNjmRegularEntry);
+          } else {
+            ToastHelper.showErrorSnackBar(
+              context,
+              "please select Habitation First !!",
+            );
+          }},
+          child: Container (
+            height: 60,
+            padding: const EdgeInsets.all(8),
+
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+
+              gradient: const LinearGradient(
+                colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
+
+              boxShadow: [
+                BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
+              ],
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-                size: 16,
-              ),
+            child: Row(
+              children: [
+
+                const Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Regular Invetory",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
