@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
 import 'package:jal_sanchalan/screens/ftk_shg/ftk_landingpage.dart';
+import 'package:jal_sanchalan/screens/njm_wso/water_supply_components/water_pump/pumping_main.dart';
+import 'package:jal_sanchalan/screens/njm_wso/water_supply_components/water_pump/pumping_regular.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_login.dart';
 import 'package:jal_sanchalan/screens/panchayat/vwsc_member_list.dart';
@@ -29,7 +31,7 @@ import 'njm_wso/njm_wso_landingpage.dart';
 import 'njm_wso/njm_wso_login.dart';
 import 'njm_wso/water_supply_components/gls_reservoir.dart';
 import 'njm_wso/water_supply_components/overhead_service.dart';
-import 'njm_wso/water_supply_components/pumps_form.dart';
+
 import 'njm_wso/water_supply_components/spring_water.dart';
 import 'njm_wso/water_supply_components/water_source/groundwatersourcetube_main.dart';
 import 'njm_wso/water_supply_components/water_source/groundwatersourcetube_regular.dart';
@@ -80,11 +82,11 @@ class AppRoutes {
           NjmWsoLandingpage(),
       AppConstants.navigateToNjmCategory: (context) => const NjmCategory(),
       AppConstants.navigateToWscCategory: (context) => const WscCategory(),
-      AppConstants.navigateToGroundwatersourcetubeMain: (context) =>
-          const GroundwatersourcetubeMain(),
+      AppConstants.navigateToGroundwatersourcetubeMain: (context) => const GroundwatersourcetubeMain(),
       AppConstants.navigateToGroundwatersourcetubeRegular: (context) =>
           const GroundwatersourcetubeRegular(),
-      AppConstants.navigateToPumpsForm: (context) => const PumpsForm(),
+      AppConstants.navigateToPumpingMain: (context) => const PumpingMain(),
+      AppConstants.navigateToPumpingRegular: (context) => const PumpingRegular(),
       AppConstants.navigateToOHSRForm: (context) => const OHSRForm(),
       AppConstants.navigateToGSRForm: (context) => const GSRForm(),
       AppConstants.navigateToSpringWaterForm: (context) =>

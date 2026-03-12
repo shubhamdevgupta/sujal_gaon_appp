@@ -429,14 +429,12 @@ Widget buildNormalAssetCard(
 void _navigateToAssetForm(BuildContext context,SjlAllAsset asset) {
   switch (asset.assetTypeId) {
     case 2:
-      Navigator.pushNamed(context, AppConstants.navigateToPumpsForm);
+      Navigator.pushNamed(context, AppConstants.navigateToPumpingMain, arguments:  asset);
       break;
     case 0:
       Navigator.pushNamed(
         context,
-        AppConstants.navigateToGroundwatersourcetubeMain,
-        arguments: asset
-      );
+        AppConstants.navigateToGroundwatersourcetubeMain, arguments: asset);
       break;
     case 8:
       Navigator.pushNamed(context, AppConstants.navigateToOHSRForm);

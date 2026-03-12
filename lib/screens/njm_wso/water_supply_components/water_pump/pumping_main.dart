@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class PumpsForm extends StatefulWidget {
-  const PumpsForm({super.key});
+import '../../../../models/njm_ftk_response/habitation_assest.dart';
+import '../../../../providers/njm_wso/njm_wso_provider.dart';
+import '../../../../service/local_storage_service.dart';
+import '../../../../utils/app_constants.dart';
+import '../../../../utils/app_dialog.dart';
+import '../../../../utils/auth/user_session_manager.dart';
+import '../../../../utils/device_utils.dart';
+import '../../../../utils/enum/app_dialog.dart';
+import '../../../../utils/toast_helper.dart';
+
+class PumpingMain extends StatefulWidget {
+  const PumpingMain({super.key});
 
   @override
-  State<PumpsForm> createState() => _PumpsForm();
+  State<PumpingMain> createState() => _PumpingMain();
 }
 
-class _PumpsForm extends State<PumpsForm> {
+class _PumpingMain extends State<PumpingMain> {
 
   // ================= VARIABLES =================
-
+  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
   String? pumpType;
   String? locationType;
   String? flowMeterInstalled;
@@ -97,12 +109,24 @@ class _PumpsForm extends State<PumpsForm> {
   // ================= UI =================
 
   @override
+  void initState() {
+    session.init();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final njm_wsoProvider = context.watch<NjmWsoProvider>();
+    final SjlAllAsset asset = ModalRoute.of(context)!.settings.arguments as SjlAllAsset;
     return Scaffold(
       backgroundColor: const Color(0xFFF2F6FF),
 
       appBar: AppBar(
         backgroundColor: const Color(0xFF1976D2),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text(
           "Ground Water Pump",
           style: TextStyle(color: Colors.white),
@@ -134,78 +158,41 @@ class _PumpsForm extends State<PumpsForm> {
 
                   _dropdown(
                     "Type of Pump",
-                    value: pumpType,
-                    items: const [
-                      DropdownMenuItem(
-                        value: "Submersible",
-                        child: Text("Submersible"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Horizontal",
-                        child: Text("Horizontal"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Vertical",
-                        child: Text("Vertical"),
-                      ),
-                    ],
-                    onChanged: (v) => setState(() => pumpType = v),
+                    value: njm_wsoProvider.selectedPumpLabel,
+                    items: njm_wsoProvider.typesofpumpMap.keys.toList(),
+                    onChanged: (value) {
+                      njm_wsoProvider.setSelectedtypesofpump(value);
+                      print("pump id ${njm_wsoProvider.selectedtypesofpumpId}");
+                    },
                   ),
+
 
                   _dropdown(
                     "Location",
-                    value: locationType,
-                    items: const [
-                      DropdownMenuItem(
-                        value: "Feeding reservoir",
-                        child: Text("Feeding reservoir"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Direct distribution",
-                        child: Text("Direct distribution"),
-                      ),
-                    ],
-                    onChanged: (v) => setState(() => locationType = v),
+                    value: njm_wsoProvider.selectedlocationlabel,
+                    items: njm_wsoProvider.typesoflocationMap.keys.toList(),
+                    onChanged: (value) {
+                      njm_wsoProvider.setSelectedtypesoflocation(value);
+                      print("location id ${njm_wsoProvider.selectedlocationId}");
+                    },
                   ),
 
-                  _input("Discharge (m³/h)", controller: dischargeController),
-                  _input("Head of Pump (m)", controller: headController),
+                  _input(
+                    "Discharge of Pump (m3/h)",
+                    controller: njm_wsoProvider.dischargeController,
+                    keyboard: const TextInputType.numberWithOptions(decimal: true),
+                  ),
+
+                  _input(
+                    "Head of Pump (m)",
+                    controller: njm_wsoProvider.headController,
+                    keyboard: const TextInputType.numberWithOptions(decimal: true),
+                  ),
 
                 ],
               ),
 
               const SizedBox(height: 20),
-
-              // ================= TIME DETAILS =================
-
-              _sectionCard(
-                icon: Icons.access_time,
-                title: "Pumping Time",
-                children: [
-
-                  InkWell(
-                    onTap: () => _pickTime(startTimeController),
-                    child: _input("Pump Start Time",
-                        controller: startTimeController,
-                        readOnly: true),
-                  ),
-
-                  InkWell(
-                    onTap: () => _pickTime(stopTimeController),
-                    child: _input("Pump Stop Time",
-                        controller: stopTimeController,
-                        readOnly: true),
-                  ),
-
-                  _input("Pumping Hours (Auto)",
-                      controller: pumpingHoursController,
-                      readOnly: true),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // ================= FLOW METER =================
 
               _sectionCard(
                 icon: Icons.speed,
@@ -214,44 +201,19 @@ class _PumpsForm extends State<PumpsForm> {
 
                   _dropdown(
                     "Flow Meter Installed?",
-                    value: flowMeterInstalled,
-                    items: const [
-                      DropdownMenuItem(
-                        value: "Yes",
-                        child: Text("Yes"),
-                      ),
-                      DropdownMenuItem(
-                        value: "No",
-                        child: Text("No"),
-                      ),
-                    ],
-                    onChanged: (v) {
-                      setState(() {
-                        flowMeterInstalled = v;
-                        _calculateVolume();
-                      });
+                    value: njm_wsoProvider.Isflow_meter_yesno,
+                    items: njm_wsoProvider.yesnoMap.keys.toList(),
+                    onChanged: (value) {
+                      njm_wsoProvider.setIsFlowMeterYesNo(value);
                     },
                   ),
 
-                  if (flowMeterInstalled == "Yes") ...[
-                    _input("Flow Meter Reading Start",
-                        controller: flowStartController,
-                        keyboard: TextInputType.number,
-                        onChanged: (_) => _calculateVolume()),
-
-                    _input("Flow Meter Reading Stop",
-                        controller: flowStopController,
-                        keyboard: TextInputType.number,
-                        onChanged: (_) => _calculateVolume()),
-                  ],
-
-                  _input("Volume Supplied (Auto)",
-                      controller: volumeController,
-                      readOnly: true),
                 ],
               ),
 
               const SizedBox(height: 30),
+              _submitButton(njm_wsoProvider,asset),
+
             ],
           ),
         ),
@@ -377,53 +339,103 @@ class _PumpsForm extends State<PumpsForm> {
     );
   }
 
+  Widget _submitButton(NjmWsoProvider provider,SjlAllAsset asset) {
+    return InkWell(
+      onTap: () async{
+        await provider.insertOrUpdateGroundWaterPumpHouse(
+            id: 0,
+            stateId: 31,
+            rpwssId: asset.rpwssId!,
+            outVillageId: asset.outVillageId!,
+            assetId: asset.assetId!,
+            assetTypeId: asset.assetTypeId!,
+            assetType: asset.assetType!,
+            habitationId: 1030748,
+            typeOfPumpId: provider.selectedtypesofpumpId! ,
+            feedingTypeId: provider.selectedlocationId!,
+            dischargeOfPump: double.parse(provider.dischargeController.text),
+            dischargeUnit: 'm3/h',
+            headPump:  double.parse(provider.headController.text),
+            headPumpUnit: 'm',
+            isFlowMeterInstalled: provider.Isflow_meter_yesnoId! ,
+            createdBy: session.userId,
+            createdIp: DeviceInfoUtil.deviceId
+        );
+        await provider.groundWaterResponse!.status ==true ?AppDialog.show(
+          context,
+          type: AppDialogType.success,
+          message: provider.njmFtkRegistrationResponse?.message,
+          onPressed: () {
+
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppConstants.navigateToNjmCategory,
+                  (route) => false,
+            );
+          },
+        ):ToastHelper.showToastMessage(provider.errorMsg!);
+
+      },
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF1E88E5),
+              Color(0xFF1565C0),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: const Center(
+          child: Text(
+            "Save Pump Entry",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   Widget _dropdown(
       String label, {
-        required List<DropdownMenuItem<String>> items,
+        required String? value,
+        required List<String> items,
         required Function(String?) onChanged,
-        String? value,
       }) {
     return DropdownButtonFormField<String>(
       value: value,
-      icon: const Icon(
-        Icons.keyboard_arrow_down_rounded,
-        color: Color(0xFF1976D2),
-      ),
+      isExpanded: true,   // 🔥 VERY IMPORTANT FIX
       decoration: InputDecoration(
         labelText: label,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-
-        labelStyle: const TextStyle(
-          color: Color(0xFF1976D2),
-          fontWeight: FontWeight.w600,
-        ),
-
-        filled: true,
-        fillColor: Colors.white,
-
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
+          horizontal: 12,
           vertical: 14,
         ),
-
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(
-            color: Colors.blueGrey.shade400,
-            width: 1.3,
-          ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: Color(0xFF1976D2),
-            width: 1.8,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF1565C0)),
         ),
       ),
-      items: items,
+      items: items
+          .map(
+            (item) => DropdownMenuItem(
+          value: item,
+          child: Text(
+            item,
+            overflow: TextOverflow.ellipsis,  // 🔥 prevent overflow
+          ),
+        ),
+      )
+          .toList(),
       onChanged: onChanged,
     );
   }

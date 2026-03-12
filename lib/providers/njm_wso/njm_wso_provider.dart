@@ -101,6 +101,30 @@ class NjmWsoProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+ int? _selectedlocationId;
+  int? get selectedlocationId => _selectedlocationId;
+
+  final Map<String, int> typesoflocationMap = {
+    "Feeding": 1,
+    "Direct distribution through pumping": 2,
+  };
+
+  String? get selectedlocationlabel {
+    if (_selectedlocationId == null) return null;
+
+    return typesoflocationMap.entries
+        .firstWhere((e) => e.value == _selectedlocationId)
+        .key;
+  }
+
+  void setSelectedtypesoflocation(String? label) {
+    if (label != null) {
+      _selectedlocationId = typesoflocationMap[label];
+    } else {
+      _selectedlocationId = null;
+    }
+    notifyListeners();
+  }
 
   final Map<String, int> yesnoMap = {"yes": 1, "no": 0};
 
