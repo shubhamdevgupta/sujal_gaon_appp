@@ -3,6 +3,7 @@ import 'package:jal_sanchalan/repository/njm_wso/njm_wso_repo.dart';
 
 import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
 import '../../models/njm_ftk_response/habitation_assest.dart';
+import '../../models/njm_wso/njm_wso_get_ground_water.dart';
 import '../../models/njm_wso/njm_wso_groundwatersource_response.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
 import '../../utils/global_exception_handler.dart';
@@ -46,13 +47,6 @@ class NjmWsoProvider extends ChangeNotifier {
 
   int? get habitationId => selectedHabitationId;
 
-  String? _selectedtypesofpump;
-  int? _selectedtypesofpumpId;
-
-  String? get selectedtypesofpump => _selectedtypesofpump;
-
-  int? get selectedtypesofpumpId => _selectedtypesofpumpId;
-
   final dischargeController = TextEditingController();
   final headController = TextEditingController();
   final startTimeController = TextEditingController();
@@ -76,30 +70,41 @@ class NjmWsoProvider extends ChangeNotifier {
   GroundWaterPumpResponse? get groundWaterResponse => _groundWaterResponse;
 
   HabitationAssetResponse? _habitationAssetResponse;
+  HabitationAssetResponse? get habitationAssetResponse => _habitationAssetResponse;
 
-  HabitationAssetResponse? get habitationAssetResponse =>
-      _habitationAssetResponse;
+  GwTubeBoreWellPumpHouseResponse? _gwTubeBoreWellPumpHouseList;
+  GwTubeBoreWellPumpHouseResponse? get gwTubeBoreWellPumpHouseList => _gwTubeBoreWellPumpHouseList;
+
+
+  int? _selectedtypesofpumpId;
+  int? get selectedtypesofpumpId => _selectedtypesofpumpId;
+
   final Map<String, int> typesofpumpMap = {
     "Submersible": 1,
     "Horizontal": 2,
-    "vertical": 3,
+    "Vertical": 3,
   };
 
-  void setSelectedtypesofpump(String? label) {
-    _selectedtypesofpump = label;
+  String? get selectedPumpLabel {
+    if (_selectedtypesofpumpId == null) return null;
 
+    return typesofpumpMap.entries
+        .firstWhere((e) => e.value == _selectedtypesofpumpId)
+        .key;
+  }
+
+  void setSelectedtypesofpump(String? label) {
     if (label != null) {
       _selectedtypesofpumpId = typesofpumpMap[label];
     } else {
       _selectedtypesofpumpId = null;
     }
-
     notifyListeners();
   }
 
-  final Map<String, int> yesnoMap = {"yes": 1, "no": 2};
+  final Map<String, int> yesnoMap = {"yes": 1, "no": 0};
 
-  void setIsflowmeteryesno(String? label) {
+  void setIsFlowMeterYesNo(String? label) {
     _Isflow_meter_yesno = label;
 
     if (label != null) {
@@ -182,7 +187,8 @@ class NjmWsoProvider extends ChangeNotifier {
     int stateID,
     int habitationId,
     int userId,
-  ) async {
+  ) async
+  {
     _isLoading = true;
     notifyListeners();
 
@@ -203,6 +209,38 @@ class NjmWsoProvider extends ChangeNotifier {
         stackTrace: stackTrace,
       );
       _habitationAssetResponse = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getGroundWaterSourceList(
+      int userId,
+      int stateId,
+      int rpwssId,
+      int habitationId,
+      int assetId,
+      int assetTypeId,
+  ) async
+  {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      var rawResponse = await _njmWsoRepo.getGroundWaterSourceList(userId,stateId,rpwssId,habitationId,assetId,assetTypeId
+      );
+      if (rawResponse.status == true) {
+        _gwTubeBoreWellPumpHouseList = rawResponse;
+      } else {
+        errorMsg = rawResponse.msg;
+      }
+    } catch (e, stackTrace) {
+      GlobalExceptionHandler.handleException(
+        e as Exception,
+        stackTrace: stackTrace,
+      );
+      _gwTubeBoreWellPumpHouseList = null;
     } finally {
       _isLoading = false;
       notifyListeners();

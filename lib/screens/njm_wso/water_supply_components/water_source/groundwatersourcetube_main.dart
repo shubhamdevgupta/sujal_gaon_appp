@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:jal_sanchalan/utils/app_constants.dart';
+import 'package:jal_sanchalan/utils/device_utils.dart';
+import 'package:jal_sanchalan/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
+import '../../../../../models/njm_ftk_response/habitation_assest.dart';
 import '../../../../../providers/njm_wso/njm_wso_provider.dart';
+import '../../../../../service/local_storage_service.dart';
+import '../../../../../utils/app_dialog.dart';
+import '../../../../../utils/auth/user_session_manager.dart';
+import '../../../../../utils/enum/app_dialog.dart';
 
-class GroundwatersourcetubeRegular extends StatefulWidget {
-  const GroundwatersourcetubeRegular({super.key});
+class GroundwatersourcetubeMain extends StatefulWidget {
+
+  const GroundwatersourcetubeMain({super.key});
 
   @override
-  State<GroundwatersourcetubeRegular> createState() =>
-      _GroundwatersourcetubeRegular();
+  State<GroundwatersourcetubeMain> createState() =>
+      _GroundwatersourcetubeMain();
 }
 
-class _GroundwatersourcetubeRegular
-    extends State<GroundwatersourcetubeRegular> {
+class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
+
+  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
 
   String? pumpType;
   String? locationType;
@@ -86,15 +98,22 @@ class _GroundwatersourcetubeRegular
   // ================= UI =================
 
   @override
+  void initState() {
+      session.init();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final njm_wsoProvider = context.watch<NjmWsoProvider>();
+    final SjlAllAsset asset = ModalRoute.of(context)!.settings.arguments as SjlAllAsset;
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
 
       appBar: AppBar(
         backgroundColor: const Color(0xFF1976D2),
         title: const Text(
-          "Ground Water Source",
+          "Ground Water Source ",
           style: TextStyle(color: Colors.white),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -114,61 +133,77 @@ class _GroundwatersourcetubeRegular
           child: Column(
             children: [
 
-
-
-
-
-              // ================= OPERATION =================
+              // ================= CONFIGURATION =================
               _sectionCard(
-                icon: Icons.access_time,
-                title: "Pump Operation",
+                icon: Icons.settings,
+                title: "Pump Configuration",
                 children: [
 
+                  _dropdown(
+                    "Type of Pump",
+                    value: njm_wsoProvider.selectedPumpLabel,
+                    items: njm_wsoProvider.typesofpumpMap.keys.toList(),
+                    onChanged: (value) {
+                      njm_wsoProvider.setSelectedtypesofpump(value);
+                      print("pump id ${njm_wsoProvider.selectedtypesofpumpId}");
+                    },
+                  ),
                   _input(
-                    "Pump Start Time (HH:MM)",
-                    controller: njm_wsoProvider.startTimeController,
-                    onChanged: (_) =>
-                        _calculatePumpingHours(),
+                    "Discharge of Pump (m3/h)",
+                    controller: njm_wsoProvider.dischargeController,
+                    keyboard: const TextInputType.numberWithOptions(decimal: true),
                   ),
 
                   _input(
-                    "Pump Stop Time (HH:MM)",
-                    controller: njm_wsoProvider.stopTimeController,
-                    onChanged: (_) =>
-                        _calculatePumpingHours(),
-                  ),
-
-                  _input(
-                    "Pumping Hours (Auto)",
-                    controller: njm_wsoProvider.pumpingHoursController,
-                    readOnly: true,
+                    "Head of Pump (m)",
+                    controller: njm_wsoProvider.headController,
+                    keyboard: const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ],
               ),
-
-
 
               const SizedBox(height: 22),
 
-              // ================= VOLUME =================
+              // ================= FLOW METER =================
               _sectionCard(
-                icon: Icons.analytics,
-                title: "Auto Calculated Volume",
+                icon: Icons.speed,
+                title: "Flow Meter Details",
                 children: [
 
-                  _input(
-                    "Volume Supplied (KL / m3)",
-                    controller: njm_wsoProvider.volumeController,
-                    readOnly: true,
+                  _dropdown(
+                    "Flow Meter Installed?",
+                    value: njm_wsoProvider.Isflow_meter_yesno,
+                    items: njm_wsoProvider.yesnoMap.keys.toList(),
+                    onChanged: (value) {
+                      njm_wsoProvider.setIsFlowMeterYesNo(value);
+                    },
                   ),
+
+
+                  if (flowMeterInstalled == "Yes") ...[
+                    _input(
+                      "Flow Meter Reading (Start)",
+                      controller: flowStartController,
+                      keyboard: TextInputType.number,
+                      onChanged: (_) => _calculateVolume(),
+                    ),
+
+                    _input(
+                      "Flow Meter Reading (Stop)",
+                      controller: njm_wsoProvider.flowStopController,
+                      keyboard: TextInputType.number,
+                      onChanged: (_) => _calculateVolume(),
+                    ),
+                  ],
                 ],
               ),
+              const SizedBox(height: 22),
 
-              const SizedBox(height: 30),
+              _submitButton(njm_wsoProvider,asset),
 
-              _submitButton(),
 
-              const SizedBox(height: 40),
+
+
             ],
           ),
         ),
@@ -254,6 +289,23 @@ class _GroundwatersourcetubeRegular
         bool readOnly = false,
         Function(String)? onChanged,
       }) {
+
+    List<TextInputFormatter>? formatters;
+
+    /// Restrict input based on keyboard type
+    if (keyboard == TextInputType.number) {
+      formatters = [
+        FilteringTextInputFormatter.digitsOnly,
+      ];
+    }
+
+    /// Allow decimal values
+    if (keyboard == const TextInputType.numberWithOptions(decimal: true)) {
+      formatters = [
+        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+      ];
+    }
+
     return TextField(
       controller: controller,
       keyboardType: keyboard,
@@ -261,6 +313,7 @@ class _GroundwatersourcetubeRegular
       maxLength: maxLength,
       readOnly: readOnly,
       onChanged: onChanged,
+      inputFormatters: formatters,
 
       decoration: InputDecoration(
         hintText: hint,
@@ -279,7 +332,6 @@ class _GroundwatersourcetubeRegular
           vertical: 14,
         ),
 
-        // 🔥 Darker textured border
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(
@@ -339,26 +391,65 @@ class _GroundwatersourcetubeRegular
   }
 
   // ================= SUBMIT =================
+ // provider.fetchHabitationAssetsID(31, 1030748, session.userId);
+  //TODO  remove the staic values from there
+  Widget _submitButton(NjmWsoProvider provider,SjlAllAsset asset) {
+    return InkWell(
+      onTap: () async{
+       await provider.insertOrUpdateGroundWaterPumpHouse(
+            id: 0,
+            stateId: 31,
+            rpwssId: asset.rpwssId!,
+            outVillageId: asset.outVillageId!,
+            assetId: asset.assetId!,
+            assetTypeId: asset.assetTypeId!,
+            assetType: asset.assetType!,
+            habitationId: 1030748,
+            typeOfPumpId: provider.selectedtypesofpumpId! ,
+            feedingTypeId: 0,
+            dischargeOfPump: double.parse(provider.dischargeController.text),
+            dischargeUnit: 'm3/h',
+            headPump:  double.parse(provider.headController.text),
+            headPumpUnit: 'm',
+            isFlowMeterInstalled: provider.Isflow_meter_yesnoId! ,
+            createdBy: session.userId,
+            createdIp: DeviceInfoUtil.deviceId
+        );
+       await provider.groundWaterResponse!.status ==true ?AppDialog.show(
+          context,
+          type: AppDialogType.success,
+          message: provider.njmFtkRegistrationResponse?.message,
+          onPressed: () {
 
-  Widget _submitButton() {
-    return Container(
-      width: double.infinity,
-      height: 56,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF1E88E5),
-            Color(0xFF1565C0),
-          ],
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppConstants.navigateToNjmCategory,
+                  (route) => false,
+            );
+          },
+        ):ToastHelper.showToastMessage(provider.errorMsg!);
+        
+      },
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF1E88E5),
+              Color(0xFF1565C0),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(30),
         ),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: const Center(
-        child: Text(
-          "Save Pump Entry",
-          style: TextStyle(
+        child: const Center(
+          child: Text(
+            "Save Pump Entry",
+            style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.w600),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ),
     );
