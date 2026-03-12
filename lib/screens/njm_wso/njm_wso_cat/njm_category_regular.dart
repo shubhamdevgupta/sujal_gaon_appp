@@ -536,7 +536,7 @@ void _navigateToAssetForm(BuildContext context, SjlAllAsset asset,int tubeBoreWe
       );
       break;
     case 2:
-      Navigator.pushNamed(context, AppConstants.navigateToPumpsForm);
+      Navigator.pushNamed(context, AppConstants.navigateToPumpingRegular);
       break;
     case 8:
       Navigator.pushNamed(context, AppConstants.navigateToOHSRForm);

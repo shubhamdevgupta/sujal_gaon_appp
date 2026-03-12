@@ -161,7 +161,7 @@ class _NjmCategory extends State<WscCategory> {
                           title: "Pumps ",
                           subtitle: "Testing Information",
                           onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToPumpsForm);
+                            Navigator.pushNamed(context, AppConstants.navigateToPumpingMain);
                           },
                         ),
 

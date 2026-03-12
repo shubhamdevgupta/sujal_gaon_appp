@@ -18,8 +18,7 @@ class GroundwatersourcetubeMain extends StatefulWidget {
   const GroundwatersourcetubeMain({super.key});
 
   @override
-  State<GroundwatersourcetubeMain> createState() =>
-      _GroundwatersourcetubeMain();
+  State<GroundwatersourcetubeMain> createState() => _GroundwatersourcetubeMain();
 }
 
 class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
@@ -92,6 +91,17 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
                     onChanged: (value) {
                       njm_wsoProvider.setSelectedtypesofpump(value);
                       print("pump id ${njm_wsoProvider.selectedtypesofpumpId}");
+                    },
+                  ),
+
+
+                  _dropdown(
+                    "Location",
+                    value: njm_wsoProvider.selectedlocationlabel,
+                    items: njm_wsoProvider.typesoflocationMap.keys.toList(),
+                    onChanged: (value) {
+                      njm_wsoProvider.setSelectedtypesoflocation(value);
+                      print("location id ${njm_wsoProvider.selectedlocationId}");
                     },
                   ),
                   _input(
@@ -336,7 +346,7 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
             assetType: asset.assetType!,
             habitationId: 1030748,
             typeOfPumpId: provider.selectedtypesofpumpId! ,
-            feedingTypeId: 0,
+            feedingTypeId: provider.selectedlocationId!,
             dischargeOfPump: double.parse(provider.dischargeController.text),
             dischargeUnit: 'm3/h',
             headPump:  double.parse(provider.headController.text),
