@@ -216,15 +216,15 @@ class _GroundwatersourcetubeRegular
   }
 
   Widget _input(
-    String hint, {
-    TextEditingController? controller,
-    TextInputType keyboard = TextInputType.text,
-    int maxLines = 1,
-    int? maxLength,
-    bool readOnly = false,
-    VoidCallback? onTap,
-    Function(String)? onChanged,
-  }) {
+      String label, {
+        TextEditingController? controller,
+        TextInputType keyboard = TextInputType.text,
+        int maxLines = 1,
+        int? maxLength,
+        bool readOnly = false,
+        VoidCallback? onTap,
+        Function(String)? onChanged,
+      }) {
     List<TextInputFormatter>? formatters;
 
     /// Restrict input based on keyboard type
@@ -234,7 +234,9 @@ class _GroundwatersourcetubeRegular
 
     /// Allow decimal values
     if (keyboard == const TextInputType.numberWithOptions(decimal: true)) {
-      formatters = [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))];
+      formatters = [
+        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+      ];
     }
 
     return TextField(
@@ -248,9 +250,13 @@ class _GroundwatersourcetubeRegular
       inputFormatters: formatters,
 
       decoration: InputDecoration(
-        hintText: hint,
+        labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
 
-        prefixIcon: const Icon(Icons.edit, color: Color(0xFF1976D2), size: 18),
+        labelStyle: const TextStyle(
+          color: Color(0xFF1976D2),
+          fontWeight: FontWeight.w600,
+        ),
 
         filled: true,
         fillColor: Colors.white,
@@ -262,12 +268,18 @@ class _GroundwatersourcetubeRegular
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.blueGrey.shade400, width: 1.3),
+          borderSide: BorderSide(
+            color: Colors.blueGrey.shade400,
+            width: 1.3,
+          ),
         ),
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFF1976D2), width: 1.8),
+          borderSide: const BorderSide(
+            color: Color(0xFF1976D2),
+            width: 1.8,
+          ),
         ),
       ),
     );

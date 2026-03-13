@@ -572,7 +572,7 @@ void _navigateToAssetForm(
       );
       break;
     case 2:
-      Navigator.pushNamed(context, AppConstants.navigateToPumpingRegular);
+      Navigator.pushNamed(context, AppConstants.navigateToPumpingRegular,  arguments: tubeBoreWellId);
       break;
     case 8:
       Navigator.pushNamed(context, AppConstants.navigateToOHSRForm);

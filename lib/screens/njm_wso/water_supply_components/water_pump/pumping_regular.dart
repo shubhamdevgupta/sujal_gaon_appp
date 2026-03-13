@@ -1,4 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../providers/njm_wso/njm_wso_provider.dart';
+import '../../../../service/local_storage_service.dart';
+import '../../../../utils/app_constants.dart';
+import '../../../../utils/app_dialog.dart';
+import '../../../../utils/auth/user_session_manager.dart';
+import '../../../../utils/device_utils.dart';
+import '../../../../utils/enum/app_dialog.dart';
+import '../../../../utils/toast_helper.dart';
 
 class PumpingRegular extends StatefulWidget {
   const PumpingRegular({super.key});
@@ -10,7 +21,8 @@ class PumpingRegular extends StatefulWidget {
 class _PumpingRegular extends State<PumpingRegular> {
 
   // ================= VARIABLES =================
-
+  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
   String? pumpType;
   String? locationType;
   String? flowMeterInstalled;
@@ -95,9 +107,15 @@ class _PumpingRegular extends State<PumpingRegular> {
     volumeController.text = volume.toStringAsFixed(2);
   }
   // ================= UI =================
-
+  @override
+  void initState() {
+    session.init();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    final njm_wsoProvider = context.watch<NjmWsoProvider>();
+    final tubeBoreWellId = ModalRoute.of(context)!.settings.arguments as int;
     return Scaffold(
       backgroundColor: const Color(0xFFF2F6FF),
 
@@ -129,29 +147,40 @@ class _PumpingRegular extends State<PumpingRegular> {
 
               _sectionCard(
                 icon: Icons.access_time,
-                title: "Pumping Time",
+                title: "Pump Operation",
                 children: [
+                  _input(
+                    "Pump Start Time",
+                    controller: njm_wsoProvider.pumpStartTimeController,
+                    readOnly: true,
+                    onTap: () async {
+                      final dateTime = await pickDateTime(context);
 
-                  InkWell(
-                    onTap: () => _pickTime(startTimeController),
-                    child: _input("Pump Start Time",
-                        controller: startTimeController,
-                        readOnly: true),
+                      if (dateTime != null) {
+                        njm_wsoProvider.setPumpStart(dateTime);
+                      }
+                    },
                   ),
 
-                  InkWell(
-                    onTap: () => _pickTime(stopTimeController),
-                    child: _input("Pump Stop Time",
-                        controller: stopTimeController,
-                        readOnly: true),
-                  ),
+                  _input(
+                    "Pump Stop Time",
+                    controller: njm_wsoProvider.pumpStopTimeController,
+                    readOnly: true,
+                    onTap: () async {
+                      final dateTime = await pickDateTime(context);
 
-                  _input("Pumping Hours (Auto)",
-                      controller: pumpingHoursController,
-                      readOnly: true),
+                      if (dateTime != null) {
+                        njm_wsoProvider.setPumpStop(dateTime);
+                      }
+                    },
+                  ),
+                  _input(
+                    "Pumping Hours (Auto)",
+                    controller: njm_wsoProvider.pumpingHoursController,
+                    readOnly: true,
+                  ),
                 ],
               ),
-
               const SizedBox(height: 20),
 
               // ================= FLOW METER =================
@@ -160,45 +189,29 @@ class _PumpingRegular extends State<PumpingRegular> {
                 icon: Icons.speed,
                 title: "Flow Meter Details",
                 children: [
-
-                  _dropdown(
-                    "Flow Meter Installed?",
-                    value: flowMeterInstalled,
-                    items: const [
-                      DropdownMenuItem(
-                        value: "Yes",
-                        child: Text("Yes"),
+                  if (true) ...[
+                    _input(
+                      "Flow Meter Reading (Start)",
+                      controller: njm_wsoProvider.flowMeterStartController,
+                      keyboard: const TextInputType.numberWithOptions(
+                        decimal: true,
                       ),
-                      DropdownMenuItem(
-                        value: "No",
-                        child: Text("No"),
+                    ),
+                    _input(
+                      "Flow Meter Reading (Stop)",
+                      controller: njm_wsoProvider.flowMeterStopController,
+                      keyboard: const TextInputType.numberWithOptions(
+                        decimal: true,
                       ),
-                    ],
-                    onChanged: (v) {
-                      setState(() {
-                        flowMeterInstalled = v;
-                        _calculateVolume();
-                      });
-                    },
-                  ),
-
-                  if (flowMeterInstalled == "Yes") ...[
-                    _input("Flow Meter Reading Start",
-                        controller: flowStartController,
-                        keyboard: TextInputType.number,
-                        onChanged: (_) => _calculateVolume()),
-
-                    _input("Flow Meter Reading Stop",
-                        controller: flowStopController,
-                        keyboard: TextInputType.number,
-                        onChanged: (_) => _calculateVolume()),
+                    ),
                   ],
-
-                  _input("Volume Supplied (Auto)",
-                      controller: volumeController,
-                      readOnly: true),
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
+
+              _submitButton(tubeBoreWellId),
 
               const SizedBox(height: 30),
             ],
@@ -282,14 +295,36 @@ class _PumpingRegular extends State<PumpingRegular> {
       String label, {
         TextEditingController? controller,
         TextInputType keyboard = TextInputType.text,
+        int maxLines = 1,
+        int? maxLength,
         bool readOnly = false,
+        VoidCallback? onTap,
         Function(String)? onChanged,
       }) {
+    List<TextInputFormatter>? formatters;
+
+    /// Restrict input based on keyboard type
+    if (keyboard == TextInputType.number) {
+      formatters = [FilteringTextInputFormatter.digitsOnly];
+    }
+
+    /// Allow decimal values
+    if (keyboard == const TextInputType.numberWithOptions(decimal: true)) {
+      formatters = [
+        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+      ];
+    }
+
     return TextField(
       controller: controller,
       keyboardType: keyboard,
+      maxLines: maxLines,
+      maxLength: maxLength,
       readOnly: readOnly,
       onChanged: onChanged,
+      onTap: onTap,
+      inputFormatters: formatters,
+
       decoration: InputDecoration(
         labelText: label,
         floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -320,6 +355,58 @@ class _PumpingRegular extends State<PumpingRegular> {
           borderSide: const BorderSide(
             color: Color(0xFF1976D2),
             width: 1.8,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _submitButton(int tubeBoreWellId) {
+    final provider = context.read<NjmWsoProvider>();
+    return InkWell(
+      onTap: () async {
+        await provider.insertPumpRegularEntry(
+          id: 0,
+          stateId: 31,
+          tubeBoreWellId: tubeBoreWellId,
+          isManualStartStop: 0,
+          pumpStartDateTime: provider.pumpStartApi,
+          pumpStopDateTime: provider.pumpStopApi,
+          flowMeterReading: "KL",
+          flowMeterStart: double.parse(provider.flowMeterStartController.text),
+          flowMeterStop: double.parse(provider.flowMeterStopController.text),
+          createdBy: session.userId,
+          createdIp: DeviceInfoUtil.deviceId,
+        );
+        await provider.groundWaterResponse!.status == true
+            ? AppDialog.show(
+          context,
+          type: AppDialogType.success,
+          title: provider.groundWaterResponse!.id.toString(),
+          message: provider.groundWaterResponse?.message,
+          onPressed: () {
+            Navigator.pushNamed(
+              context,
+              AppConstants.navigateToNjmRegularEntry,
+            );
+          },
+        )
+            : ToastHelper.showToastMessage(provider.errorMsg!);
+      },
+
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1E88E5), Color(0xFF1565C0)],
+          ),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: const Center(
+          child: Text(
+            "Save Pump Entry",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
       ),
@@ -375,5 +462,25 @@ class _PumpingRegular extends State<PumpingRegular> {
       items: items,
       onChanged: onChanged,
     );
+  }
+
+  Future<DateTime?> pickDateTime(BuildContext context) async {
+    final date = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+
+    if (date == null) return null;
+
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (time == null) return null;
+
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 }
