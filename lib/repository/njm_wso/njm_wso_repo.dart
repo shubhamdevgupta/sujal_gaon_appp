@@ -137,7 +137,7 @@ class NjmWsoRepo {
   ) async {
     try {
       final response = await _apiService.get(
-        'SJL_Get_invnt_ground_water_tube_bore_well_Pumphouse?UserId=$userId&StateId=$stateId&RPWSSId=$rpwssId&HabitationId=$habitationId&AssetId=$assetId&AssetYpeId=$assetTypeId',
+        'SJL_Get_invnt_ground_water_tube_bore_well_Pumphouse?UserId=$userId&StateId=$stateId&RPWSSId=$rpwssId&HabitationId=$habitationId&AssetId=$assetId&AssetTypeId=$assetTypeId',
       );
 
       return GwTubeBoreWellPumpHouseResponse.fromJson(response);

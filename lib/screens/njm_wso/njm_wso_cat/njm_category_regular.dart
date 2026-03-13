@@ -83,6 +83,7 @@ class _NjmRegularEntry extends State<NjmRegularEntry> {
     );
   }
 }
+
 Widget buildHabitationCard(String serviceArea) {
   const Color habitationThemeColor = Color(0xFF1565C0); // Deep JJM Blue
 
@@ -322,15 +323,15 @@ Widget buildNormalAssetCard(
   BuildContext context,
   SjlAllAsset asset,
   int index,
-)
-{
+) {
   const Color themeColor = Color(0xFF1976D2);
 
   return Consumer<NjmWsoProvider>(
     builder: (context, provider, child) {
       bool isExpanded = expandedAssets[index] ?? false;
 
-      final pumpList = provider.gwTubeBoreWellPumpHouseList?.pumpHouseList ?? [];
+      final pumpList =
+          provider.gwTubeBoreWellPumpHouseList?.pumpHouseList ?? [];
 
       return AnimatedContainer(
         duration: const Duration(milliseconds: 300),
@@ -352,9 +353,7 @@ Widget buildNormalAssetCard(
                 expandedAssets[index] = !isExpanded;
 
                 if (expandedAssets[index] == true) {
-
                   switch (asset.assetTypeId) {
-
                     case 0:
                       await provider.getGroundWaterSourceList(
                         41494,
@@ -367,19 +366,47 @@ Widget buildNormalAssetCard(
                       break;
 
                     case 2:
-                   //   await provider.getPumpHouseList(asset.assetId!);
+                      await provider.getGroundWaterSourceList(
+                        41494,
+                        31,
+                        asset.rpwssId!,
+                        1030748,
+                        asset.assetId!,
+                        asset.assetTypeId!,
+                      );
                       break;
 
                     case 8:
-                     // await provider.getOhsrList(asset.assetId!);
+                      await provider.getGroundWaterSourceList(
+                        41494,
+                        31,
+                        asset.rpwssId!,
+                        1030748,
+                        asset.assetId!,
+                        asset.assetTypeId!,
+                      );
                       break;
 
                     case 5:
-                     // await provider.getClearWaterReservoirList(asset.assetId!);
+                      await provider.getGroundWaterSourceList(
+                        41494,
+                        31,
+                        asset.rpwssId!,
+                        1030748,
+                        asset.assetId!,
+                        asset.assetTypeId!,
+                      );
                       break;
 
                     case 11:
-                      //await provider.getDisinfectionList(asset.assetId!);
+                      await provider.getGroundWaterSourceList(
+                        41494,
+                        31,
+                        asset.rpwssId!,
+                        1030748,
+                        asset.assetId!,
+                        asset.assetTypeId!,
+                      );
                       break;
                   }
                 }
@@ -433,11 +460,8 @@ Widget buildNormalAssetCard(
                           ),
                           Text(
                             "${asset.assetId}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-
                         ],
                       ),
                     ),
@@ -503,14 +527,23 @@ Widget buildNormalAssetCard(
                                 ),
 
                                 ElevatedButton(
-                                  onPressed: () =>
-                                      _navigateToAssetForm(context, asset,pump.tubeBoreWellId),
+                                  onPressed: () => _navigateToAssetForm(
+                                    context,
+                                    asset,
+                                    pump.tubeBoreWellId,
+                                  ),
 
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF1976D2),
                                   ),
 
-                                  child: const Text("Add", style: const TextStyle(fontSize: 12,color: Colors.white)),
+                                  child: const Text(
+                                    "Add",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -525,8 +558,11 @@ Widget buildNormalAssetCard(
   );
 }
 
-void _navigateToAssetForm(BuildContext context, SjlAllAsset asset,int tubeBoreWellId) {
-
+void _navigateToAssetForm(
+  BuildContext context,
+  SjlAllAsset asset,
+  int tubeBoreWellId,
+) {
   switch (asset.assetTypeId) {
     case 0:
       Navigator.pushNamed(
