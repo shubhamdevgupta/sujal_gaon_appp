@@ -54,6 +54,7 @@ class GwTubeBoreWellPumpHouse {
   final double headPump;
   final String headPumpUnit;
   final int isFlowMeterInstalled;
+  final int Total_Regular_entry;
 
   GwTubeBoreWellPumpHouse({
     required this.tubeBoreWellId,
@@ -72,6 +73,7 @@ class GwTubeBoreWellPumpHouse {
     required this.headPump,
     required this.headPumpUnit,
     required this.isFlowMeterInstalled,
+    required this.Total_Regular_entry,
   });
 
   factory GwTubeBoreWellPumpHouse.fromJson(Map<String, dynamic> json) {
@@ -92,6 +94,7 @@ class GwTubeBoreWellPumpHouse {
       headPump: (json['HeadPump'] ?? 0).toDouble(),
       headPumpUnit: json['HeadPumpUnit'] ?? '',
       isFlowMeterInstalled: json['IsFlowMeterInstalled'] ?? 0,
+      Total_Regular_entry: json['Total_Regular_entry'] ?? 0,
     );
   }
 
@@ -113,6 +116,7 @@ class GwTubeBoreWellPumpHouse {
       "HeadPump": headPump,
       "HeadPumpUnit": headPumpUnit,
       "IsFlowMeterInstalled": isFlowMeterInstalled,
+      "Total_Regular_entry": Total_Regular_entry,
     };
   }
 }

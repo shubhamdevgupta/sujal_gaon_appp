@@ -450,7 +450,7 @@ Widget buildNormalAssetCard(
                               const Spacer(),
 
                               Text(
-                                "${pumpList.length} Active",
+                                "${pumpList.length} Inventory",
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: Colors.grey.shade500,
@@ -520,6 +520,11 @@ Widget buildNormalAssetCard(
 
                                       Text(
                                         "Discharge : ${pump.dischargeOfPump} ${pump.dischargeUnit}",
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+
+                                      Text(
+                                        "Total Regular Entry : ${pump.Total_Regular_entry}",
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
