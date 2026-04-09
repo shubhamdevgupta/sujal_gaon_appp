@@ -40,7 +40,7 @@ class _NjmRegularEntry extends State<NjmRegularEntry> {
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: Colors.blue.shade700.withOpacity(0.9),
-        title: const Text("NJM", style: TextStyle(color: Colors.white)),
+        title: const Text("Regular Inventory", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Container(
@@ -212,109 +212,6 @@ Widget buildAssetList(NjmWsoProvider provider) {
   );
 }
 
-Widget buildSourceAssetCard(BuildContext context, SjlAllAsset asset) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 12),
-    child: Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        color: Colors.blue.shade50.withOpacity(.4),
-        border: Border.all(color: Colors.blue.shade200),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// TITLE
-          Row(
-            children: [
-              Icon(
-                _getAssetIcon(asset.assetTypeId),
-                color: Colors.blue.shade700,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                asset.assetType ?? "",
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 10),
-
-          /// MAIN TESTING
-          _sourceActionTile(
-            title: "Pump entry",
-            icon: Icons.science_outlined,
-            color: Colors.blue.shade100,
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                AppConstants.navigateToGroundwatersourcetubeMain,
-                arguments: asset,
-              );
-            },
-          ),
-
-          const SizedBox(height: 8),
-
-          /// REGULAR TESTING
-          _sourceActionTile(
-            title: "Pump activity",
-            icon: Icons.check_circle_outline,
-            color: Colors.green.shade100,
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                AppConstants.navigateToGroundwatersourcetubeRegular,
-              );
-            },
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _sourceActionTile({
-  required String title,
-  required IconData icon,
-  required Color color,
-  required VoidCallback onTap,
-}) {
-  return InkWell(
-    borderRadius: BorderRadius.circular(10),
-    onTap: onTap,
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: Colors.black87),
-
-          const SizedBox(width: 10),
-
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-            ),
-          ),
-
-          /// RIGHT ARROW
-          Icon(Icons.chevron_right, color: Colors.grey.shade600),
-        ],
-      ),
-    ),
-  );
-}
 
 bool isPumpExpanded = false;
 Map<int, bool> expandedAssets = {};
@@ -580,7 +477,7 @@ void _navigateToAssetForm(
       Navigator.pushNamed(context, AppConstants.navigateToPumpingRegular);
       break;
     case 8:
-      Navigator.pushNamed(context, AppConstants.navigateToOHSRForm);
+      Navigator.pushNamed(context, AppConstants.navigateToOHSRRegular);
       break;
     case 11:
       Navigator.pushNamed(context, AppConstants.navigateToDisinfectionForm);

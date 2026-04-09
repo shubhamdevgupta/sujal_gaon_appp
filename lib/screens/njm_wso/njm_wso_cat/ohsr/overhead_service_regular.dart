@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class OHSRForm extends StatefulWidget {
-  const OHSRForm({super.key});
+class OhsrRegular extends StatefulWidget {
+  const OhsrRegular({super.key});
 
   @override
-  State<OHSRForm> createState() => _OHSRFormState();
+  State<OhsrRegular> createState() => _OHSRFormState();
 }
 
-class _OHSRFormState extends State<OHSRForm> {
+class _OHSRFormState extends State<OhsrRegular> {
 
   // ================= VARIABLES =================
 
@@ -178,7 +178,7 @@ class _OHSRFormState extends State<OHSRForm> {
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: const Color(0xFF1976D2),
-        title: const Text("OHSR / Overhead Tank",
+        title: const Text("OHSR Regular",
             style: TextStyle(color: Colors.white)),
       ),
 

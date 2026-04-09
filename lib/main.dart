@@ -3,6 +3,7 @@ import 'package:jal_sanchalan/providers/authentication_provider.dart';
 import 'package:jal_sanchalan/providers/master_provider.dart';
 import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
 import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
+import 'package:jal_sanchalan/providers/njm_wso/ohsr_provider.dart';
 import 'package:jal_sanchalan/providers/panchayat/panchayat_provider.dart';
 import 'package:jal_sanchalan/providers/update_provider.dart';
 import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
@@ -49,6 +50,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => NjmFtkProvider(getIt<NjmFtkRepository>()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => OhsrProvider(getIt<NjmWsoRepo>()),
         ),
         ChangeNotifierProvider(create: (_) => UpdateViewModel()),
       ],

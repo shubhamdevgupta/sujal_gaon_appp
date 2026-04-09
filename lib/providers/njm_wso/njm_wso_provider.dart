@@ -59,15 +59,16 @@ class NjmWsoProvider extends ChangeNotifier {
   final volumeController = TextEditingController();
 
   String? _Isflow_meter_yesno;
+  String? get Isflow_meter_yesno => _Isflow_meter_yesno;
+
   int? _Isflow_meter_yesnoId;
+  int? get Isflow_meter_yesnoId => _Isflow_meter_yesnoId;
 
   String get pumpStartApi =>
       _pumpStart?.toIso8601String() ?? "";
   String get pumpStopApi =>
       _pumpStop?.toIso8601String() ?? "";
-  String? get Isflow_meter_yesno => _Isflow_meter_yesno;
 
-  int? get Isflow_meter_yesnoId => _Isflow_meter_yesnoId;
 
   GroundWaterPumpResponse? _groundWaterResponse;
 

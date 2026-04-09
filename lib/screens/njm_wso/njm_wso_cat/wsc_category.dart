@@ -53,7 +53,7 @@ class _NjmCategory extends State<WscCategory> {
               ),
             ),
 
-            /// Main UI
+        /*    /// Main UI
             SafeArea(
               child: Column(
                 children: [
@@ -114,7 +114,7 @@ class _NjmCategory extends State<WscCategory> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       children: [
 
-                  /*      CategoryCard(
+                  *//*      CategoryCard(
                           icon: Icons.person_outline,
                           title: "1. Basic Details",
                           subtitle: "User Information",
@@ -126,7 +126,7 @@ class _NjmCategory extends State<WscCategory> {
 
 
                           },
-                        ),*/
+                        ),*//*
 
                         CategoryCard(
                           icon: Icons.location_on_outlined,
@@ -170,7 +170,7 @@ class _NjmCategory extends State<WscCategory> {
                           title: "Over Head Service Reservoir (OHSR) / Over Head Tank ",
                           subtitle: "Risk Assessment",
                           onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToOHSRForm);
+                            Navigator.pushNamed(context, AppConstants.navigateToOHSRMain);
                           },
                         ),
 
@@ -198,7 +198,7 @@ class _NjmCategory extends State<WscCategory> {
                   ),
                 ],
               ),
-            ),
+            ),*/
           ],
         ),
       ),

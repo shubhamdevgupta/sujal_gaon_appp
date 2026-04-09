@@ -59,7 +59,8 @@ class AppConstants {
   static const String navigateToGroundwatersourcetubeRegular = '/GroundwatersourcetubeRegular ';
   static const String navigateToPumpingRegular = '/PumpingRegular ';
   static const String navigateToPumpingMain = '/PumpingMain ';
-  static const String navigateToOHSRForm = '/OHSRForm ';
+  static const String navigateToOHSRMain = '/OHSRMain ';
+  static const String navigateToOHSRRegular = '/OHSRRegular ';
   static const String navigateToGSRForm = '/GSRForm ';
   static const String navigateToSpringWaterForm = '/SpringWaterForm ';
   static const String navigateToDistributionSupplyForm = '/DistributionSupplyForm ';

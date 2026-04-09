@@ -3,8 +3,8 @@ import 'package:jal_sanchalan/models/njm_ftk_response/habitation_assest.dart';
 import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../utils/app_constants.dart';
-import '../../../utils/auth/user_session_manager.dart';
+import '../../../utils/app_constants.dart';
+import '../../utils/auth/user_session_manager.dart';
 
 class NjmCategory extends StatefulWidget {
   const NjmCategory({super.key});
@@ -38,7 +38,7 @@ class _NjmCategory extends State<NjmCategory> {
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: Colors.blue.shade700.withOpacity(0.9),
-        title: const Text("Inventory", style: TextStyle(color: Colors.white)),
+        title: const Text("Add Inventory", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Container(
@@ -437,7 +437,7 @@ void _navigateToAssetForm(BuildContext context,SjlAllAsset asset) {
         AppConstants.navigateToGroundwatersourcetubeMain, arguments: asset);
       break;
     case 8:
-      Navigator.pushNamed(context, AppConstants.navigateToOHSRForm);
+      Navigator.pushNamed(context, AppConstants.navigateToOHSRMain);
       break;
     case 11:
       Navigator.pushNamed(context, AppConstants.navigateToDisinfectionForm);
