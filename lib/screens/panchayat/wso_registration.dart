@@ -27,14 +27,13 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
   DateTime? fromDate;
   DateTime? toDate;
 
-
   @override
   void initState() {
     super.initState();
     session.init();
-    final masterProvider = Provider.of<MasterProvider>(context, listen: false);
-    masterProvider.fetchVillage(
-        _localStorage.getString(AppConstants.prefPanchayatId)!);
+    // final masterProvider = Provider.of<MasterProvider>(context, listen: false);
+    // masterProvider.fetchVillage(
+    //     _localStorage.getString(AppConstants.prefPanchayatId)!);
   }
 
   @override
@@ -47,7 +46,7 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF1565C0),
         title: const Text(
-          "NJM Registration",
+          "WSO Registration",
           style: TextStyle(color: Colors.white),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -55,14 +54,8 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
       ),
 
       body: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/icons/SJL_bg.png"),
@@ -102,6 +95,16 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
                         appBarTitle: "Select Village",
                       ),
 
+                      Text(
+                        "LGD Code of the Village",
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+
+                      //Habitation commented
+                      /*
                       if (masterProvider.selectedVillageId != null) ...[
                         if (masterProvider.isLoading)
                           const Padding(
@@ -176,6 +179,7 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
                           ),
                         ],
                       ],
+*/
                     ],
                   ),
                   const SizedBox(height: 22),
@@ -213,7 +217,6 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
                       ),
                     ],
                   ),
-
                 ],
               ),
 
@@ -289,7 +292,7 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
           const SizedBox(height: 16),
 
           ...children.map(
-                (e) =>
+            (e) =>
                 Padding(padding: const EdgeInsets.only(bottom: 16), child: e),
           ),
         ],
@@ -297,7 +300,8 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
     );
   }
 
-  Widget _input(String hint, {
+  Widget _input(
+    String hint, {
     TextEditingController? controller,
     TextInputType keyboard = TextInputType.text,
     int maxLines = 1,
@@ -339,24 +343,24 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
       ),
     );
   }
+
   Widget _dropdown(
-      String label, {
-        required String? value,
-        required List<String> items,
-        required Function(String?) onChanged,
-      }) {
+    String label, {
+    required String? value,
+    required List<String> items,
+    required Function(String?) onChanged,
+  }) {
     return DropdownButtonFormField<String>(
       value: value,
-      isExpanded: true,   // 🔥 VERY IMPORTANT FIX
+      isExpanded: true,
+      // 🔥 VERY IMPORTANT FIX
       decoration: InputDecoration(
         labelText: label,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 14,
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFF1565C0)),
@@ -365,13 +369,13 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
       items: items
           .map(
             (item) => DropdownMenuItem(
-          value: item,
-          child: Text(
-            item,
-            overflow: TextOverflow.ellipsis,  // 🔥 prevent overflow
-          ),
-        ),
-      )
+              value: item,
+              child: Text(
+                item,
+                overflow: TextOverflow.ellipsis, // 🔥 prevent overflow
+              ),
+            ),
+          )
           .toList(),
       onChanged: onChanged,
     );
@@ -425,7 +429,10 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
 
     // Habitation validation
     if (masterProvider.selectedHabitationIds.isEmpty) {
-      ToastHelper.showErrorSnackBar(context, "Please select at least one habitation");
+      ToastHelper.showErrorSnackBar(
+        context,
+        "Please select at least one habitation",
+      );
       return false;
     }
 
@@ -443,12 +450,15 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
     }
 
     if (mobile.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(mobile)) {
-      ToastHelper.showErrorSnackBar(context, "Enter valid 10 digit mobile number");
+      ToastHelper.showErrorSnackBar(
+        context,
+        "Enter valid 10 digit mobile number",
+      );
       return false;
     }
 
     // Email validation (optional)
-/*    String email = provider.emailController.text.trim();
+    /*    String email = provider.emailController.text.trim();
     if (email.isNotEmpty) {
       if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(email)) {
         ToastHelper.showErrorSnackBar(context, "Enter valid email address");
@@ -476,7 +486,6 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
   Widget _submitButton(VwscProvider provider, MasterProvider masterProvider) {
     return InkWell(
       onTap: () async {
-
         /// 🔴 VALIDATION CHECK
         if (!_validateForm(provider, masterProvider)) {
           return;
@@ -485,7 +494,9 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
         await provider.registerNjmFTK(
           regId: 0,
           userTypeId: UserType.njmp.id,
-          stateId: int.parse(_localStorage.getString(AppConstants.prefStateId)!),
+          stateId: int.parse(
+            _localStorage.getString(AppConstants.prefStateId)!,
+          ),
           districtId: int.parse(
             _localStorage.getString(AppConstants.prefDistrictId)!,
           ),
@@ -569,7 +580,7 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         AppConstants.navigateToWSOLandingPage,
-                            (route) => false, // Clear back stack
+                        (route) => false, // Clear back stack
                       );
                       provider.clearData();
                     },

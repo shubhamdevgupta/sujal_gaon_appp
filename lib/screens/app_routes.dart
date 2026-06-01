@@ -12,8 +12,8 @@ import 'package:jal_sanchalan/screens/ssg_member/ssg_landingpage.dart';
 import 'package:jal_sanchalan/screens/ssg_member/ssg_login.dart';
 import 'package:jal_sanchalan/screens/ssg_member/ssg_questionscategory.dart';
 import 'package:jal_sanchalan/screens/vwsc/member_list/members_tab_screen.dart';
-import 'package:jal_sanchalan/screens/vwsc/ssg_registration.dart';
-import 'package:jal_sanchalan/screens/vwsc/wso_registration.dart';
+import 'package:jal_sanchalan/screens/panchayat/ssg_registration.dart';
+import 'package:jal_sanchalan/screens/panchayat/wso_registration.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_landing_screen.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_login.dart';
 import 'package:jal_sanchalan/screens/wso/main_wso_inventory.dart';
@@ -56,9 +56,9 @@ class AppRoutes {
       AppConstants.navigateToVwscLogin: (context) => const VwscLogin(),
       AppConstants.navigateToVWSCLandingScreen: (context) =>
           const VwscLandingScreen(),
-      AppConstants.navigateToNJMPRegistrationForm: (context) =>
+      AppConstants.navigateToWsoRegistrationForm: (context) =>
           const WSORegistrationForm(),
-      AppConstants.navigateToSHGFTKRegistrationForm: (context) =>
+      AppConstants.navigateToSSGRegistrationForm: (context) =>
           const SSGMemberRegistrationForm(),
       AppConstants.navigateToVWSCMemberScrenn: (context) => MembersTabScreen(),
 

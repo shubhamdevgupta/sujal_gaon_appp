@@ -113,13 +113,13 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
 
                 _viewActionCard(
                   icon: Icons.water_drop,
-                  title: "Register NJM / WSO",
-                  subtitle: "Register Nal Jal Mitra",
+                  title: "Register WSO",
+                  subtitle: "Water Supply Operator",
                   iconColor: Colors.blue,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
-                      AppConstants.navigateToNJMPRegistrationForm,
+                      AppConstants.navigateToWsoRegistrationForm,
                     );
                   },
                 ),
@@ -128,13 +128,13 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
 
                 _viewActionCard(
                   icon: Icons.groups,
-                  title: "Register SHG / FTK Women",
-                  subtitle: "Register Self Help Group",
+                  title: "Register SSG Member",
+                  subtitle: "Register Sujalam Shakti Group Member",
                   iconColor: Colors.blue,
                   onTap: () {
                     Navigator.pushNamed(
                       context,
-                      AppConstants.navigateToSHGFTKRegistrationForm,
+                      AppConstants.navigateToSSGRegistrationForm,
                     );
                   },
                 ),
@@ -157,7 +157,7 @@ class _PanchayatLandingScreenState extends State<PanchayatLandingScreen> {
                 _viewActionCard(
                   icon: Icons.assignment,
                   title: "View Registered Members",
-                  subtitle: "NJM / WSO / FTK / SHG",
+                  subtitle: "WSO / SSG Members",
                   iconColor: Colors.teal,
                   onTap: () {
                     Navigator.pushNamed(

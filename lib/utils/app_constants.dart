@@ -35,8 +35,8 @@ class AppConstants {
   //vwsc
   static const String navigateToVwscLogin = '/VwscLogin ';
   static const String navigateToVWSCLandingScreen = '/VWSClandingscreen';
-  static const String navigateToNJMPRegistrationForm = '/NJMPRegistrationForm';
-  static const String navigateToSHGFTKRegistrationForm ='/SHGFTKRegistrationForm';
+  static const String navigateToWsoRegistrationForm = '/NJMPRegistrationForm';
+  static const String navigateToSSGRegistrationForm ='/SHGFTKRegistrationForm';
   static const String navigateToVWSCMemberScrenn = '/listofvwscmember';
 
   ///////////////      SUJALAM SHAKTI GROUP MEMBER
