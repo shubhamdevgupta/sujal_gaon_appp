@@ -14,16 +14,15 @@ import '../../utils/auth/user_session_manager.dart';
 import '../../utils/enum/user_type.dart';
 import '../../utils/loader_utils.dart';
 import '../../utils/toast_helper.dart';
-import '../widgets/app_dropdown.dart';
 
-class FtkLandingpage extends StatefulWidget {
-  const FtkLandingpage({super.key});
+class SsgLandingpage extends StatefulWidget {
+  const SsgLandingpage({super.key});
 
   @override
-  State<FtkLandingpage> createState() => _FtkLandingpageState();
+  State<SsgLandingpage> createState() => _SsgLandingpageState();
 }
 
-class _FtkLandingpageState extends State<FtkLandingpage> {
+class _SsgLandingpageState extends State<SsgLandingpage> {
   final session = UserSessionManager();
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -139,8 +138,6 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
   }
 
   Widget _dashboardCard(BuildContext context) {
-    final provider = context.read<NjmFtkProvider>();
-
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -190,7 +187,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                   const SizedBox(height: 8),
 
                   const Text(
-                    "Overview of Your FTK Area",
+                    "Overview of Your SSG Area",
                     style: TextStyle(color: Colors.black87, fontSize: 13),
                   ),
 
@@ -199,15 +196,14 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                   // ================= INNER WHITE CARD =================
                   _buildLocationCard(),
 
-                  SizedBox(height: 20),
-
+                  /*
                   Text(
                     'Select Habitation',
                     style: TextStyle(color: Colors.black, fontSize: 18),
                   ),
                   SizedBox(height: 2),
 
-         /*         AppDropdown(
+                        AppDropdown(
                     hint: "Select Habitation",
                     items: provider.njmFtkDashboardResponse!.habitationList!
                         .map((e) => e.habitationName ?? "")
@@ -221,7 +217,6 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                       provider.setSelectedHabitationId(selected.habitationId);
                     },
                   ),*/
-
                   SizedBox(height: 20),
 
                   _registerCard(context),
@@ -239,7 +234,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
       onTap: () {
         Navigator.pushNamed(
           context,
-          AppConstants.navigateToFTKQuestionscategory,
+          AppConstants.navigateToSSGQuestionscategory,
         );
       },
 
@@ -249,7 +244,6 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
 
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-
           gradient: const LinearGradient(
             colors: [Color(0xFF64B5F6), Color(0xFF1E88E5)],
             begin: Alignment.topLeft,
@@ -284,7 +278,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                   SizedBox(height: 4),
 
                   Text(
-                    "Activity Log of SHG / FTK-trained Women",
+                    "Activity Log of Sujalam Shakti Group Member",
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
@@ -489,8 +483,7 @@ class _FtkLandingpageState extends State<FtkLandingpage> {
                     "Welcome Back 👋",
                     style: TextStyle(color: Colors.white70),
                   ),
-
-                  SizedBox(height: 6),
+                  Text("SSG Member", style: TextStyle(color: Colors.white70)),
 
                   Text(
                     "${provider.njmFtkDashboardResponse!.firstName}${provider.njmFtkDashboardResponse!.lastName}",

@@ -39,10 +39,10 @@ class AppConstants {
   static const String navigateToSHGFTKRegistrationForm ='/SHGFTKRegistrationForm';
   static const String navigateToVWSCMemberScrenn = '/listofvwscmember';
 
-  ///////////////     FTK / SGH
-  static const String navigateToFTKLogin = '/FtkLogin ';
-  static const String navigateToFtkLandingpage = '/FtkLandingpage ';
-  static const String navigateToFTKQuestionscategory = '/FtkQuestionscategory ';
+  ///////////////      SUJALAM SHAKTI GROUP MEMBER
+  static const String navigateToSSGLogin = '/SsgLogin ';
+  static const String navigateToSSGLandingpage = '/SsgLandingpage ';
+  static const String navigateToSSGQuestionscategory = '/SsgQuestionscategory ';
   static const String navigateToBasicDetailsForm = '/BasicDetailsForm ';
   static const String navigateToLocationFormScreen = '/LocationFormScreen ';
   static const String navigateToWaterSampleForm = '/WaterSampleForm ';
@@ -50,11 +50,11 @@ class AppConstants {
   static const String navigateToMonthlyChargeCollectionForm = '/MonthlyChargeCollectionForm ';
 
 
-  ///////////////     NJM / WSO
-  static const String navigateToNJMLogin = '/NJMLogin ';
-  static const String navigateToNJMWSOLandingPage = '/NjmWsoLandingPage';
-  static const String navigateToNjmCategory = '/NjmCategory ';
-  static const String navigateToWscCategory = '/WscCategory ';
+  ///////////////     WATER SUPPLY OPERATOR
+  static const String navigateToWSOLogin = '/WSOLogin ';
+  static const String navigateToWSOLandingPage = '/WsoLandingPage';
+  static const String navigateToWSOCategory = '/Category ';
+  static const String navigateToWaterSupplyComponent = '/WaterSupplyComponent ';
   static const String navigateToGroundwatersourcetubeMain = '/GroundwatersourcetubeMain ';
   static const String navigateToGroundwatersourcetubeRegular = '/GroundwatersourcetubeRegular ';
   static const String navigateToPumpingRegular = '/PumpingRegular ';
@@ -67,6 +67,6 @@ class AppConstants {
   static const String navigateToDisinfectionForm = '/DisinfectionForm ';
   static const String navigateToNonSupplyForm = '/NonSupplyForm ';
   static const String navigateToEscalationAlertsScreen = '/EscalationAlertsScreen ';
-  static const String navigateToNjmRegularEntry = '/NjmRegularEntry ';
+  static const String navigateToWSORegularEntry = '/WSORegularEntry ';
 
 }

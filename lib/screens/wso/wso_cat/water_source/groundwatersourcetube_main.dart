@@ -363,7 +363,7 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
 
             Navigator.pushNamed(
               context,
-              AppConstants.navigateToNjmCategory,
+              AppConstants.navigateToWSOCategory,
             );
           },
         ):ToastHelper.showToastMessage(provider.errorMsg!);

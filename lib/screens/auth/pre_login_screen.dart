@@ -79,23 +79,23 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                   const SizedBox(height: 20),
 
                   _buildLoginCard(
-                    title: "NJM/WSO Login",
-                    subtitle: "Nal Jal Mitra / Water Supply Operator Login",
+                    title: "WSO Login",
+                    subtitle: "Water Supply Operator Login",
                     onTap: () {
                       Navigator.pushNamed(
                         context,
-                        AppConstants.navigateToNJMLogin,
+                        AppConstants.navigateToWSOLogin,
                       );
                     },
                   ),
                   const SizedBox(height: 20),
                   _buildLoginCard(
-                    title: "FTK/SHG Login",
-                    subtitle: "Field Test Kit/ Self Help Group Trained Women",
+                    title: "SSG Member Login",
+                    subtitle: "Sujalam Shakti Group Member",
                     onTap: () {
                       Navigator.pushNamed(
                         context,
-                        AppConstants.navigateToFTKLogin,
+                        AppConstants.navigateToSSGLogin,
                       );
                     },
                   ),

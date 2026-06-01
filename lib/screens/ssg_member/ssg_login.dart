@@ -11,14 +11,14 @@ import '../../providers/authentication_provider.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/toast_helper.dart';
 
-class FtkShgLogin extends StatefulWidget {
-  const FtkShgLogin({super.key});
+class SSGMemberLogin extends StatefulWidget {
+  const SSGMemberLogin({super.key});
 
   @override
-  State<FtkShgLogin> createState() => _FtkShgLogin();
+  State<SSGMemberLogin> createState() => _SSGMemberLogin();
 }
 
-class _FtkShgLogin extends State<FtkShgLogin> {
+class _SSGMemberLogin extends State<SSGMemberLogin> {
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
@@ -90,7 +90,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "FTK/SGH User Login",
+                      "Sujalam Shakti Group",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -203,7 +203,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
                                   () {
                                 Navigator.pushNamed(
                                   context,
-                                  AppConstants.navigateToFtkLandingpage,
+                                  AppConstants.navigateToSSGLandingpage,
                                 );
                               },
                                   (error) {
@@ -263,7 +263,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
           () {
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AppConstants.navigateToFtkLandingpage,
+          AppConstants.navigateToSSGLandingpage,
               (route) => false,
         );
       },
@@ -315,7 +315,7 @@ class _FtkShgLogin extends State<FtkShgLogin> {
     provider.verifyOtp(
       enteredOtp,
       () {
-        Navigator.pushNamed(context, AppConstants.navigateToFtkLandingpage);
+        Navigator.pushNamed(context, AppConstants.navigateToSSGLandingpage);
       },
       (error) {
         showMessage(error);

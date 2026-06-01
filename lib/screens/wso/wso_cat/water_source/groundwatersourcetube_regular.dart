@@ -299,7 +299,7 @@ class _GroundwatersourcetubeRegular
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    AppConstants.navigateToNjmRegularEntry,
+                    AppConstants.navigateToWSORegularEntry,
                   );
                 },
               )

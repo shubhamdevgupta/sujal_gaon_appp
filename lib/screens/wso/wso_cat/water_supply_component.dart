@@ -4,18 +4,14 @@ import 'package:flutter/material.dart';
 
 import '../../../../utils/app_constants.dart';
 
-
-
-
-
-class WscCategory extends StatefulWidget {
-  const WscCategory({super.key});
+class WaterSupplyComponent extends StatefulWidget {
+  const WaterSupplyComponent({super.key});
 
   @override
-  State<WscCategory> createState() => _NjmCategory();
+  State<WaterSupplyComponent> createState() => _WaterSupplyComponent();
 }
 
-class _NjmCategory extends State<WscCategory> {
+class _WaterSupplyComponent extends State<WaterSupplyComponent> {
 
 
   @override
@@ -47,7 +43,7 @@ class _NjmCategory extends State<WscCategory> {
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/images/bg_water.png"),
+                  image: AssetImage("assets/icons/SJL_bg.png"),
                   fit: BoxFit.cover,
                 ),
               ),

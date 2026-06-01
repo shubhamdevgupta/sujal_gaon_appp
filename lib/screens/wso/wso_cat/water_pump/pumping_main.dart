@@ -369,7 +369,7 @@ class _PumpingMain extends State<PumpingMain> {
 
             Navigator.pushNamedAndRemoveUntil(
               context,
-              AppConstants.navigateToNjmCategory,
+              AppConstants.navigateToWSOCategory,
                   (route) => false,
             );
           },

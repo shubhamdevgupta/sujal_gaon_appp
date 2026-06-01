@@ -18,14 +18,14 @@ import '../../utils/custom_password_set.dart';
 import '../../utils/enum/user_type.dart';
 import '../widgets/app_dropdown.dart';
 
-class NjmWsoLandingpage extends StatefulWidget {
-  const NjmWsoLandingpage({super.key});
+class WsoLandingpage extends StatefulWidget {
+  const WsoLandingpage({super.key});
 
   @override
-  State<NjmWsoLandingpage> createState() => _NjmWsoLandingpageState();
+  State<WsoLandingpage> createState() => _WsoLandingpageState();
 }
 
-class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
+class _WsoLandingpageState extends State<WsoLandingpage> {
   final session = UserSessionManager();
   final LocalStorageService _localStorage = LocalStorageService();
   bool passwordMatch = true;
@@ -246,7 +246,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
                   SizedBox(height: 8),
 
                   const Text(
-                    "Overview Your Njm/Wso Area",
+                    "Overview Your Water Supply Area",
                     style: TextStyle(color: Colors.black87, fontSize: 13),
                   ),
 
@@ -299,7 +299,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
         GestureDetector(
           onTap: (){    if (njmWsoProvider.selectedHabitationId != 0 &&
               njmWsoProvider.selectedHabitationId != null) {
-            Navigator.pushNamed(context, AppConstants.navigateToNjmCategory);
+            Navigator.pushNamed(context, AppConstants.navigateToWSOCategory);
           } else {
             ToastHelper.showErrorSnackBar(
               context,
@@ -362,7 +362,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
         GestureDetector(
           onTap: () {    if (njmWsoProvider.selectedHabitationId != 0 &&
               njmWsoProvider.selectedHabitationId != null) {
-            Navigator.pushNamed(context, AppConstants.navigateToNjmRegularEntry);
+            Navigator.pushNamed(context, AppConstants.navigateToWSORegularEntry);
           } else {
             ToastHelper.showErrorSnackBar(
               context,
@@ -604,7 +604,7 @@ class _NjmWsoLandingpageState extends State<NjmWsoLandingpage> {
 
                 children: [
                   Text(
-                    "Welcome Back 👋 \nNJM/WSO User",
+                    "Welcome Back 👋 \nWater Supply Operator",
                     style: TextStyle(color: Colors.white70),
                   ),
 

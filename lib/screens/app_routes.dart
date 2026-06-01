@@ -1,42 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
-import 'package:jal_sanchalan/screens/ftk_shg/ftk_landingpage.dart';
-import 'package:jal_sanchalan/screens/njm_wso/njm_wso_cat/ohsr/overhead_service_regular.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_login.dart';
 import 'package:jal_sanchalan/screens/panchayat/vwsc_member_list.dart';
+import 'package:jal_sanchalan/screens/ssg_member/question_cat/basicdetails.dart';
+import 'package:jal_sanchalan/screens/ssg_member/question_cat/locationform.dart';
+import 'package:jal_sanchalan/screens/ssg_member/question_cat/monthlychargecollection.dart';
+import 'package:jal_sanchalan/screens/ssg_member/question_cat/saniSanitaryinspection.dart';
+import 'package:jal_sanchalan/screens/ssg_member/question_cat/watersampledataform.dart';
+import 'package:jal_sanchalan/screens/ssg_member/ssg_landingpage.dart';
+import 'package:jal_sanchalan/screens/ssg_member/ssg_login.dart';
+import 'package:jal_sanchalan/screens/ssg_member/ssg_questionscategory.dart';
 import 'package:jal_sanchalan/screens/vwsc/member_list/members_tab_screen.dart';
-import 'package:jal_sanchalan/screens/vwsc/registration_ftk.dart';
-import 'package:jal_sanchalan/screens/vwsc/registration_njmp.dart';
+import 'package:jal_sanchalan/screens/vwsc/ssg_registration.dart';
+import 'package:jal_sanchalan/screens/vwsc/wso_registration.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_landing_screen.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_login.dart';
+import 'package:jal_sanchalan/screens/wso/main_wso_inventory.dart';
+import 'package:jal_sanchalan/screens/wso/regular_wso_category.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/disinfection_chlorination.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/distribution_supply.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/escaltion_alters.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/gls_reservoir.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/nonsupply_distruptions.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/ohsr/overhead_service_main.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/ohsr/overhead_service_regular.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/spring_water.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/water_pump/pumping_main.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/water_pump/pumping_regular.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/water_source/groundwatersourcetube_main.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/water_source/groundwatersourcetube_regular.dart';
+import 'package:jal_sanchalan/screens/wso/wso_cat/water_supply_component.dart';
+import 'package:jal_sanchalan/screens/wso/wso_landingpage.dart';
+import 'package:jal_sanchalan/screens/wso/wso_login.dart';
 
 import '../utils/app_constants.dart';
 import 'auth/splash_screen.dart';
-import 'ftk_shg/ftk_questionscategory.dart';
-import 'ftk_shg/ftk_shg_login.dart';
-import 'ftk_shg/question_cat/basicdetails.dart';
-import 'ftk_shg/question_cat/locationform.dart';
-import 'ftk_shg/question_cat/monthlychargecollection.dart';
-import 'ftk_shg/question_cat/saniSanitaryinspection.dart';
-import 'ftk_shg/question_cat/watersampledataform.dart';
-import 'njm_wso/njm_category_regular.dart';
-import 'njm_wso/njm_wso_cat/disinfection_chlorination.dart';
-import 'njm_wso/njm_wso_cat/distribution_supply.dart';
-import 'njm_wso/njm_wso_cat/escaltion_alters.dart';
-import 'njm_wso/njm _category_inventory.dart';
-import 'njm_wso/njm_wso_cat/nonsupply_distruptions.dart';
-import 'njm_wso/njm_wso_cat/ohsr/overhead_service_main.dart';
-import 'njm_wso/njm_wso_cat/water_pump/pumping_main.dart';
-import 'njm_wso/njm_wso_cat/water_pump/pumping_regular.dart';
-import 'njm_wso/njm_wso_cat/water_source/groundwatersourcetube_main.dart';
-import 'njm_wso/njm_wso_cat/water_source/groundwatersourcetube_regular.dart';
-import 'njm_wso/njm_wso_cat/wsc_category.dart';
-import 'njm_wso/njm_wso_landingpage.dart';
-import 'njm_wso/njm_wso_login.dart';
-import 'njm_wso/njm_wso_cat/gls_reservoir.dart';
-import 'njm_wso/njm_wso_cat/spring_water.dart';
-
 
 class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
@@ -58,16 +57,16 @@ class AppRoutes {
       AppConstants.navigateToVWSCLandingScreen: (context) =>
           const VwscLandingScreen(),
       AppConstants.navigateToNJMPRegistrationForm: (context) =>
-          const NJMPRegistrationForm(),
+          const WSORegistrationForm(),
       AppConstants.navigateToSHGFTKRegistrationForm: (context) =>
-          const SHGFTKRegistrationForm(),
+          const SSGMemberRegistrationForm(),
       AppConstants.navigateToVWSCMemberScrenn: (context) => MembersTabScreen(),
 
-      //ftk/sgh
-      AppConstants.navigateToFTKLogin: (context) => FtkShgLogin(),
-      AppConstants.navigateToFtkLandingpage: (context) => FtkLandingpage(),
-      AppConstants.navigateToFTKQuestionscategory: (context) =>
-          FtkQuestionscategory(),
+      // SUJALAM SHAKTI GROUP MEMBER
+      AppConstants.navigateToSSGLogin: (context) => SSGMemberLogin(),
+      AppConstants.navigateToSSGLandingpage: (context) => SsgLandingpage(),
+      AppConstants.navigateToSSGQuestionscategory: (context) =>
+          SSGQuestionscategory(),
       AppConstants.navigateToBasicDetailsForm: (context) => Basicdetails(),
       AppConstants.navigateToLocationFormScreen: (context) =>
           LocationFormScreen(),
@@ -77,16 +76,17 @@ class AppRoutes {
       AppConstants.navigateToMonthlyChargeCollectionForm: (context) =>
           MonthlyChargeCollectionForm(),
 
-      // njm / wso
-      AppConstants.navigateToNJMLogin: (context) => NjmWsoLogin(),
-      AppConstants.navigateToNJMWSOLandingPage: (context) =>
-          NjmWsoLandingpage(),
-      AppConstants.navigateToNjmCategory: (context) => const NjmCategory(),
-      AppConstants.navigateToGroundwatersourcetubeMain: (context) => const GroundwatersourcetubeMain(),
+      // WSO (Water Supply Operator)
+      AppConstants.navigateToWSOLogin: (context) => WsoLogin(),
+      AppConstants.navigateToWSOLandingPage: (context) => WsoLandingpage(),
+      AppConstants.navigateToWSOCategory: (context) => const WsoInventoryMain(),
+      AppConstants.navigateToGroundwatersourcetubeMain: (context) =>
+          const GroundwatersourcetubeMain(),
       AppConstants.navigateToGroundwatersourcetubeRegular: (context) =>
           const GroundwatersourcetubeRegular(),
       AppConstants.navigateToPumpingMain: (context) => const PumpingMain(),
-      AppConstants.navigateToPumpingRegular: (context) => const PumpingRegular(),
+      AppConstants.navigateToPumpingRegular: (context) =>
+          const PumpingRegular(),
       AppConstants.navigateToOHSRMain: (context) => const OhsrMain(),
       AppConstants.navigateToOHSRRegular: (context) => const OhsrRegular(),
       AppConstants.navigateToGSRForm: (context) => const GSRForm(),
@@ -99,8 +99,10 @@ class AppRoutes {
       AppConstants.navigateToNonSupplyForm: (context) => const NonSupplyForm(),
       AppConstants.navigateToEscalationAlertsScreen: (context) =>
           const EscalationAlertsScreen(),
-      AppConstants.navigateToNjmRegularEntry: (context) =>
-          const NjmRegularEntry(),
+      AppConstants.navigateToWSORegularEntry: (context) =>
+          const WsoRegularEntry(),
+      AppConstants.navigateToWaterSupplyComponent: (context) =>
+          const WaterSupplyComponent(),
     };
   }
 }

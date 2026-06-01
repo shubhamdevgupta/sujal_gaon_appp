@@ -9,14 +9,14 @@ import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
 
 
-class FtkQuestionscategory extends StatefulWidget {
-  const FtkQuestionscategory({super.key});
+class SSGQuestionscategory extends StatefulWidget {
+  const SSGQuestionscategory({super.key});
 
   @override
-  State<FtkQuestionscategory> createState() => _NjmQuestionscategory();
+  State<SSGQuestionscategory> createState() => _NjmQuestionscategory();
 }
 
-class _NjmQuestionscategory extends State<FtkQuestionscategory> {
+class _NjmQuestionscategory extends State<SSGQuestionscategory> {
   final session = UserSessionManager();
   final LocalStorageService _localStorage = LocalStorageService();
   @override

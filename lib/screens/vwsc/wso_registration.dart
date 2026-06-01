@@ -11,14 +11,14 @@ import '../../utils/auth/user_session_manager.dart';
 import '../../utils/custom screen/custom_dropdown.dart';
 import '../../utils/toast_helper.dart';
 
-class NJMPRegistrationForm extends StatefulWidget {
-  const NJMPRegistrationForm({super.key});
+class WSORegistrationForm extends StatefulWidget {
+  const WSORegistrationForm({super.key});
 
   @override
-  State<NJMPRegistrationForm> createState() => _NJMPRegistrationFormState();
+  State<WSORegistrationForm> createState() => _WSORegistrationFormState();
 }
 
-class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
+class _WSORegistrationFormState extends State<WSORegistrationForm> {
   String? trainingLevel;
   String? selectedVillage;
   String? selectedHabitation;
@@ -568,7 +568,7 @@ class _NJMPRegistrationFormState extends State<NJMPRegistrationForm> {
                       Navigator.pop(context); // Close dialog
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        AppConstants.navigateToFtkLandingpage,
+                        AppConstants.navigateToWSOLandingPage,
                             (route) => false, // Clear back stack
                       );
                       provider.clearData();

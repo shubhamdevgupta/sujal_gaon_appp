@@ -3,20 +3,18 @@ import 'package:jal_sanchalan/models/njm_ftk_response/habitation_assest.dart';
 import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../utils/app_constants.dart';
-import '../../../service/local_storage_service.dart';
-import '../../../utils/auth/user_session_manager.dart';
+import '../../../utils/app_constants.dart';
+import '../../utils/auth/user_session_manager.dart';
 
-class NjmRegularEntry extends StatefulWidget {
-  const NjmRegularEntry({super.key});
+class WsoInventoryMain extends StatefulWidget {
+  const WsoInventoryMain({super.key});
 
   @override
-  State<NjmRegularEntry> createState() => _NjmRegularEntry();
+  State<WsoInventoryMain> createState() => _WsoInventoryMain();
 }
 
-class _NjmRegularEntry extends State<NjmRegularEntry> {
+class _WsoInventoryMain extends State<WsoInventoryMain> {
   final session = UserSessionManager();
-  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
@@ -40,7 +38,7 @@ class _NjmRegularEntry extends State<NjmRegularEntry> {
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: Colors.blue.shade700.withOpacity(0.9),
-        title: const Text("Regular Inventory", style: TextStyle(color: Colors.white)),
+        title: const Text("Add Inventory", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Container(
@@ -66,10 +64,12 @@ class _NjmRegularEntry extends State<NjmRegularEntry> {
                     if (serviceArea == null) {
                       return const SizedBox();
                     }
+
                     return Column(
                       children: [
                         buildHabitationCard(serviceArea),
                         SizedBox(height: 5),
+
                         buildAssetsCard(provider),
                       ],
                     );
@@ -199,6 +199,12 @@ Widget buildAssetsCard(NjmWsoProvider provider) {
 }
 
 Widget buildAssetList(NjmWsoProvider provider) {
+  /// Dummy Pump Inventory Data
+  final List<Map<String, int>> dummyPumpInventory = [
+    {"assetId": 310161109},
+    {"assetId": 310161110},
+  ];
+
   return ListView.builder(
     shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
@@ -207,11 +213,121 @@ Widget buildAssetList(NjmWsoProvider provider) {
       SjlAllAsset asset =
           provider.habitationAssetResponse!.sjlAllAssetList![index];
 
-      return buildNormalAssetCard(context, asset, index);
+      /// Source UI
+      if (asset.assetTypeId == "0") {
+        return buildSourceAssetCard(context, asset);
+      }
+      /// Other Assets
+      else {
+        return buildNormalAssetCard(context, asset, dummyPumpInventory, index);
+      }
     },
   );
 }
 
+Widget buildSourceAssetCard(BuildContext context, SjlAllAsset asset) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        color: Colors.blue.shade50.withOpacity(.4),
+        border: Border.all(color: Colors.blue.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// TITLE
+          Row(
+            children: [
+              Icon(
+                _getAssetIcon(asset.assetTypeId),
+                color: Colors.blue.shade700,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                asset.assetType ?? "",
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          /// MAIN TESTING
+          _sourceActionTile(
+            title: "Pump entry",
+            icon: Icons.science_outlined,
+            color: Colors.blue.shade100,
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                AppConstants.navigateToGroundwatersourcetubeMain,
+                arguments: asset,
+              );
+            },
+          ),
+
+          const SizedBox(height: 8),
+
+          /// REGULAR TESTING
+          _sourceActionTile(
+            title: "Pump activity",
+            icon: Icons.check_circle_outline,
+            color: Colors.green.shade100,
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                AppConstants.navigateToGroundwatersourcetubeRegular,
+              );
+            },
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _sourceActionTile({
+  required String title,
+  required IconData icon,
+  required Color color,
+  required VoidCallback onTap,
+}) {
+  return InkWell(
+    borderRadius: BorderRadius.circular(10),
+    onTap: onTap,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: Colors.black87),
+
+          const SizedBox(width: 10),
+
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+            ),
+          ),
+
+          /// RIGHT ARROW
+          Icon(Icons.chevron_right, color: Colors.grey.shade600),
+        ],
+      ),
+    ),
+  );
+}
 
 bool isPumpExpanded = false;
 Map<int, bool> expandedAssets = {};
@@ -219,17 +335,15 @@ Map<int, bool> expandedAssets = {};
 Widget buildNormalAssetCard(
   BuildContext context,
   SjlAllAsset asset,
+  List dummyPumpInventory,
   int index,
 ) {
+  // Constant Blue theme as requested
   const Color themeColor = Color(0xFF1976D2);
 
-  return Consumer<NjmWsoProvider>(
-    builder: (context, provider, child) {
+  return StatefulBuilder(
+    builder: (BuildContext context, StateSetter setState) {
       bool isExpanded = expandedAssets[index] ?? false;
-
-      final pumpList =
-          provider.gwTubeBoreWellPumpHouseList?.pumpHouseList ?? [];
-
       return AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
@@ -241,76 +355,21 @@ Widget buildNormalAssetCard(
                 ? themeColor.withOpacity(0.3)
                 : Colors.grey.shade200,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
           children: [
-            /// HEADER
             InkWell(
-              onTap: () async {
-                expandedAssets[index] = !isExpanded;
-
-                if (expandedAssets[index] == true) {
-                  switch (asset.assetTypeId) {
-                    case 0:
-                      await provider.getGroundWaterSourceList(
-                        41494,
-                        31,
-                        asset.rpwssId!,
-                        1030748,
-                        asset.assetId!,
-                        asset.assetTypeId!,
-                      );
-                      break;
-
-                    case 2:
-                      await provider.getGroundWaterSourceList(
-                        41494,
-                        31,
-                        asset.rpwssId!,
-                        1030748,
-                        asset.assetId!,
-                        asset.assetTypeId!,
-                      );
-                      break;
-
-                    case 8:
-                      await provider.getGroundWaterSourceList(
-                        41494,
-                        31,
-                        asset.rpwssId!,
-                        1030748,
-                        asset.assetId!,
-                        asset.assetTypeId!,
-                      );
-                      break;
-
-                    case 5:
-                      await provider.getGroundWaterSourceList(
-                        41494,
-                        31,
-                        asset.rpwssId!,
-                        1030748,
-                        asset.assetId!,
-                        asset.assetTypeId!,
-                      );
-                      break;
-
-                    case 11:
-                      await provider.getGroundWaterSourceList(
-                        41494,
-                        31,
-                        asset.rpwssId!,
-                        1030748,
-                        asset.assetId!,
-                        asset.assetTypeId!,
-                      );
-                      break;
-                  }
-                }
-
-                (context as Element).markNeedsBuild();
+              onTap: () {
+                 _navigateToAssetForm(context,asset);
               },
-
+              borderRadius: BorderRadius.circular(16),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -320,16 +379,14 @@ Widget buildNormalAssetCard(
                   children: [
                     CircleAvatar(
                       radius: 18,
-                      backgroundColor: themeColor.withOpacity(.1),
+                      backgroundColor: themeColor.withOpacity(0.1),
                       child: Icon(
                         _getAssetIcon(asset.assetTypeId),
                         color: themeColor,
                         size: 18,
                       ),
                     ),
-
                     const SizedBox(width: 12),
-
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,122 +394,31 @@ Widget buildNormalAssetCard(
                           Row(
                             children: [
                               Text(
-                                asset.assetType ?? "",
+                                asset.assetType!,
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
+                                  color: Color(0xFF1A1C1E),
                                 ),
                               ),
-
-                              const Spacer(),
-
+                              Spacer(),
                               Text(
-                                "${pumpList.length} Inventory",
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Colors.grey.shade500,
+                                "${asset.assetId}",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF1A1C1E),
                                 ),
                               ),
                             ],
                           ),
-                          Text(
-                            "${asset.assetId}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
                         ],
                       ),
-                    ),
-
-                    Icon(
-                      isExpanded
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      color: themeColor,
                     ),
                   ],
                 ),
               ),
             ),
-
-            /// SUB-ASSET LIST
-            if (isExpanded)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-
-                child: provider.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : Column(
-                        children: pumpList.map((pump) {
-                          return Container(
-                            margin: const EdgeInsets.only(top: 8),
-                            padding: const EdgeInsets.all(14),
-
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade50,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.blue.shade100),
-                            ),
-
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      /// THIS IS WHAT YOU WANT
-                                      Text(
-                                        "Tube Bore Well ID : ${pump.tubeBoreWellId}",
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-
-                                      const SizedBox(height: 4),
-
-                                      Text(
-                                        "Pump Type : ${pump.typeOfPump}",
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-
-                                      Text(
-                                        "Discharge : ${pump.dischargeOfPump} ${pump.dischargeUnit}",
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-
-                                      Text(
-                                        "Total Regular Entry : ${pump.Total_Regular_entry}",
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                ElevatedButton(
-                                  onPressed: () => _navigateToAssetForm(
-                                    context,
-                                    asset,
-                                    pump.tubeBoreWellId,
-                                  ),
-
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF1976D2),
-                                  ),
-
-                                  child: const Text(
-                                    "Add",
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-              ),
           ],
         ),
       );
@@ -460,29 +426,20 @@ Widget buildNormalAssetCard(
   );
 }
 
-void _navigateToAssetForm(
-  BuildContext context,
-  SjlAllAsset asset,
-  int tubeBoreWellId,
-) {
+void _navigateToAssetForm(BuildContext context,SjlAllAsset asset) {
   switch (asset.assetTypeId) {
+    case 2:
+      Navigator.pushNamed(context, AppConstants.navigateToPumpingMain, arguments:  asset);
+      break;
     case 0:
       Navigator.pushNamed(
         context,
-        AppConstants.navigateToGroundwatersourcetubeRegular,
-        arguments: tubeBoreWellId,
-      );
-      break;
-    case 2:
-      Navigator.pushNamed(context, AppConstants.navigateToPumpingRegular);
+        AppConstants.navigateToGroundwatersourcetubeMain, arguments: asset);
       break;
     case 8:
-      Navigator.pushNamed(context, AppConstants.navigateToOHSRRegular);
+      Navigator.pushNamed(context, AppConstants.navigateToOHSRMain);
       break;
     case 11:
-      Navigator.pushNamed(context, AppConstants.navigateToDisinfectionForm);
-      break;
-    case 5:
       Navigator.pushNamed(context, AppConstants.navigateToDisinfectionForm);
       break;
     default:

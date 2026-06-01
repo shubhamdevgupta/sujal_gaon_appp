@@ -7,14 +7,14 @@ import '../../utils/app_constants.dart';
 import '../../utils/enum/user_type.dart';
 import '../../utils/toast_helper.dart';
 
-class NjmWsoLogin extends StatefulWidget {
-  const NjmWsoLogin({super.key});
+class WsoLogin extends StatefulWidget {
+  const WsoLogin({super.key});
 
   @override
-  State<NjmWsoLogin> createState() => _NjmWsoLogin();
+  State<WsoLogin> createState() => _NjmWsoLogin();
 }
 
-class _NjmWsoLogin extends State<NjmWsoLogin> {
+class _NjmWsoLogin extends State<WsoLogin> {
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
@@ -87,7 +87,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "NJM/WSO User Login",
+                      "Water Supply Operator Login",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -200,7 +200,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
                               () {
                                 Navigator.pushNamed(
                                   context,
-                                  AppConstants.navigateToNJMWSOLandingPage,
+                                  AppConstants.navigateToWSOLandingPage,
                                 );
                               },
                               (error) {
@@ -260,7 +260,7 @@ class _NjmWsoLogin extends State<NjmWsoLogin> {
           () {
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AppConstants.navigateToNJMWSOLandingPage,
+          AppConstants.navigateToWSOLandingPage,
               (route) => false,
         );
       },

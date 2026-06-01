@@ -105,7 +105,7 @@ class _SplashScreenState extends State<SplashScreen>
       case 45: // NJM
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AppConstants.navigateToNJMWSOLandingPage,
+          AppConstants.navigateToWSOLandingPage,
           (route) => false,
         );
         break;
@@ -113,7 +113,7 @@ class _SplashScreenState extends State<SplashScreen>
       case 46: // FTK
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AppConstants.navigateToFtkLandingpage,
+          AppConstants.navigateToSSGLandingpage,
           (route) => false,
         );
         break;

@@ -11,14 +11,14 @@ import '../../utils/custom screen/custom_dropdown.dart';
 import '../../utils/enum/user_type.dart';
 import '../../utils/toast_helper.dart';
 
-class SHGFTKRegistrationForm extends StatefulWidget {
-  const SHGFTKRegistrationForm({super.key});
+class SSGMemberRegistrationForm extends StatefulWidget {
+  const SSGMemberRegistrationForm({super.key});
 
   @override
-  State<SHGFTKRegistrationForm> createState() => _SHGFTKRegistrationFormState();
+  State<SSGMemberRegistrationForm> createState() => _SSGMemberRegistrationFormState();
 }
 
-class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
+class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
   String? selectedVillage;
   String? selectedHabitation;
 
@@ -616,7 +616,7 @@ class _SHGFTKRegistrationFormState extends State<SHGFTKRegistrationForm> {
                       Navigator.pop(context); // Close dialog
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        AppConstants.navigateToFtkLandingpage,
+                        AppConstants.navigateToSSGLandingpage,
                         (route) => false, // Clear back stack
                       );
                       provider.clearData();
