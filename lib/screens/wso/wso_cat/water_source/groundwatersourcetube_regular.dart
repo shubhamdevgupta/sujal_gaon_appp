@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jal_sanchalan/providers/wso/wso_provider.dart';
 import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../providers/njm_wso/njm_wso_provider.dart';
 import '../../../../utils/app_constants.dart';
 import '../../../../utils/app_dialog.dart';
 import '../../../../utils/enum/app_dialog.dart';
@@ -21,7 +21,7 @@ class _GroundwatersourcetubeRegular
     extends State<GroundwatersourcetubeRegular> {
   @override
   Widget build(BuildContext context) {
-    final njm_wsoProvider = context.watch<NjmWsoProvider>();
+    final wsoProvider = context.watch<WsoProvider>();
     final tubeBoreWellId = ModalRoute.of(context)!.settings.arguments as int;
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
@@ -55,32 +55,32 @@ class _GroundwatersourcetubeRegular
                 children: [
                   _input(
                     "Pump Start Time",
-                    controller: njm_wsoProvider.pumpStartTimeController,
+                    controller: wsoProvider.pumpStartTimeController,
                     readOnly: true,
                     onTap: () async {
                       final dateTime = await pickDateTime(context);
 
                       if (dateTime != null) {
-                        njm_wsoProvider.setPumpStart(dateTime);
+                        wsoProvider.setPumpStart(dateTime);
                       }
                     },
                   ),
 
                   _input(
                     "Pump Stop Time",
-                    controller: njm_wsoProvider.pumpStopTimeController,
+                    controller: wsoProvider.pumpStopTimeController,
                     readOnly: true,
                     onTap: () async {
                       final dateTime = await pickDateTime(context);
 
                       if (dateTime != null) {
-                        njm_wsoProvider.setPumpStop(dateTime);
+                        wsoProvider.setPumpStop(dateTime);
                       }
                     },
                   ),
                   _input(
                     "Pumping Hours (Auto)",
-                    controller: njm_wsoProvider.pumpingHoursController,
+                    controller: wsoProvider.pumpingHoursController,
                     readOnly: true,
                   ),
                 ],
@@ -96,14 +96,14 @@ class _GroundwatersourcetubeRegular
                   if (true) ...[
                     _input(
                       "Flow Meter Reading (Start)",
-                      controller: njm_wsoProvider.flowMeterStartController,
+                      controller: wsoProvider.flowMeterStartController,
                       keyboard: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
                     ),
                     _input(
                       "Flow Meter Reading (Stop)",
-                      controller: njm_wsoProvider.flowMeterStopController,
+                      controller: wsoProvider.flowMeterStopController,
                       keyboard: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
@@ -274,7 +274,7 @@ class _GroundwatersourcetubeRegular
   }
 
   Widget _submitButton(int tubeBoreWellId) {
-    final provider = context.read<NjmWsoProvider>();
+    final provider = context.read<WsoProvider>();
     return InkWell(
       onTap: () async {
         await provider.insertPumpRegularEntry(

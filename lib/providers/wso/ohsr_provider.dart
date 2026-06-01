@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../../repository/njm_wso/njm_wso_repo.dart';
 
 class OhsrProvider extends ChangeNotifier {
-  final NjmWsoRepo _njmWsoRepo;
+  final WsoRepo _njmWsoRepo;
 
   OhsrProvider(this._njmWsoRepo);
 

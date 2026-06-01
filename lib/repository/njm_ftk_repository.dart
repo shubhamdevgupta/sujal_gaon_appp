@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-import '../models/njm_ftk_response/njm_ftk_dashboard_response.dart';
-import '../models/njm_ftk_response/njm_ftk_login_response.dart';
+import '../models/njm_ftk_response/wso_ssg_dashboard_response.dart';
+import '../models/njm_ftk_response/wso_ssg_login_response.dart';
 import '../models/njm_ftk_response/password_login.dart';
 import '../models/update_password.dart';
 import '../service/base_api_service.dart';
 import '../utils/global_exception_handler.dart';
 
-class NjmFtkRepository {
+class WsoSSGRepository {
   final BaseApiService _apiService;
-  NjmFtkRepository(this._apiService);
+  WsoSSGRepository(this._apiService);
 
-  Future<PasswordLoginResponse> loginNjmFtkUserByPassword(
+  Future<PasswordLoginResponse> loginWsoSSGUserByPassword(
     String username,
     String password,
     int userTypeId,
@@ -36,7 +36,7 @@ class NjmFtkRepository {
     }
   }
 
-  Future<NjmFtkLoginResponse> loginNjmFtkUserByOtp(
+  Future<WsoSSGLoginResponse> loginWsoSSGUserByOtp(
     String mobileNumber,
     int userTypeId,
   ) async {
@@ -49,7 +49,7 @@ class NjmFtkRepository {
         }),
       );
 
-      return NjmFtkLoginResponse.fromJson(response);
+      return WsoSSGLoginResponse.fromJson(response);
     } catch (e, stackTrace) {
       GlobalExceptionHandler.handleException(
         e as Exception,
@@ -59,7 +59,7 @@ class NjmFtkRepository {
     }
   }
 
-  Future<NjmFtkDashboardResponse> fetchNjmFtkDashboard(
+  Future<WsoSSGDashboardResponse> fetchWsoSSGDashboard(
     int userId,
     int userTypeId,
   ) async {
@@ -68,7 +68,7 @@ class NjmFtkRepository {
         'SJL_Get_dashboard_list?UserId=$userId&UserTypeId=$userTypeId',
       );
 
-      return NjmFtkDashboardResponse.fromJson(response);
+      return WsoSSGDashboardResponse.fromJson(response);
     } catch (e, stackTrace) {
       GlobalExceptionHandler.handleException(
         e as Exception,
@@ -78,7 +78,7 @@ class NjmFtkRepository {
     }
   }
 
-  Future<UpdateNjmFtkPassword> updateNjmFtkPassword(
+  Future<UpdateWsoSSGPassword> updateWsoSSGPassword(
     int regId,
     int userTypeId,
     String mobileNumber,
@@ -101,7 +101,7 @@ class NjmFtkRepository {
         }),
       );
 
-      return UpdateNjmFtkPassword.fromJson(response);
+      return UpdateWsoSSGPassword.fromJson(response);
     } catch (e, stackTrace) {
       GlobalExceptionHandler.handleException(
         e as Exception,

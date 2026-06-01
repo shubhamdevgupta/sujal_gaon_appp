@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
+import 'package:jal_sanchalan/providers/wso_ssg_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
@@ -25,7 +25,7 @@ class _NjmWsoLogin extends State<WsoLogin> {
 
   @override
   Widget build(BuildContext context) {
-    final njmFtkProvider = context.watch<NjmFtkProvider>();
+    final njmFtkProvider = context.watch<WsoSSGProvider>();
 
     return Scaffold(
       backgroundColor: const Color(0xFFEAF4FF),
@@ -149,7 +149,7 @@ class _NjmWsoLogin extends State<WsoLogin> {
                           text: "Send OTP",
                           isLoading: njmFtkProvider.isLoading,
                           onTap: () {
-                            final provider = context.read<NjmFtkProvider>();
+                            final provider = context.read<WsoSSGProvider>();
                             String mobile = mobileController.text.trim();
 
                             if (mobile.length != 10) {
@@ -157,7 +157,7 @@ class _NjmWsoLogin extends State<WsoLogin> {
                               return;
                             }
 
-                            provider.loginNjmFtkUserByOtp(
+                            provider.loginWsoSSGUserByOtp(
                               mobile,
                               UserType.njmp.id,
                               () {
@@ -187,7 +187,7 @@ class _NjmWsoLogin extends State<WsoLogin> {
                           isLoading: njmFtkProvider.isLoading,
                           onTap: () {
                             final provider = context
-                                .read<NjmFtkProvider>();
+                                .read<WsoSSGProvider>();
 
                             String enteredOtp = otpController.text.trim();
 
@@ -243,7 +243,7 @@ class _NjmWsoLogin extends State<WsoLogin> {
   // ===================== LOGIC ======================
 
   void loginWithPassword() async{
-    final provider = context.read<NjmFtkProvider>();
+    final provider = context.read<WsoSSGProvider>();
 
     String mobile = mobileController.text.trim();
     String password = passwordController.text.trim();
@@ -253,7 +253,7 @@ class _NjmWsoLogin extends State<WsoLogin> {
       return;
     }
 
-   await provider.loginNjmFtkUserByPassword(
+   await provider.loginWsoSSGUserByPassword(
       mobile,
       password,
       UserType.njmp.id,

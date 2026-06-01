@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
+import 'package:jal_sanchalan/providers/wso_ssg_provider.dart';
 import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -30,13 +30,13 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final provider = context.read<NjmFtkProvider>();
+      final provider = context.read<WsoSSGProvider>();
 
       await session.init();
 
       /// CASE 1: Password login already stored userId
       if (session.userId != 0) {
-        await provider.fetchNjmFtkDashboard(session.userId, UserType.ftk.id);
+        await provider.fetchWsoSSGDashboard(session.userId, UserType.ftk.id);
         return;
       }
       print("-----  ${_localStorage.getInt(AppConstants.prefIsPassUpdated)}");
@@ -44,14 +44,14 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
       if (_localStorage.getInt(AppConstants.prefIsPassUpdated) == 0) {
         _showPasswordDialog();
       } else {
-        await provider.fetchNjmFtkDashboard(session.userId, UserType.ftk.id);
+        await provider.fetchWsoSSGDashboard(session.userId, UserType.ftk.id);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<NjmFtkProvider>();
+    final provider = context.watch<WsoSSGProvider>();
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
@@ -105,7 +105,7 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
           ),
           child: Stack(
             children: [
-              provider.njmFtkDashboardResponse == null
+              provider.wsoSSGDashboardResponse == null
                   ? SizedBox()
                   : SingleChildScrollView(
                       padding: const EdgeInsets.all(10),
@@ -300,7 +300,7 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
   }
 
   Widget _buildLocationCard() {
-    final provider = context.watch<NjmFtkProvider>();
+    final provider = context.watch<WsoSSGProvider>();
 
     return Container(
       margin: const EdgeInsets.only(top: 10),
@@ -337,7 +337,7 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
                 icon: Icons.account_balance,
                 color: Color(0xFF1976D2),
                 title: "State",
-                value: "${provider.njmFtkDashboardResponse!.stateName}",
+                value: "${provider.wsoSSGDashboardResponse!.stateName}",
               ),
 
               _verticalDivider(),
@@ -346,10 +346,10 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
                 icon: Icons.place,
                 color: Color(0xFFE53935),
                 title: "District",
-                value: "${provider.njmFtkDashboardResponse!.districtName}",
+                value: "${provider.wsoSSGDashboardResponse!.districtName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.districtLgdcode}",
+                    "${provider.wsoSSGDashboardResponse!.districtLgdcode}",
               ),
             ],
           ),
@@ -365,10 +365,10 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
                 icon: Icons.apartment,
                 color: Color(0xFF8D6E63),
                 title: "Block",
-                value: "${provider.njmFtkDashboardResponse!.blockName}",
+                value: "${provider.wsoSSGDashboardResponse!.blockName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.blockLgdcode}",
+                    "${provider.wsoSSGDashboardResponse!.blockLgdcode}",
               ),
 
               _verticalDivider(),
@@ -377,10 +377,10 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
                 icon: Icons.home,
                 color: Color(0xFF00796B),
                 title: "GP",
-                value: "${provider.njmFtkDashboardResponse!.panchayatName}",
+                value: "${provider.wsoSSGDashboardResponse!.panchayatName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.panchayatLgdcode}",
+                    "${provider.wsoSSGDashboardResponse!.panchayatLgdcode}",
               ),
             ],
           ),
@@ -452,7 +452,7 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
   }
 
   Widget _buildWelcomeCard() {
-    final provider = context.watch<NjmFtkProvider>();
+    final provider = context.watch<WsoSSGProvider>();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(22),
@@ -486,7 +486,7 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
                   Text("SSG Member", style: TextStyle(color: Colors.white70)),
 
                   Text(
-                    "${provider.njmFtkDashboardResponse!.firstName}${provider.njmFtkDashboardResponse!.lastName}",
+                    "${provider.wsoSSGDashboardResponse!.firstName}${provider.wsoSSGDashboardResponse!.lastName}",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -554,8 +554,8 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
   }
 
   void _showPasswordDialog() {
-    final provider = context.read<NjmFtkProvider>();
-    final res = provider.njmFtkLoginResponse!;
+    final provider = context.read<WsoSSGProvider>();
+    final res = provider.wsoSSGLoginResponse!;
 
     showCreatePasswordDialog(
       context,
@@ -568,7 +568,7 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
           return;
         }
 
-        await provider.updateNjmFtkPasswords(
+        await provider.updateWsoSSGPasswords(
           res.regId!,
           UserType.ftk.id,
           res.mobileNumber!,
@@ -578,10 +578,10 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
           DeviceInfoUtil.deviceId,
         );
 
-        if (provider.updateNjmFtkPassword?.status == true) {
+        if (provider.updateWsoSSGPassword?.status == true) {
           /// After password update load dashboard
-          await provider.fetchNjmFtkDashboard(
-            provider.updateNjmFtkPassword!.userId ?? 0,
+          await provider.fetchWsoSSGDashboard(
+            provider.updateWsoSSGPassword!.userId ?? 0,
             UserType.ftk.id,
           );
         }

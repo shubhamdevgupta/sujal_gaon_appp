@@ -19,11 +19,11 @@ void setupDI() {
     ..registerLazySingleton<MasterRepositary>(
       () => MasterRepositary(getIt()),
     )
-    ..registerLazySingleton<NjmFtkRepository>(
-      () => NjmFtkRepository(getIt()),
+    ..registerLazySingleton<WsoSSGRepository>(
+      () => WsoSSGRepository(getIt()),
     )
-    ..registerLazySingleton<NjmWsoRepo>(
-      () => NjmWsoRepo(getIt()),
+    ..registerLazySingleton<WsoRepo>(
+      () => WsoRepo(getIt()),
     )
     ..registerLazySingleton<VwscRepo>(() => VwscRepo(getIt()))
     ..registerLazySingleton<PanchayatRepo>(

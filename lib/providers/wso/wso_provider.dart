@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/repository/njm_wso/njm_wso_repo.dart';
 
-import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
+import '../../models/njm_ftk_response/WsoSSGRegistrationResponse.dart';
 import '../../models/njm_ftk_response/habitation_assest.dart';
-import '../../models/njm_wso/njm_wso_get_ground_water.dart';
-import '../../models/njm_wso/njm_wso_groundwatersource_response.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
+import '../../models/wso/wso_get_ground_water.dart';
+import '../../models/wso/wso_groundwatersource_response.dart';
 import '../../utils/global_exception_handler.dart';
 
-class NjmWsoProvider extends ChangeNotifier {
-  final NjmWsoRepo _njmWsoRepo;
+class WsoProvider extends ChangeNotifier {
+  final WsoRepo _njmWsoRepo;
 
-  NjmWsoProvider(this._njmWsoRepo);
+  WsoProvider(this._njmWsoRepo);
 
   bool _isLoading = false;
 
@@ -25,10 +25,10 @@ class NjmWsoProvider extends ChangeNotifier {
   TextEditingController addressController = TextEditingController();
   TextEditingController appointAuthConroller = TextEditingController();
 
-  Njmftkregistrationresponse? _njmftkregistrationresponse;
+  Wsossgregistrationresponse? _wsossgregistrationresponse;
 
-  Njmftkregistrationresponse? get njmFtkRegistrationResponse =>
-      _njmftkregistrationresponse;
+  Wsossgregistrationresponse? get wsoSsgRegistrationResponse =>
+      _wsossgregistrationresponse;
 
   String? errorMsg = '';
 

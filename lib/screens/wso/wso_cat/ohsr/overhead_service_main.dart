@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/providers/njm_wso/ohsr_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../providers/wso/ohsr_provider.dart';
 
 class OhsrMain extends StatefulWidget {
   const OhsrMain({super.key});

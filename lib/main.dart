@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/providers/authentication_provider.dart';
 import 'package:jal_sanchalan/providers/master_provider.dart';
-import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
-import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
-import 'package:jal_sanchalan/providers/njm_wso/ohsr_provider.dart';
+import 'package:jal_sanchalan/providers/wso/ohsr_provider.dart';
+import 'package:jal_sanchalan/providers/wso/wso_provider.dart';
+import 'package:jal_sanchalan/providers/wso_ssg_provider.dart';
 import 'package:jal_sanchalan/providers/panchayat/panchayat_provider.dart';
 import 'package:jal_sanchalan/providers/update_provider.dart';
 import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
@@ -46,13 +46,13 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (_) => VwscProvider(getIt<VwscRepo>())),
         ChangeNotifierProvider(
-          create: (_) => NjmWsoProvider(getIt<NjmWsoRepo>()),
+          create: (_) => WsoProvider(getIt<WsoRepo>()),
         ),
         ChangeNotifierProvider(
-          create: (_) => NjmFtkProvider(getIt<NjmFtkRepository>()),
+          create: (_) => WsoSSGProvider(getIt<WsoSSGRepository>()),
         ),
         ChangeNotifierProvider(
-          create: (_) => OhsrProvider(getIt<NjmWsoRepo>()),
+          create: (_) => OhsrProvider(getIt<WsoRepo>()),
         ),
         ChangeNotifierProvider(create: (_) => UpdateViewModel()),
       ],

@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import '../../models/njm_ftk_response/habitation_assest.dart';
-import '../../models/njm_wso/njm_wso_get_ground_water.dart';
-import '../../models/njm_wso/njm_wso_groundwatersource_response.dart';
+import '../../models/wso/wso_get_ground_water.dart';
+import '../../models/wso/wso_groundwatersource_response.dart';
 import '../../service/base_api_service.dart';
 import '../../utils/global_exception_handler.dart';
 
-class NjmWsoRepo {
+class WsoRepo {
   final BaseApiService _apiService;
 
-  NjmWsoRepo(this._apiService);
+  WsoRepo(this._apiService);
 
   Future<GroundWaterPumpResponse> insertOrUpdateGroundWaterPumpHouse(
     int id,

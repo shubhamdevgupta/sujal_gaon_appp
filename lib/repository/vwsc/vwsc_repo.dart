@@ -1,5 +1,5 @@
 import 'dart:convert';
-import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
+import '../../models/njm_ftk_response/WsoSSGRegistrationResponse.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
 import '../../service/base_api_service.dart';
 import '../../utils/global_exception_handler.dart';
@@ -8,7 +8,7 @@ class VwscRepo {
   final BaseApiService _apiService;
   VwscRepo(this._apiService);
 
-  Future<Njmftkregistrationresponse> registerNjmFTK(
+  Future<Wsossgregistrationresponse> registerNjmFTK(
       int regId,
       int userTypeId,
       int stateId,
@@ -57,7 +57,7 @@ class VwscRepo {
         }),
       );
 
-      return Njmftkregistrationresponse.fromJson(response);
+      return Wsossgregistrationresponse.fromJson(response);
     } catch (e, stackTrace) {
       GlobalExceptionHandler.handleException(
         e as Exception,

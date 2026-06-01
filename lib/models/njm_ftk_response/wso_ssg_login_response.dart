@@ -1,4 +1,4 @@
-class NjmFtkLoginResponse {
+class WsoSSGLoginResponse {
   final bool? status;
   final String? message;
   final String? loginId;
@@ -10,7 +10,7 @@ class NjmFtkLoginResponse {
   final int? isPwdUpdate;
   final int? otp;
 
-  NjmFtkLoginResponse({
+  WsoSSGLoginResponse({
     this.status,
     this.message,
     this.loginId,
@@ -23,8 +23,8 @@ class NjmFtkLoginResponse {
     this.otp,
   });
 
-  factory NjmFtkLoginResponse.fromJson(Map<String, dynamic> json) {
-    return NjmFtkLoginResponse(
+  factory WsoSSGLoginResponse.fromJson(Map<String, dynamic> json) {
+    return WsoSSGLoginResponse(
       status: json['Status'],
       message: json['Message'],
       loginId: json['LoginId'],

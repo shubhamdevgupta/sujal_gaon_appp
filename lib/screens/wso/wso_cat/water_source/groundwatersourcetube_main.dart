@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jal_sanchalan/providers/wso/wso_provider.dart';
 import 'package:jal_sanchalan/utils/app_constants.dart';
 import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:jal_sanchalan/utils/toast_helper.dart';
@@ -7,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'dart:math';
 
 import '../../../../../models/njm_ftk_response/habitation_assest.dart';
-import '../../../../../providers/njm_wso/njm_wso_provider.dart';
 import '../../../../../service/local_storage_service.dart';
 import '../../../../../utils/app_dialog.dart';
 import '../../../../../utils/auth/user_session_manager.dart';
@@ -50,7 +50,7 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
 
   @override
   Widget build(BuildContext context) {
-    final njm_wsoProvider = context.watch<NjmWsoProvider>();
+    final wsoProvider = context.watch<WsoProvider>();
     final SjlAllAsset asset = ModalRoute.of(context)!.settings.arguments as SjlAllAsset;
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
@@ -86,33 +86,33 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
 
                   _dropdown(
                     "Type of Pump",
-                    value: njm_wsoProvider.selectedPumpLabel,
-                    items: njm_wsoProvider.typesofpumpMap.keys.toList(),
+                    value: wsoProvider.selectedPumpLabel,
+                    items: wsoProvider.typesofpumpMap.keys.toList(),
                     onChanged: (value) {
-                      njm_wsoProvider.setSelectedtypesofpump(value);
-                      print("pump id ${njm_wsoProvider.selectedtypesofpumpId}");
+                      wsoProvider.setSelectedtypesofpump(value);
+                      print("pump id ${wsoProvider.selectedtypesofpumpId}");
                     },
                   ),
 
 
                   _dropdown(
                     "Location",
-                    value: njm_wsoProvider.selectedlocationlabel,
-                    items: njm_wsoProvider.typesoflocationMap.keys.toList(),
+                    value: wsoProvider.selectedlocationlabel,
+                    items: wsoProvider.typesoflocationMap.keys.toList(),
                     onChanged: (value) {
-                      njm_wsoProvider.setSelectedtypesoflocation(value);
-                      print("location id ${njm_wsoProvider.selectedlocationId}");
+                      wsoProvider.setSelectedtypesoflocation(value);
+                      print("location id ${wsoProvider.selectedlocationId}");
                     },
                   ),
                   _input(
                     "Discharge of Pump (m3/h)",
-                    controller: njm_wsoProvider.dischargeController,
+                    controller: wsoProvider.dischargeController,
                     keyboard: const TextInputType.numberWithOptions(decimal: true),
                   ),
 
                   _input(
                     "Head of Pump (m)",
-                    controller: njm_wsoProvider.headController,
+                    controller: wsoProvider.headController,
                     keyboard: const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ],
@@ -127,17 +127,17 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
                 children: [
                   _dropdown(
                     "Flow Meter Installed?",
-                    value: njm_wsoProvider.Isflow_meter_yesno,
-                    items: njm_wsoProvider.yesnoMap.keys.toList(),
+                    value: wsoProvider.Isflow_meter_yesno,
+                    items: wsoProvider.yesnoMap.keys.toList(),
                     onChanged: (value) {
-                      njm_wsoProvider.setIsFlowMeterYesNo(value);
+                      wsoProvider.setIsFlowMeterYesNo(value);
                     },
                   ),
                 ],
               ),
               const SizedBox(height: 22),
 
-              _submitButton(njm_wsoProvider,asset),
+              _submitButton(wsoProvider,asset),
 
 
 
@@ -332,7 +332,7 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
   // ================= SUBMIT =================
  // provider.fetchHabitationAssetsID(31, 1030748, session.userId);
   //TODO  remove the staic values from there
-  Widget _submitButton(NjmWsoProvider provider,SjlAllAsset asset) {
+  Widget _submitButton(WsoProvider provider,SjlAllAsset asset) {
     return InkWell(
       onTap: () async
       {
@@ -358,7 +358,7 @@ class _GroundwatersourcetubeMain extends State<GroundwatersourcetubeMain> {
        await provider.groundWaterResponse!.status ==true ?AppDialog.show(
           context,
           type: AppDialogType.success,
-          message: provider.njmFtkRegistrationResponse?.message,
+          message: provider.wsoSsgRegistrationResponse?.message,
           onPressed: () {
 
             Navigator.pushNamed(

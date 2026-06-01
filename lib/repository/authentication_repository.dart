@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:jal_sanchalan/models/njm_ftk_response/njm_ftk_dashboard_response.dart';
-import 'package:jal_sanchalan/models/njm_ftk_response/njm_ftk_login_response.dart';
+import 'package:jal_sanchalan/models/njm_ftk_response/wso_ssg_dashboard_response.dart';
+import 'package:jal_sanchalan/models/njm_ftk_response/wso_ssg_login_response.dart';
 import 'package:jal_sanchalan/models/njm_ftk_response/password_login.dart';
 
 import '../models/njm_ftk_response/habitation_assest.dart';

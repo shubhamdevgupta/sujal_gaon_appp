@@ -1,11 +1,11 @@
-class Njmftkregistrationresponse {
+class Wsossgregistrationresponse {
   final int? userId;
   final bool status;
   final String? message;
   final String? token;
   final int? id;
 
-  Njmftkregistrationresponse({
+  Wsossgregistrationresponse({
     this.userId,
     required this.status,
     this.message,
@@ -13,8 +13,8 @@ class Njmftkregistrationresponse {
     this.id,
   });
 
-  factory Njmftkregistrationresponse.fromJson(Map<String, dynamic> json) {
-    return Njmftkregistrationresponse(
+  factory Wsossgregistrationresponse.fromJson(Map<String, dynamic> json) {
+    return Wsossgregistrationresponse(
       userId: json['UserId'],
       status: json['Status'] ?? false,
       message: json['msg'],

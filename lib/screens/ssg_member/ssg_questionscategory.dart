@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/njm_ftk_provider.dart';
+import '../../providers/wso_ssg_provider.dart';
 import '../../service/local_storage_service.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
@@ -24,7 +24,7 @@ class _NjmQuestionscategory extends State<SSGQuestionscategory> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final provider = context.read<NjmFtkProvider>();
+      final provider = context.read<WsoSSGProvider>();
 
      // await provider.fetchHabitationAssetsID(31, 1213773, session.userId);
       // await provider.fetchHabitationAssetsID(_localStorage.getInt(AppConstants.prefStateId)!, provider.habitationId!, session.userId);

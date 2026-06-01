@@ -3,14 +3,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
-import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
+import 'package:jal_sanchalan/providers/wso_ssg_provider.dart';
 import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:jal_sanchalan/utils/loader_utils.dart';
 import 'package:jal_sanchalan/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
+import '../../providers/wso/wso_provider.dart';
 import '../../service/local_storage_service.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/auth/user_session_manager.dart';
@@ -34,24 +34,24 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final provider = context.read<NjmFtkProvider>();
+      final provider = context.read<WsoSSGProvider>();
       await session.init();
       /// CASE 1: Password login already stored userId
       if (session.userId != 0) {
-        await provider.fetchNjmFtkDashboard(session.userId, UserType.njmp.id);
+        await provider.fetchWsoSSGDashboard(session.userId, UserType.njmp.id);
         return;
       }
 
       if (_localStorage.getInt(AppConstants.prefIsPassUpdated) == 0) {
         _showPasswordDialog();
       } else {
-        await provider.fetchNjmFtkDashboard(session.userId, UserType.njmp.id);
+        await provider.fetchWsoSSGDashboard(session.userId, UserType.njmp.id);
       }
     });
   }
   @override
   Widget build(BuildContext context) {
-    final njmFtkProvider = context.watch<NjmFtkProvider>();
+    final njmFtkProvider = context.watch<WsoSSGProvider>();
 
     return PopScope(
       canPop: false,
@@ -109,7 +109,7 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
           child: Stack(
             children: [
               /// STEP 3: show dashboard only when dashboard data available
-              njmFtkProvider.njmFtkDashboardResponse == null
+              njmFtkProvider.wsoSSGDashboardResponse == null
                   ? const SizedBox()
                   : SingleChildScrollView(
                       padding: const EdgeInsets.all(10),
@@ -143,8 +143,8 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
 
 
   void _showPasswordDialog() {
-    final provider = context.read<NjmFtkProvider>();
-    final res = provider.njmFtkLoginResponse!;
+    final provider = context.read<WsoSSGProvider>();
+    final res = provider.wsoSSGLoginResponse!;
 
     CreatePasswordDialog.show(
       context,
@@ -158,7 +158,7 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
           return;
         }
 
-        await provider.updateNjmFtkPasswords(
+        await provider.updateWsoSSGPasswords(
           res.regId!,
           UserType.njmp.id,
           res.mobileNumber!,
@@ -168,7 +168,7 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
           DeviceInfoUtil.deviceId,
         );
 
-        if (provider.updateNjmFtkPassword?.status == true) {
+        if (provider.updateWsoSSGPassword?.status == true) {
 
           /// ✅ Success Toast
           ToastHelper.showSuccessSnackBar(
@@ -177,8 +177,8 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
           );
 
           /// Load dashboard
-          await provider.fetchNjmFtkDashboard(
-            provider.updateNjmFtkPassword!.userId ?? 0,
+          await provider.fetchWsoSSGDashboard(
+            provider.updateWsoSSGPassword!.userId ?? 0,
             UserType.njmp.id,
           );
         } else {
@@ -193,8 +193,8 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
   }
 
   Widget _dashboardCard(BuildContext context) {
-    final provider = context.read<NjmFtkProvider>();
-    final njmWsoProvider = context.read<NjmWsoProvider>();
+    final provider = context.read<WsoSSGProvider>();
+    final wsoProvider = context.read<WsoProvider>();
 
     return Container(
       padding: const EdgeInsets.all(8),
@@ -264,16 +264,16 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
 
                   AppDropdown(
                     hint: "Select Habitation",
-                    items: provider!.njmFtkDashboardResponse!.habitationList!
+                    items: provider!.wsoSSGDashboardResponse!.habitationList!
                         .map((e) => e.habitationName ?? "")
                         .toList(),
                     onChanged: (value) {
                       final selected = provider
-                          .njmFtkDashboardResponse!
+                          .wsoSSGDashboardResponse!
                           .habitationList!
                           .firstWhere((e) => e.habitationName == value);
 
-                      njmWsoProvider.setSelectedHabitationId(selected.habitationId);
+                      wsoProvider.setSelectedHabitationId(selected.habitationId);
 
                       print("Habitation Name: ${selected.habitationName}");
                       print("Habitation Id: ${selected.habitationId}");
@@ -292,13 +292,13 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
   }
 
   Widget _registerCard(BuildContext context) {
-    final njmWsoProvider = context.watch<NjmWsoProvider>();
+    final wsoProvider = context.watch<WsoProvider>();
 
     return Column(
       children: [
         GestureDetector(
-          onTap: (){    if (njmWsoProvider.selectedHabitationId != 0 &&
-              njmWsoProvider.selectedHabitationId != null) {
+          onTap: (){    if (wsoProvider.selectedHabitationId != 0 &&
+              wsoProvider.selectedHabitationId != null) {
             Navigator.pushNamed(context, AppConstants.navigateToWSOCategory);
           } else {
             ToastHelper.showErrorSnackBar(
@@ -360,8 +360,8 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
         SizedBox(height: 10,),
 
         GestureDetector(
-          onTap: () {    if (njmWsoProvider.selectedHabitationId != 0 &&
-              njmWsoProvider.selectedHabitationId != null) {
+          onTap: () {    if (wsoProvider.selectedHabitationId != 0 &&
+              wsoProvider.selectedHabitationId != null) {
             Navigator.pushNamed(context, AppConstants.navigateToWSORegularEntry);
           } else {
             ToastHelper.showErrorSnackBar(
@@ -424,7 +424,7 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
   }
 
   Widget _buildLocationCard() {
-    final provider = context.watch<NjmFtkProvider>();
+    final provider = context.watch<WsoSSGProvider>();
 
     return Container(
       margin: const EdgeInsets.only(top: 10),
@@ -461,7 +461,7 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
                 icon: Icons.account_balance,
                 color: Color(0xFF1976D2),
                 title: "State",
-                value: "${provider.njmFtkDashboardResponse!.stateName}",
+                value: "${provider.wsoSSGDashboardResponse!.stateName}",
               ),
 
               _verticalDivider(),
@@ -470,10 +470,10 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
                 icon: Icons.place,
                 color: Color(0xFFE53935),
                 title: "District",
-                value: "${provider.njmFtkDashboardResponse!.districtName}",
+                value: "${provider.wsoSSGDashboardResponse!.districtName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.districtLgdcode}",
+                    "${provider.wsoSSGDashboardResponse!.districtLgdcode}",
               ),
             ],
           ),
@@ -489,10 +489,10 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
                 icon: Icons.apartment,
                 color: Color(0xFF8D6E63),
                 title: "Block",
-                value: "${provider.njmFtkDashboardResponse!.blockName}",
+                value: "${provider.wsoSSGDashboardResponse!.blockName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.blockLgdcode}",
+                    "${provider.wsoSSGDashboardResponse!.blockLgdcode}",
               ),
 
               _verticalDivider(),
@@ -501,10 +501,10 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
                 icon: Icons.home,
                 color: Color(0xFF00796B),
                 title: "GP",
-                value: "${provider.njmFtkDashboardResponse!.panchayatName}",
+                value: "${provider.wsoSSGDashboardResponse!.panchayatName}",
                 subTitle: "LGD Code",
                 subTitleValue:
-                    "${provider.njmFtkDashboardResponse!.panchayatLgdcode}",
+                    "${provider.wsoSSGDashboardResponse!.panchayatLgdcode}",
               ),
             ],
           ),
@@ -576,7 +576,7 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
   }
 
   Widget _buildWelcomeCard() {
-    final provider = context.watch<NjmFtkProvider>();
+    final provider = context.watch<WsoSSGProvider>();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(22),
@@ -611,7 +611,7 @@ class _WsoLandingpageState extends State<WsoLandingpage> {
                   SizedBox(height: 2),
 
                   Text(
-                    "${provider.njmFtkDashboardResponse!.firstName ?? ""}${provider.njmFtkDashboardResponse!.lastName ?? ""}",
+                    "${provider.wsoSSGDashboardResponse!.firstName ?? ""}${provider.wsoSSGDashboardResponse!.lastName ?? ""}",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

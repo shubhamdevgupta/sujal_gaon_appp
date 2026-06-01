@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/repository/vwsc/vwsc_repo.dart';
 
-import '../../models/njm_ftk_response/NjmFtkRegistrationResponse.dart';
+import '../../models/njm_ftk_response/WsoSSGRegistrationResponse.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
 
 class VwscProvider extends ChangeNotifier {
@@ -20,10 +20,10 @@ class VwscProvider extends ChangeNotifier {
   TextEditingController addressController = TextEditingController();
   TextEditingController appointAuthConroller = TextEditingController();
 
-  Njmftkregistrationresponse? _njmftkregistrationresponse;
+  Wsossgregistrationresponse? _wsossgregistrationresponse;
 
-  Njmftkregistrationresponse? get njmFtkRegistrationResponse =>
-      _njmftkregistrationresponse;
+  Wsossgregistrationresponse? get wsoSSGRegistrationResponse =>
+      _wsossgregistrationresponse;
 
   final Map<String, int> levelTranningMap = {
     "Not Trained": 1,
@@ -147,9 +147,9 @@ class VwscProvider extends ChangeNotifier {
       );
 
       if (response.status == true) {
-        _njmftkregistrationresponse = response;
+        _wsossgregistrationresponse = response;
       } else {
-        _njmftkregistrationresponse = null;
+        _wsossgregistrationresponse = null;
         debugPrint("Registration Failed: ${response.message}");
       }
     } catch (e) {
@@ -162,7 +162,7 @@ class VwscProvider extends ChangeNotifier {
 
   void clearData() {
     _isLoading = false;
-    _njmftkregistrationresponse = null;
+    _wsossgregistrationresponse = null;
     _fromDate = null;
     _toDate = null;
 

@@ -1,11 +1,11 @@
-class UpdateNjmFtkPassword {
+class UpdateWsoSSGPassword {
   final bool status;
   final int? userId;
   final int? id;
   final String? message;
   final String? loginId;
 
-  UpdateNjmFtkPassword({
+  UpdateWsoSSGPassword({
     required this.status,
     this.userId,
     this.id,
@@ -13,8 +13,8 @@ class UpdateNjmFtkPassword {
     this.loginId,
   });
 
-  factory UpdateNjmFtkPassword.fromJson(Map<String, dynamic> json) {
-    return UpdateNjmFtkPassword(
+  factory UpdateWsoSSGPassword.fromJson(Map<String, dynamic> json) {
+    return UpdateWsoSSGPassword(
       status: json['Status'] ?? false,
       userId: json['UserId'],
       id: json['Id'],

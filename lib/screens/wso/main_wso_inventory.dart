@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/models/njm_ftk_response/habitation_assest.dart';
-import 'package:jal_sanchalan/providers/njm_wso/njm_wso_provider.dart';
+import 'package:jal_sanchalan/providers/wso/wso_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils/app_constants.dart';
@@ -21,7 +21,7 @@ class _WsoInventoryMain extends State<WsoInventoryMain> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final provider = context.read<NjmWsoProvider>();
+      final provider = context.read<WsoProvider>();
 
       await provider.fetchHabitationAssetsID(31, 1030748, session.userId);
       // await provider.fetchHabitationAssetsID(_localStorage.getInt(AppConstants.prefStateId)!, provider.habitationId!, session.userId);
@@ -55,7 +55,7 @@ class _WsoInventoryMain extends State<WsoInventoryMain> {
             SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(12),
-                child: Consumer<NjmWsoProvider>(
+                child: Consumer<WsoProvider>(
                   builder: (context, provider, child) {
                     final serviceArea = provider
                         .habitationAssetResponse
@@ -161,7 +161,7 @@ Widget buildHabitationCard(String serviceArea) {
   );
 }
 
-Widget buildAssetsCard(NjmWsoProvider provider) {
+Widget buildAssetsCard(WsoProvider provider) {
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 5),
     padding: const EdgeInsets.only(right: 10, left: 10, top: 10),
@@ -198,7 +198,7 @@ Widget buildAssetsCard(NjmWsoProvider provider) {
   );
 }
 
-Widget buildAssetList(NjmWsoProvider provider) {
+Widget buildAssetList(WsoProvider provider) {
   /// Dummy Pump Inventory Data
   final List<Map<String, int>> dummyPumpInventory = [
     {"assetId": 310161109},

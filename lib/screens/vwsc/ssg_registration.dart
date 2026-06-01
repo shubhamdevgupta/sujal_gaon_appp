@@ -559,8 +559,8 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
           validatedTo: formatDate(provider.toDate),
           habitationIds: masterProvider.selectedHabitationIdsAsString,
         );
-        if (provider.njmFtkRegistrationResponse != null &&
-            provider.njmFtkRegistrationResponse!.status == true) {
+        if (provider.wsoSSGRegistrationResponse != null &&
+            provider.wsoSSGRegistrationResponse!.status == true) {
           showDialog(
             context: context,
             barrierDismissible: false, // Disable tap outside to dismiss
@@ -594,7 +594,7 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
                 ],
               ),
               content: Text(
-                provider.njmFtkRegistrationResponse?.message ??
+                provider.wsoSSGRegistrationResponse?.message ??
                     'FTK Registration completed!',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 16, color: Colors.black87),
@@ -633,7 +633,7 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
         } else {
           ToastHelper.showErrorSnackBar(
             context,
-            provider.njmFtkRegistrationResponse!.message ??
+            provider.wsoSSGRegistrationResponse!.message ??
                 "Registration Failed",
           );
         }

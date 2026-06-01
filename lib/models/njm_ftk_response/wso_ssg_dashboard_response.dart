@@ -1,4 +1,4 @@
-class NjmFtkDashboardResponse {
+class WsoSSGDashboardResponse {
   bool? status;
   String? msg;
   String? token;
@@ -33,7 +33,7 @@ class NjmFtkDashboardResponse {
 
   List<HabitationList>? habitationList;
 
-  NjmFtkDashboardResponse({
+  WsoSSGDashboardResponse({
     this.status,
     this.msg,
     this.token,
@@ -68,7 +68,7 @@ class NjmFtkDashboardResponse {
     this.habitationList,
   });
 
-  NjmFtkDashboardResponse.fromJson(Map<String, dynamic> json) {
+  WsoSSGDashboardResponse.fromJson(Map<String, dynamic> json) {
     status = json['Status'];
     msg = json['msg'];
     token = json['Token'];

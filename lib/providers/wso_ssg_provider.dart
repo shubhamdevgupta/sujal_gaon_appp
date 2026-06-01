@@ -4,8 +4,8 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/repository/njm_ftk_repository.dart';
 
-import '../models/njm_ftk_response/njm_ftk_dashboard_response.dart';
-import '../models/njm_ftk_response/njm_ftk_login_response.dart';
+import '../models/njm_ftk_response/wso_ssg_dashboard_response.dart';
+import '../models/njm_ftk_response/wso_ssg_login_response.dart';
 import '../models/njm_ftk_response/password_login.dart';
 import '../models/update_password.dart';
 import '../service/local_storage_service.dart';
@@ -13,9 +13,9 @@ import '../utils/app_constants.dart';
 import '../utils/auth/user_session_manager.dart';
 import '../utils/global_exception_handler.dart';
 
-class NjmFtkProvider extends ChangeNotifier {
-  final NjmFtkRepository _njmFtkRepository;
-  NjmFtkProvider(this._njmFtkRepository);
+class WsoSSGProvider extends ChangeNotifier {
+  final WsoSSGRepository _wsoSSGRepository;
+  WsoSSGProvider(this._wsoSSGRepository);
 
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
@@ -28,22 +28,22 @@ class NjmFtkProvider extends ChangeNotifier {
 
   bool get isLoggedIn => _isLoggedIn;
 
-  NjmFtkLoginResponse? _njmFtkLoginResponse;
+  WsoSSGLoginResponse? _wsoSSGLoginResponse;
 
-  NjmFtkLoginResponse? get njmFtkLoginResponse => _njmFtkLoginResponse;
+  WsoSSGLoginResponse? get wsoSSGLoginResponse => _wsoSSGLoginResponse;
 
   PasswordLoginResponse? _passwordLoginResponse;
 
   PasswordLoginResponse? get passwordLoginResponse => _passwordLoginResponse;
 
-  NjmFtkDashboardResponse? _njmFtkDashboardResponse;
+  WsoSSGDashboardResponse? _wsoSSGDashboardResponse;
 
-  NjmFtkDashboardResponse? get njmFtkDashboardResponse =>
-      _njmFtkDashboardResponse;
+  WsoSSGDashboardResponse? get wsoSSGDashboardResponse =>
+      _wsoSSGDashboardResponse;
 
-  UpdateNjmFtkPassword? _updateNjmFtkPassword;
+  UpdateWsoSSGPassword? _updateWsoSSGPassword;
 
-  UpdateNjmFtkPassword? get updateNjmFtkPassword => _updateNjmFtkPassword;
+  UpdateWsoSSGPassword? get updateWsoSSGPassword => _updateWsoSSGPassword;
 
   bool _isLoading = false;
 
@@ -55,7 +55,7 @@ class NjmFtkProvider extends ChangeNotifier {
 
   String? errorMsg = '';
 
-  Future<void> loginNjmFtkUserByOtp(
+  Future<void> loginWsoSSGUserByOtp(
     mobileNumber,
     userTypeId,
     Function() onSuccess,
@@ -65,37 +65,37 @@ class NjmFtkProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _njmFtkLoginResponse = await _njmFtkRepository.loginNjmFtkUserByOtp(
+      _wsoSSGLoginResponse = await _wsoSSGRepository.loginWsoSSGUserByOtp(
         mobileNumber,
         userTypeId,
       );
-      if (_njmFtkLoginResponse?.status == true) {
+      if (_wsoSSGLoginResponse?.status == true) {
         await _localStorage.clearAll();
         await _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
 
-        _generatedOtp = _njmFtkLoginResponse?.otp.toString();
+        _generatedOtp = _wsoSSGLoginResponse?.otp.toString();
 
         _localStorage.saveInt(AppConstants.prefUserTypeId, userTypeId);
         _localStorage.saveString(
           AppConstants.prefUserName,
-          _njmFtkLoginResponse!.name!,
+          _wsoSSGLoginResponse!.name!,
         );
         _localStorage.saveString(
           AppConstants.prefUserEmail,
-          _njmFtkLoginResponse!.email!,
+          _wsoSSGLoginResponse!.email!,
         );
         _localStorage.saveInt(
           AppConstants.prefIsPassUpdated,
-          _njmFtkLoginResponse!.isPwdUpdate!,
+          _wsoSSGLoginResponse!.isPwdUpdate!,
         );
         _localStorage.saveInt(
           AppConstants.prefUserId,
-          _njmFtkLoginResponse!.userId!,
+          _wsoSSGLoginResponse!.userId!,
         );
         await session.init();
         onSuccess();
       } else {
-        errorMsg = _njmFtkLoginResponse?.message;
+        errorMsg = _wsoSSGLoginResponse?.message;
         onFailure(errorMsg);
       }
     } catch (e, stackTrace) {
@@ -105,14 +105,14 @@ class NjmFtkProvider extends ChangeNotifier {
         e as Exception,
         stackTrace: stackTrace,
       );
-      _njmFtkLoginResponse = null;
+      _wsoSSGLoginResponse = null;
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> loginNjmFtkUserByPassword(
+  Future<void> loginWsoSSGUserByPassword(
     String mobileNumber,
     String password,
     int userTypeId,
@@ -122,8 +122,8 @@ class NjmFtkProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      _passwordLoginResponse = await _njmFtkRepository
-          .loginNjmFtkUserByPassword(
+      _passwordLoginResponse = await _wsoSSGRepository
+          .loginWsoSSGUserByPassword(
             mobileNumber,
             generateSha512Pass(password),
             userTypeId,
@@ -161,54 +161,54 @@ class NjmFtkProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchNjmFtkDashboard(int userID, int userTypeID) async {
+  Future<void> fetchWsoSSGDashboard(int userID, int userTypeID) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      var rawResponse = await _njmFtkRepository.fetchNjmFtkDashboard(
+      var rawResponse = await _wsoSSGRepository.fetchWsoSSGDashboard(
         userID,
         userTypeID,
       );
       if (rawResponse.status == true) {
-        _njmFtkDashboardResponse = rawResponse;
+        _wsoSSGDashboardResponse = rawResponse;
 
         _localStorage.saveString(
           AppConstants.prefToken,
-          _njmFtkDashboardResponse!.token!,
+          _wsoSSGDashboardResponse!.token!,
         );
 
         _localStorage.saveInt(
           AppConstants.prefStateId,
-          _njmFtkDashboardResponse!.stateId!,
+          _wsoSSGDashboardResponse!.stateId!,
         );
         _localStorage.saveString(
           AppConstants.prefStateName,
-          _njmFtkDashboardResponse!.stateName!,
+          _wsoSSGDashboardResponse!.stateName!,
         );
         _localStorage.saveInt(
           AppConstants.prefDistrictId,
-          _njmFtkDashboardResponse!.districtid!,
+          _wsoSSGDashboardResponse!.districtid!,
         );
         _localStorage.saveString(
           AppConstants.prefDistrictName,
-          _njmFtkDashboardResponse!.districtName!,
+          _wsoSSGDashboardResponse!.districtName!,
         );
         _localStorage.saveInt(
           AppConstants.prefBlockId,
-          _njmFtkDashboardResponse!.blockId!,
+          _wsoSSGDashboardResponse!.blockId!,
         );
         _localStorage.saveString(
           AppConstants.prefBlockName,
-          _njmFtkDashboardResponse!.blockName!,
+          _wsoSSGDashboardResponse!.blockName!,
         );
         _localStorage.saveInt(
           AppConstants.prefPanchayatId,
-          _njmFtkDashboardResponse!.panchayatId!,
+          _wsoSSGDashboardResponse!.panchayatId!,
         );
         _localStorage.saveString(
           AppConstants.prefPanchayatName,
-          _njmFtkDashboardResponse!.panchayatName!,
+          _wsoSSGDashboardResponse!.panchayatName!,
         );
       } else {
         errorMsg = rawResponse.msg;
@@ -218,14 +218,14 @@ class NjmFtkProvider extends ChangeNotifier {
         e as Exception,
         stackTrace: stackTrace,
       );
-      _njmFtkLoginResponse = null;
+      _wsoSSGLoginResponse = null;
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> updateNjmFtkPasswords(
+  Future<void> updateWsoSSGPasswords(
     int regId,
     int userTypeId,
     String mobileNumber,
@@ -238,7 +238,7 @@ class NjmFtkProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      var rawResponse = await _njmFtkRepository.updateNjmFtkPassword(
+      var rawResponse = await _wsoSSGRepository.updateWsoSSGPassword(
         regId,
         userTypeId,
         mobileNumber,
@@ -248,17 +248,17 @@ class NjmFtkProvider extends ChangeNotifier {
         ipAddress,
       );
       if (rawResponse.status == true) {
-        _updateNjmFtkPassword = rawResponse;
+        _updateWsoSSGPassword = rawResponse;
         await _localStorage.saveInt(
           AppConstants.prefUserId,
-          _updateNjmFtkPassword!.userId!,
+          _updateWsoSSGPassword!.userId!,
         );
       } else {
         errorMsg = rawResponse.message;
       }
     } catch (e, stackTrace) {
       debugPrint("**** $e ***$stackTrace");
-      _updateNjmFtkPassword = null;
+      _updateWsoSSGPassword = null;
     } finally {
       _isLoading = false;
       notifyListeners();

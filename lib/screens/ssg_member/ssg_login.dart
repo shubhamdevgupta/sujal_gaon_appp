@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:jal_sanchalan/providers/njm_ftk_provider.dart';
+import 'package:jal_sanchalan/providers/wso_ssg_provider.dart';
 import 'package:jal_sanchalan/utils/enum/user_type.dart';
 import 'package:provider/provider.dart';
 import '../../providers/authentication_provider.dart';
@@ -29,7 +29,7 @@ class _SSGMemberLogin extends State<SSGMemberLogin> {
 
   @override
   Widget build(BuildContext context) {
-    final njmFtkProvider = context.watch<NjmFtkProvider>();
+    final njmFtkProvider = context.watch<WsoSSGProvider>();
 
     return Scaffold(
       backgroundColor: const Color(0xFFEAF4FF),
@@ -152,7 +152,7 @@ class _SSGMemberLogin extends State<SSGMemberLogin> {
                           text: "Send OTP",
                           isLoading: njmFtkProvider.isLoading,
                           onTap: () {
-                            final provider = context.read<NjmFtkProvider>();
+                            final provider = context.read<WsoSSGProvider>();
                             String mobile = mobileController.text.trim();
 
                             if (mobile.length != 10) {
@@ -160,7 +160,7 @@ class _SSGMemberLogin extends State<SSGMemberLogin> {
                               return;
                             }
 
-                            provider.loginNjmFtkUserByOtp(
+                            provider.loginWsoSSGUserByOtp(
                               mobile,
                               UserType.ftk.id,
                                   () {
@@ -190,7 +190,7 @@ class _SSGMemberLogin extends State<SSGMemberLogin> {
                           isLoading: njmFtkProvider.isLoading,
                           onTap: () {
                             final provider = context
-                                .read<NjmFtkProvider>();
+                                .read<WsoSSGProvider>();
 
                             String enteredOtp = otpController.text.trim();
 
@@ -246,7 +246,7 @@ class _SSGMemberLogin extends State<SSGMemberLogin> {
   // ===================== LOGIC ======================
 
   void loginWithPassword() async{
-    final provider = context.read<NjmFtkProvider>();
+    final provider = context.read<WsoSSGProvider>();
 
     String mobile = mobileController.text.trim();
     String password = passwordController.text.trim();
@@ -256,7 +256,7 @@ class _SSGMemberLogin extends State<SSGMemberLogin> {
       return;
     }
 
-    await provider.loginNjmFtkUserByPassword(
+    await provider.loginWsoSSGUserByPassword(
       mobile,
       password,
       UserType.ftk.id,
@@ -279,7 +279,7 @@ class _SSGMemberLogin extends State<SSGMemberLogin> {
 
 
   void sendOTP() {
-    final provider = context.read<NjmFtkProvider>();
+    final provider = context.read<WsoSSGProvider>();
     String mobile = mobileController.text.trim();
 
     if (mobile.length != 10) {
@@ -287,7 +287,7 @@ class _SSGMemberLogin extends State<SSGMemberLogin> {
       return;
     }
 
-    provider.loginNjmFtkUserByOtp(
+    provider.loginWsoSSGUserByOtp(
       mobile,
       UserType.ftk.id,
       () {
@@ -303,7 +303,7 @@ class _SSGMemberLogin extends State<SSGMemberLogin> {
   }
 
   void verifyOTP() {
-    final provider = context.read<NjmFtkProvider>();
+    final provider = context.read<WsoSSGProvider>();
 
     String enteredOtp = otpController.text.trim();
 
