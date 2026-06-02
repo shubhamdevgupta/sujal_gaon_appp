@@ -514,10 +514,10 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
     }
 
     // Training Level validation
-    if (provider.selectedLevelId == null) {
+ /*   if (provider.selectedLevelId == null) {
       ToastHelper.showErrorSnackBar(context, "Please select training level");
       return false;
-    }
+    }*/
 
     return true;
   }
