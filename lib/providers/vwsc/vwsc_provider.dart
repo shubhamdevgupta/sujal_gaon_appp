@@ -25,29 +25,54 @@ class VwscProvider extends ChangeNotifier {
   Wsossgregistrationresponse? get wsoSSGRegistrationResponse =>
       _wsossgregistrationresponse;
 
-  final Map<String, int> levelTranningMap = {
-    "Not Trained": 1,
-    "Nal Jal Mitra (PMKVY-JJM)": 2,
-    "Trained under State Programme": 3,
+  final Map<String, int> educationalMap = {
+    "Below 8th": 1,
+    "8th": 2,
+    "10th": 3,
+    "12th": 4,
+    "Graduate and above": 5,
   };
 
-  String? _selectedLevelLabel;
+  String? _selectedEducationLabel;
+  String? get selectedEducational => _selectedEducationLabel;
 
-  String? get selectedLevelLabel => _selectedLevelLabel;
+  int? _selectedEducationalId;
+  int? get selectedEducationId => _selectedEducationalId;
 
-  int? _selectedLevelId;
-
-  int? get selectedLevelId => _selectedLevelId;
-
-  void setSelectedLevel(String? label) {
-    _selectedLevelLabel = label;
+  void setEducational(String? label) {
+    _selectedEducationLabel = label;
 
     if (label != null) {
-      _selectedLevelId = levelTranningMap[label];
+      _selectedEducationalId = educationalMap[label];
     } else {
-      _selectedLevelId = null;
+      _selectedEducationalId = null;
     }
+    notifyListeners();
+  }
 
+
+  final Map<String, int> skillingMap = {
+    "Plumbing": 1,
+    "Electrical": 2,
+    "Multi-Tasking": 3,
+    "Any other skill,Please enter": 4,
+  };
+
+  String? _selectedSkillingLabel;
+  String? get selectedSkilling => _selectedSkillingLabel;
+
+  int? _selectedSkillingId;
+  int? get selectedSkillId => _selectedSkillingId;
+
+
+  void setSkill(String? label) {
+    _selectedSkillingLabel = label;
+
+    if (label != null) {
+      _selectedSkillingId = skillingMap[label];
+    } else {
+      _selectedSkillingId = null;
+    }
     notifyListeners();
   }
 

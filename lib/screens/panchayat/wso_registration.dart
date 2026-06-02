@@ -24,8 +24,10 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
   String? selectedHabitation;
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
-  DateTime? fromDate;
-  DateTime? toDate;
+
+  final PageController _pageController = PageController();
+
+  int currentStep = 0;
 
   @override
   void initState() {
@@ -34,6 +36,34 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
     // final masterProvider = Provider.of<MasterProvider>(context, listen: false);
     // masterProvider.fetchVillage(
     //     _localStorage.getString(AppConstants.prefPanchayatId)!);
+  }
+
+  void nextStep() {
+    if (currentStep < 2) {
+      setState(() {
+        currentStep++;
+      });
+
+      _pageController.animateToPage(
+        currentStep,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void previousStep() {
+    if (currentStep > 0) {
+      setState(() {
+        currentStep--;
+      });
+
+      _pageController.animateToPage(
+        currentStep,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
@@ -84,7 +114,7 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
                             ),
                           );
                         }).toList(),
-                        title: "Village *",
+                        title: "Name of the Village *",
                         onChanged: (value) {
                           masterProvider.setSelectedVillage(value);
 
@@ -101,6 +131,35 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
                         ),
+                      ),
+                      Text(
+                        "VWSC ID",
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+
+                      CustomDropdown(
+                        value: masterProvider.selectedVillageId,
+                        items: masterProvider.villages.map((village) {
+                          return DropdownMenuItem<String>(
+                            value: village.villageId.toString(),
+                            child: Text(
+                              village.villageName,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        }).toList(),
+                        title: "Area of Operation for the Operator",
+                        onChanged: (value) {
+                          masterProvider.setSelectedVillage(value);
+
+                          if (value != null && value.isNotEmpty) {
+                            masterProvider.fetchHabitation(value);
+                          }
+                        },
+                        appBarTitle: "Select Village",
                       ),
 
                       //Habitation commented
@@ -184,47 +243,38 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
                   ),
                   const SizedBox(height: 22),
 
-                  _sectionCard(
-                    icon: Icons.person,
-                    title: "Operator Details",
-                    children: [
-                      _input(
-                        "Name of the Operator",
-                        controller: vwscProvider.nameController,
-                      ),
-                      _input(
-                        "Contact Number",
-                        keyboard: TextInputType.phone,
-                        controller: vwscProvider.phoneController,
-                      ),
-                      _input(
-                        "Email Id",
-                        keyboard: TextInputType.emailAddress,
-                        controller: vwscProvider.emailController,
-                      ),
-                      _input(
-                        "Complete Address",
-                        maxLines: 3,
-                        controller: vwscProvider.addressController,
-                      ),
-                      _dropdown(
-                        "Level of Training",
-                        value: vwscProvider.selectedLevelLabel,
-                        items: vwscProvider.levelTranningMap.keys.toList(),
-                        onChanged: (value) {
-                          vwscProvider.setSelectedLevel(value);
-                        },
-                      ),
-                    ],
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .55,
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        SingleChildScrollView(
+                          child: _stepOne(vwscProvider),
+                        ),
+
+                        SingleChildScrollView(
+                          child: _stepTwo(vwscProvider),
+                        ),
+
+                        SingleChildScrollView(
+                          child: _stepThree(vwscProvider),
+                        ),
+                      ],
+                    ),
                   ),
+                  const SizedBox(height: 15),
+
+                  _buildIndicator(),
+
+                  const SizedBox(height: 15),
+
+                  _buildNavigationButtons(),
+
                 ],
               ),
 
               const SizedBox(height: 22),
-
-              _submitButton(vwscProvider, masterProvider),
-
-              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -349,7 +399,8 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
     required String? value,
     required List<String> items,
     required Function(String?) onChanged,
-  }) {
+  })
+  {
     return DropdownButtonFormField<String>(
       value: value,
       isExpanded: true,
@@ -381,44 +432,255 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
     );
   }
 
-  Widget _datePicker({
-    required String label,
-    required DateTime? date,
-    required Function(DateTime) onSelect,
+  Widget _radioGroup(
+    String title, {
+    required String? value,
+    required List<String> options,
+    required Function(String?) onChanged,
   }) {
-    return InkWell(
-      onTap: () async {
-        DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2100),
-        );
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.blueGrey.shade400, width: 1.3),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          ),
 
-        if (picked != null) onSelect(picked);
-      },
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.blueGrey.shade400),
+          Wrap(
+            children: options.map((option) {
+              return InkWell(
+                onTap: () => onChanged(option),
+                borderRadius: BorderRadius.circular(20),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Radio<String>(
+                      value: option,
+                      groupValue: value,
+                      activeColor: const Color(0xFF1976D2),
+                      onChanged: onChanged,
+                    ),
+
+                    Text(
+                      option,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _stepOne(VwscProvider provider) {
+    return _sectionCard(
+      icon: Icons.person,
+      title: "Basic Details",
+      children: [
+        _input("Name of the WSO", controller: provider.nameController),
+        _input("Father Name", controller: provider.nameController),
+        _input("Gender", controller: provider.nameController),
+        _input("Date of Birth", controller: provider.nameController),
+
+        _input(
+          "Mobile Number",
+          keyboard: TextInputType.phone,
+          controller: provider.phoneController,
         ),
-        child: Row(
-          children: [
-            const Icon(Icons.calendar_today, color: Color(0xFF1565C0)),
-            const SizedBox(width: 12),
-            Text(
-              date == null ? label : "${date.day}/${date.month}/${date.year}",
-            ),
-          ],
+      ],
+    );
+  }
+
+  Widget _stepTwo(VwscProvider provider) {
+    return _sectionCard(
+      icon: Icons.school,
+      title: "Training Details",
+      children: [
+        _input("Aadhar No.", controller: provider.addressController),
+        _input(
+          "Complete Address of the Operator",
+          maxLines: 2,
+          controller: provider.addressController,
+        ),
+
+        _dropdown(
+          "Educational Qualification",
+          value: provider.selectedEducational,
+          items: provider.educationalMap.keys.toList(),
+          onChanged: (value) {
+            provider.setEducational(value);
+          },
+        ),
+
+        _dropdown(
+          "Skilling Details",
+          value: provider.selectedSkilling,
+          items: provider.skillingMap.keys.toList(),
+          onChanged: (value) {
+            if (provider.selectedSkillId == 4) {
+              _input('Enter your skill');
+            }
+            provider.setSkill(value);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _stepThree(VwscProvider provider) {
+    return _sectionCard(
+      icon: Icons.check_circle,
+      title: "Experience",
+      children: [
+        _dropdown(
+          "Level of Training/ Technical Qualification",
+          value: provider.selectedSkilling,
+          items: provider.skillingMap.keys.toList(),
+          onChanged: (value) {
+            if (provider.selectedSkillId == 4) {
+              _input('Enter your skill');
+            }
+            provider.setSkill(value);
+          },
+        ),
+
+        _input("Years of Experience (In this GP)"),
+        _dropdown(
+          "Type of Operator",
+          value: provider.selectedSkilling,
+          items: provider.skillingMap.keys.toList(),
+          onChanged: (value) {
+            provider.setSkill(value);
+          },
+        ),
+        _dropdown(
+          "Appointment/Deployment Authority Details",
+          value: provider.selectedSkilling,
+          items: provider.skillingMap.keys.toList(),
+          onChanged: (value) {
+            provider.setSkill(value);
+          },
+        ),
+
+        _radioGroup(
+          "Salary/ Honorarium for WSO when deployed by GP",
+          value: provider.selectedSkilling,
+          options: const ["Salary", "User Charge Incentive"],
+          onChanged: (value) {},
+        ),
+        _input("Date of Registration"),
+        _radioGroup(
+          "Validation Status",
+          value: provider.selectedSkilling,
+          options: const ["Verified", "Pending"],
+          onChanged: (value) {},
+        ),
+        _input("Validation Date"),
+      ],
+    );
+  }
+
+  Widget _buildIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        3,
+        (index) => Container(
+          margin: const EdgeInsets.all(4),
+          width: currentStep == index ? 24 : 10,
+          height: 10,
+          decoration: BoxDecoration(
+            color: currentStep == index ? Colors.blue : Colors.grey.shade400,
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
       ),
     );
   }
 
-  // ======== validations=============
+  Widget _buildNavigationButtons() {
+    return Row(
+      children: [
+        if (currentStep > 0)
+          Expanded(
+            child: InkWell(
+              onTap: previousStep,
+              child: Container(
+                width: double.infinity,
+                height: 56,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF1E88E5), Color(0xFF1565C0)],
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: const Center(
+                  child: Text(
+                    "Previous",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
 
+        if (currentStep > 0) const SizedBox(width: 10),
+
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              if (currentStep == 2) {
+                // CALL YOUR API HERE
+              } else {
+                nextStep();
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              height: 56,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1E88E5), Color(0xFF1565C0)],
+                ),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Center(
+                child: Text(
+                  currentStep == 2 ? "Submit" : "Next",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ======== VALIDATION FOR THE DATA FIELDS =======
+
+/*
   bool _validateForm(VwscProvider provider, MasterProvider masterProvider) {
     // Village validation
     if (masterProvider.selectedVillageId == null ||
@@ -458,13 +720,14 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
     }
 
     // Email validation (optional)
-    /*    String email = provider.emailController.text.trim();
+   String email = provider.emailController.text.trim();
     if (email.isNotEmpty) {
       if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(email)) {
         ToastHelper.showErrorSnackBar(context, "Enter valid email address");
         return false;
       }
-    }*/
+    }
+
 
     // Address validation
     if (provider.addressController.text.trim().isEmpty) {
@@ -472,17 +735,13 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
       return false;
     }
 
-    // Training Level validation
-    if (provider.selectedLevelId == null) {
-      ToastHelper.showErrorSnackBar(context, "Please select training level");
-      return false;
-    }
-
     return true;
   }
+*/
 
-  // ================= BUTTON =================
+  // API CALL FOR THE SUBMIT BUTTON
 
+/*
   Widget _submitButton(VwscProvider provider, MasterProvider masterProvider) {
     return InkWell(
       onTap: () async {
@@ -514,7 +773,7 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
           email: provider.emailController.text,
           gender: '',
           address: provider.addressController.text,
-          levelTrainingId: provider.selectedLevelId!,
+          levelTrainingId: 0,
           ipAddress: DeviceInfoUtil.deviceId,
           createdBy: session.userId,
           validatedFrom: formatDate(provider.fromDate),
@@ -623,4 +882,5 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
       ),
     );
   }
+*/
 }
