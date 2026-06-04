@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
+import 'package:jal_sanchalan/screens/panchayat/members_communityMobilization.dart';
+import 'package:jal_sanchalan/screens/panchayat/members_communityWQMS.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_login.dart';
 import 'package:jal_sanchalan/screens/panchayat/vwsc_member_list.dart';
@@ -58,9 +60,12 @@ class AppRoutes {
           const VwscLandingScreen(),
       AppConstants.navigateToWsoRegistrationForm: (context) =>
           const WSORegistrationForm(),
-      AppConstants.navigateToSSGRegistrationForm: (context) =>
-          const SSGMemberRegistrationForm(),
+      AppConstants.navigateToSSGRegistrationForm: (context) => const SSGMemberRegistrationForm(),
       AppConstants.navigateToVWSCMemberScrenn: (context) => MembersTabScreen(),
+      AppConstants.navigateToMembersCommunitywqms: (context) => MembersCommunitywqms(),
+      AppConstants.navigateToMembersCommunitymobilization: (context) => MembersCommunitymobilization(),
+
+
 
       // SUJALAM SHAKTI GROUP MEMBER
       AppConstants.navigateToSSGLogin: (context) => SSGMemberLogin(),

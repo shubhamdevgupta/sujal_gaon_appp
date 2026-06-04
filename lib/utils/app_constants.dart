@@ -38,6 +38,8 @@ class AppConstants {
   static const String navigateToWsoRegistrationForm = '/NJMPRegistrationForm';
   static const String navigateToSSGRegistrationForm ='/SHGFTKRegistrationForm';
   static const String navigateToVWSCMemberScrenn = '/listofvwscmember';
+  static const String navigateToMembersCommunitywqms = '/memberscommunity';
+  static const String navigateToMembersCommunitymobilization = '/memberscommunitymobilzation';
 
   ///////////////      SUJALAM SHAKTI GROUP MEMBER
   static const String navigateToSSGLogin = '/SsgLogin ';
