@@ -79,7 +79,7 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
         backgroundColor: const Color(0xFF1976D2),
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
-          "SHGs / FTK Registration",
+          "SSG Registration",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -385,7 +385,7 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
               const SizedBox(height: 22),*/
 
 
-              _submitButton(vwscProvider, masterProvider),
+            //  _submitButton(vwscProvider, masterProvider),
 
               const SizedBox(height: 40),
             ],

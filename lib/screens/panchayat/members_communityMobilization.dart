@@ -40,7 +40,7 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
         backgroundColor: const Color(0xFF1976D2),
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
-          "SHGs / FTK Registration",
+          "SSG Registration",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -360,40 +360,38 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
         required Function(String?) onChanged,
       }) {
     return DropdownButtonFormField<String>(
+      isExpanded: true,
       value: value,
-
       decoration: InputDecoration(
         hintText: hint,
-
         prefixIcon: const Icon(
           Icons.arrow_drop_down_circle,
           color: Color(0xFF1976D2),
           size: 18,
         ),
-
         filled: true,
         fillColor: Colors.white,
-
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
         ),
-
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.blueGrey.shade400, width: 1.3),
         ),
-
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFF1976D2), width: 1.8),
         ),
       ),
-
-      items: items
-          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-          .toList(),
-
+      items: items.map((e) {
+        return DropdownMenuItem<String>(
+          value: e,
+          child: Text(
+            e,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        );
+      }).toList(),
       onChanged: onChanged,
     );
   }
@@ -435,6 +433,7 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
 
   Widget _datePicker({
     required String label,
+
     required DateTime? date,
     required Function(DateTime) onSelect,
   }) {
@@ -468,7 +467,5 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
       ),
     );
   }
-
-
 
 }
