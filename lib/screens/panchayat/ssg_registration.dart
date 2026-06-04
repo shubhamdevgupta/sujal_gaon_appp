@@ -28,6 +28,36 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
 
+  final TextEditingController organizationNameController =
+  TextEditingController();
+
+  final TextEditingController yearsWorkingController =
+  TextEditingController();
+
+  final TextEditingController memberCountController =
+  TextEditingController();
+
+  String? selectedOrganizationType;
+  String? selectedMemberType;
+
+  final List<Map<String, dynamic>> members = [];
+
+  final List<String> organizationTypes = [
+    "SRLM – SHG",
+    "SHG – other than SRLM",
+    "PACs",
+    "LAMP",
+    "Any other Community based Organization",
+  ];
+
+  final List<String> qualificationList = [
+    "Below 8th",
+    "8th",
+    "10th",
+    "12th",
+    "Graduate and above",
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -68,7 +98,7 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              _sectionCard(
+              /*_sectionCard(
                 icon: Icons.map,
                 title: "Area of Operation",
                 children: [
@@ -175,34 +205,159 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
                     ],
                   ],
                 ],
-              ),
+              ),*/
               const SizedBox(height: 22),
               _sectionCard(
-                icon: Icons.person,
-                title: "Personal Details",
+                icon: Icons.groups,
+                title: "Organization Details",
                 children: [
+
                   _input(
-                    "Name (First + Last Name)",
-                    controller: vwscProvider.nameController,
+                    "Name of Organization",
+                    controller: organizationNameController,
+                    maxLength: 500,
+                  ),
+
+                  _dropdown(
+                    "Type of Organization",
+                    value: selectedOrganizationType,
+                    items: organizationTypes,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedOrganizationType = value;
+                      });
+                    },
                   ),
 
                   _input(
-                    "Mobile Number",
-                    controller: vwscProvider.phoneController,
-                    keyboard: TextInputType.phone,
+                    "Years of Working",
+                    controller: yearsWorkingController,
+                    keyboard: TextInputType.number,
                   ),
 
                   _input(
-                    "Email Id",
-                    keyboard: TextInputType.emailAddress,
-                    controller: vwscProvider.emailController,
+                    "No. of Members in Organization",
+                    controller: memberCountController,
+                    keyboard: TextInputType.number,
                   ),
 
-                  _input(
-                    "Complete Address",
-                    controller: vwscProvider.addressController,
-                    maxLines: 3,
+                  _readOnly("Village Name", "Demo Village"),
+
+                  _readOnly("LGD Code", "123456"),
+
+                  _readOnly("VWSC ID", "VWSC-001"),
+
+                  const SizedBox(height: 10),
+
+                  const Text(
+                    "Enter Details of Sujalam Shakti Members:",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+
+                  Container(
+                    width: double.infinity,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF64B5F6),
+                          Color(0xFF42A5F5),
+                          Color(0xFF2196F3),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0x332196F3),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.water_drop,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      label: const Text(
+                        "Members for Community WQMS",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppConstants.navigateToMembersCommunitywqms,
+                        );
+
+                      },
+                    ),
+                  ),
+
+
+                  Container(
+                    width: double.infinity,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF64B5F6),
+                          Color(0xFF42A5F5),
+                          Color(0xFF2196F3),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0x332196F3),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      icon: const Icon(Icons.groups, color: Colors.white),
+                      label: const Text(
+                        "Members for Community Mobilization",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppConstants.navigateToMembersCommunitymobilization,
+                        );
+
+                      },
+                    ),
+                  ),
+
                 ],
               ),
 
@@ -292,7 +447,7 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
           const SizedBox(height: 16),
 
           ...children.map(
-            (e) =>
+                (e) =>
                 Padding(padding: const EdgeInsets.only(bottom: 16), child: e),
           ),
         ],
@@ -301,14 +456,14 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
   }
 
   Widget _input(
-    String hint, {
-    TextEditingController? controller,
-    TextInputType keyboard = TextInputType.text,
-    int maxLines = 1,
-    int? maxLength,
-    bool readOnly = false,
-    Function(String)? onChanged,
-  }) {
+      String hint, {
+        TextEditingController? controller,
+        TextInputType keyboard = TextInputType.text,
+        int maxLines = 1,
+        int? maxLength,
+        bool readOnly = false,
+        Function(String)? onChanged,
+      }) {
     return TextField(
       controller: controller,
       keyboardType: keyboard,
@@ -349,46 +504,44 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
   // ================= DROPDOWN =================
 
   Widget _dropdown(
-    String hint, {
-    required String? value,
-    required List<String> items,
-    required Function(String?) onChanged,
-  }) {
+      String hint, {
+        required String? value,
+        required List<String> items,
+        required Function(String?) onChanged,
+      }) {
     return DropdownButtonFormField<String>(
+      isExpanded: true,
       value: value,
-
       decoration: InputDecoration(
         hintText: hint,
-
         prefixIcon: const Icon(
           Icons.arrow_drop_down_circle,
           color: Color(0xFF1976D2),
           size: 18,
         ),
-
         filled: true,
         fillColor: Colors.white,
-
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
         ),
-
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.blueGrey.shade400, width: 1.3),
         ),
-
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFF1976D2), width: 1.8),
         ),
       ),
-
-      items: items
-          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-          .toList(),
-
+      items: items.map((e) {
+        return DropdownMenuItem<String>(
+          value: e,
+          child: Text(
+            e,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        );
+      }).toList(),
       onChanged: onChanged,
     );
   }
@@ -514,7 +667,7 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
     }
 
     // Training Level validation
- /*   if (provider.selectedLevelId == null) {
+    /*   if (provider.selectedLevelId == null) {
       ToastHelper.showErrorSnackBar(context, "Please select training level");
       return false;
     }*/
@@ -617,7 +770,7 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         AppConstants.navigateToSSGLandingpage,
-                        (route) => false, // Clear back stack
+                            (route) => false, // Clear back stack
                       );
                       provider.clearData();
                     },
@@ -660,4 +813,6 @@ class _SSGMemberRegistrationFormState extends State<SSGMemberRegistrationForm> {
       ),
     );
   }
+
+
 }
