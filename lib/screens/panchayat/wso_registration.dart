@@ -162,83 +162,6 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
                         appBarTitle: "Select Village",
                       ),
 
-                      //Habitation commented
-                      /*
-                      if (masterProvider.selectedVillageId != null) ...[
-                        if (masterProvider.isLoading)
-                          const Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Center(child: CircularProgressIndicator()),
-                          ),
-
-                        if (!masterProvider.isLoading &&
-                            masterProvider.habitations.isEmpty)
-                          const Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Text("No Habitations Found"),
-                          ),
-
-                        if (masterProvider.habitations.isNotEmpty) ...[
-                          const Text(
-                            "Select Habitations",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: masterProvider.habitations.map((hab) {
-                              final habId = hab.habitationId.toString();
-
-                              final isSelected = masterProvider
-                                  .selectedHabitationIds
-                                  .contains(habId);
-
-                              return FilterChip(
-                                label: Text(
-                                  hab.habitationName,
-                                  style: TextStyle(
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.black87,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-
-                                selected: isSelected,
-
-                                onSelected: (_) {
-                                  masterProvider.toggleHabitation(habId);
-                                },
-
-                                selectedColor: Colors.blue,
-
-                                // 🔵 Blue when selected
-                                backgroundColor: Colors.grey.shade100,
-
-                                checkmarkColor: Colors.white,
-
-                                elevation: isSelected ? 4 : 0,
-
-                                shadowColor: Colors.blue.withOpacity(0.4),
-
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                  side: BorderSide(
-                                    color: isSelected
-                                        ? Colors.blue
-                                        : Colors.grey.shade300,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ],
-*/
                     ],
                   ),
                   const SizedBox(height: 22),
@@ -263,14 +186,6 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 15),
-
-                  _buildIndicator(),
-
-                  const SizedBox(height: 15),
-
-                  _buildNavigationButtons(),
-
                 ],
               ),
 
@@ -290,6 +205,16 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
         "${date.year}";
   }
 
+  Widget _stepFooter() {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        _buildIndicator(),
+        const SizedBox(height: 15),
+        _buildNavigationButtons(),
+      ],
+    );
+  }
   Widget _sectionCard({
     required IconData icon,
     required String title,
@@ -433,49 +358,62 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
   }
 
   Widget _radioGroup(
-    String title, {
-    required String? value,
-    required List<String> options,
-    required Function(String?) onChanged,
-  }) {
+      String title, {
+        required String? value,
+        required List<String> options,
+        required Function(String?) onChanged,
+      }) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.blueGrey.shade400, width: 1.3),
+        border: Border.all(
+          color: Colors.blueGrey.shade400,
+          width: 1.3,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
           ),
 
+          const SizedBox(height: 8),
+
           Wrap(
+            spacing: 24,
+            runSpacing: 8,
             children: options.map((option) {
               return InkWell(
                 onTap: () => onChanged(option),
                 borderRadius: BorderRadius.circular(20),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Radio<String>(
-                      value: option,
-                      groupValue: value,
-                      activeColor: const Color(0xFF1976D2),
-                      onChanged: onChanged,
-                    ),
-
-                    Text(
-                      option,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Radio<String>(
+                        value: option,
+                        groupValue: value,
+                        activeColor: const Color(0xFF1976D2),
+                        visualDensity: VisualDensity.compact,
+                        onChanged: onChanged,
                       ),
-                    ),
-                  ],
+                      Text(
+                        option,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             }).toList(),
@@ -484,7 +422,6 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
       ),
     );
   }
-
   Widget _stepOne(VwscProvider provider) {
     return _sectionCard(
       icon: Icons.person,
@@ -500,6 +437,7 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
           keyboard: TextInputType.phone,
           controller: provider.phoneController,
         ),
+        _stepFooter()
       ],
     );
   }
@@ -536,6 +474,8 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
             provider.setSkill(value);
           },
         ),
+        _stepFooter()
+
       ],
     );
   }
@@ -589,6 +529,8 @@ class _WSORegistrationFormState extends State<WSORegistrationForm> {
           onChanged: (value) {},
         ),
         _input("Validation Date"),
+        _stepFooter()
+
       ],
     );
   }
