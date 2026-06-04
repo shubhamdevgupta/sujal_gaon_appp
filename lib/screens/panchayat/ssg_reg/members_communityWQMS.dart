@@ -2,32 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/master_provider.dart';
-import '../../providers/vwsc/vwsc_provider.dart';
-import '../../service/local_storage_service.dart';
-import '../../utils/app_constants.dart';
-import '../../utils/auth/user_session_manager.dart';
-import '../../utils/custom screen/custom_dropdown.dart';
-import '../../utils/enum/user_type.dart';
-import '../../utils/toast_helper.dart';
+import '../../../providers/master_provider.dart';
+import '../../../providers/vwsc/vwsc_provider.dart';
+import '../../../service/local_storage_service.dart';
+import '../../../utils/app_constants.dart';
+import '../../../utils/auth/user_session_manager.dart';
+import '../../../utils/custom screen/custom_dropdown.dart';
+import '../../../utils/enum/user_type.dart';
+import '../../../utils/toast_helper.dart';
 
-class MembersCommunitymobilization extends StatefulWidget {
-  const MembersCommunitymobilization({super.key});
+class MembersCommunitywqms extends StatefulWidget {
+  const MembersCommunitywqms({super.key});
 
   @override
-  State<MembersCommunitymobilization> createState() => _MembersCommunitymobilization();
+  State<MembersCommunitywqms> createState() => _MembersCommunitywqms();
 }
 
-class _MembersCommunitymobilization extends State<MembersCommunitymobilization> {
+class _MembersCommunitywqms extends State<MembersCommunitywqms> {
   String? selectedGender;
   String? selectedQualification;
-  String? selectedProgramme;
+  String? selectedTrainingStatus;
   String? selectedValidationStatus;
 
   DateTime? dob;
   DateTime? validationDate;
 
-  final TextEditingController cadreController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,25 +59,25 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
           child: Column(
             children: [
               _sectionCard(
-                  icon: Icons.groups,
-                  title: "Organization Details",
+                icon: Icons.groups,
+                title: "Organization Details",
                   children: [
 
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.green.shade50,
+                        color: Colors.blue.shade50,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Colors.green.shade200,
+                          color: Colors.blue.shade200,
                         ),
                       ),
                       child: const Text(
-                        "Members for Community Mobilization – User charge collection, water conservation works, implementation support, community surveillance for preventive maintenance, Lok Jal Utsav",
+                        "Members for Community WQMS – Water Quality Testing",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.green,
+                          color: Colors.blue,
                         ),
                       ),
                     ),
@@ -130,7 +129,7 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
 
                     _input(
                       "Complete Address",
-                      maxLines: 3,
+                      maxLines: 2,
                       maxLength: 500,
                     ),
 
@@ -152,28 +151,23 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
                     ),
 
                     _dropdown(
-                      "Front Line / Support Worker",
-                      value: selectedProgramme,
+                      "Received Training on FTK Earlier",
+                      value: selectedTrainingStatus,
                       items: const [
-                        "Pashu Sakhi",
-                        "Krishi Sakhi",
-                        "Bank Sakhi",
-                        "Jeevika Sakhi",
-                        "Poshan Sakhi",
-                        "Community Resource Person",
-                        "Any Similar Cadre",
+                        "Yes",
+                        "No",
                       ],
                       onChanged: (value) {
                         setState(() {
-                          selectedProgramme = value;
+                          selectedTrainingStatus = value;
                         });
                       },
                     ),
 
-                    if (selectedProgramme == "Any Similar Cadre")
+                    if (selectedTrainingStatus == "Yes")
                       _input(
-                        "Specify Cadre",
-                        controller: cadreController,
+                        "Years of Experience",
+                        keyboard: TextInputType.number,
                       ),
 
                     _readOnly(
@@ -205,11 +199,12 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
                           });
                         },
                       ),
+
                   ]
               ),
-              SizedBox(
-                height: 10,
-              ),
+
+              const SizedBox(height: 10),
+
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -234,13 +229,10 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
                 ),
               )
 
+
             ],
-
           ),
-
-
         ),
-
       ),
     );
   }
@@ -433,7 +425,6 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
 
   Widget _datePicker({
     required String label,
-
     required DateTime? date,
     required Function(DateTime) onSelect,
   }) {
@@ -467,5 +458,7 @@ class _MembersCommunitymobilization extends State<MembersCommunitymobilization> 
       ),
     );
   }
+
+
 
 }

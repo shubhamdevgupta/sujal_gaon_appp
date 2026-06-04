@@ -2,31 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/master_provider.dart';
-import '../../providers/vwsc/vwsc_provider.dart';
-import '../../service/local_storage_service.dart';
-import '../../utils/app_constants.dart';
-import '../../utils/auth/user_session_manager.dart';
-import '../../utils/custom screen/custom_dropdown.dart';
-import '../../utils/enum/user_type.dart';
-import '../../utils/toast_helper.dart';
+import '../../../providers/master_provider.dart';
+import '../../../providers/vwsc/vwsc_provider.dart';
+import '../../../service/local_storage_service.dart';
+import '../../../utils/app_constants.dart';
+import '../../../utils/auth/user_session_manager.dart';
+import '../../../utils/custom screen/custom_dropdown.dart';
+import '../../../utils/enum/user_type.dart';
+import '../../../utils/toast_helper.dart';
 
-class MembersCommunitywqms extends StatefulWidget {
-  const MembersCommunitywqms({super.key});
+class MembersCommunitymobilization extends StatefulWidget {
+  const MembersCommunitymobilization({super.key});
 
   @override
-  State<MembersCommunitywqms> createState() => _MembersCommunitywqms();
+  State<MembersCommunitymobilization> createState() => _MembersCommunitymobilization();
 }
 
-class _MembersCommunitywqms extends State<MembersCommunitywqms> {
+class _MembersCommunitymobilization extends State<MembersCommunitymobilization> {
   String? selectedGender;
   String? selectedQualification;
-  String? selectedTrainingStatus;
+  String? selectedProgramme;
   String? selectedValidationStatus;
 
   DateTime? dob;
   DateTime? validationDate;
 
+  final TextEditingController cadreController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -59,25 +60,25 @@ class _MembersCommunitywqms extends State<MembersCommunitywqms> {
           child: Column(
             children: [
               _sectionCard(
-                icon: Icons.groups,
-                title: "Organization Details",
+                  icon: Icons.groups,
+                  title: "Organization Details",
                   children: [
 
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
+                        color: Colors.green.shade50,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Colors.blue.shade200,
+                          color: Colors.green.shade200,
                         ),
                       ),
                       child: const Text(
-                        "Members for Community WQMS – Water Quality Testing",
+                        "Members for Community Mobilization – User charge collection, water conservation works, implementation support, community surveillance for preventive maintenance, Lok Jal Utsav",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                          color: Colors.green,
                         ),
                       ),
                     ),
@@ -129,7 +130,7 @@ class _MembersCommunitywqms extends State<MembersCommunitywqms> {
 
                     _input(
                       "Complete Address",
-                      maxLines: 2,
+                      maxLines: 3,
                       maxLength: 500,
                     ),
 
@@ -151,23 +152,28 @@ class _MembersCommunitywqms extends State<MembersCommunitywqms> {
                     ),
 
                     _dropdown(
-                      "Received Training on FTK Earlier",
-                      value: selectedTrainingStatus,
+                      "Front Line / Support Worker",
+                      value: selectedProgramme,
                       items: const [
-                        "Yes",
-                        "No",
+                        "Pashu Sakhi",
+                        "Krishi Sakhi",
+                        "Bank Sakhi",
+                        "Jeevika Sakhi",
+                        "Poshan Sakhi",
+                        "Community Resource Person",
+                        "Any Similar Cadre",
                       ],
                       onChanged: (value) {
                         setState(() {
-                          selectedTrainingStatus = value;
+                          selectedProgramme = value;
                         });
                       },
                     ),
 
-                    if (selectedTrainingStatus == "Yes")
+                    if (selectedProgramme == "Any Similar Cadre")
                       _input(
-                        "Years of Experience",
-                        keyboard: TextInputType.number,
+                        "Specify Cadre",
+                        controller: cadreController,
                       ),
 
                     _readOnly(
@@ -199,12 +205,11 @@ class _MembersCommunitywqms extends State<MembersCommunitywqms> {
                           });
                         },
                       ),
-
                   ]
               ),
-
-              const SizedBox(height: 10),
-
+              SizedBox(
+                height: 10,
+              ),
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -229,10 +234,13 @@ class _MembersCommunitywqms extends State<MembersCommunitywqms> {
                 ),
               )
 
-
             ],
+
           ),
+
+
         ),
+
       ),
     );
   }
@@ -425,6 +433,7 @@ class _MembersCommunitywqms extends State<MembersCommunitywqms> {
 
   Widget _datePicker({
     required String label,
+
     required DateTime? date,
     required Function(DateTime) onSelect,
   }) {
@@ -458,7 +467,5 @@ class _MembersCommunitywqms extends State<MembersCommunitywqms> {
       ),
     );
   }
-
-
 
 }
