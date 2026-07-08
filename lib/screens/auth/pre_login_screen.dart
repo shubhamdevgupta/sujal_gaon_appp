@@ -65,7 +65,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                   ),
 
                   const SizedBox(height: 20),
-                  _buildLoginCard(
+       /*           _buildLoginCard(
                     title: "VWSC Login",
                     subtitle: "Login as a VWSC Member",
                     onTap: () {
@@ -76,7 +76,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                     },
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 20),*/
 
                   _buildLoginCard(
                     title: "WSO Login",
