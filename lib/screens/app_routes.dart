@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jal_sanchalan/screens/auth/pre_login_screen.dart';
+import 'package:jal_sanchalan/screens/panchayat/ssg_reg/members_communityMobilization.dart';
+import 'package:jal_sanchalan/screens/panchayat/ssg_reg/members_communityWQMS.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_landing_screen.dart';
 import 'package:jal_sanchalan/screens/panchayat/panchayat_login.dart';
 import 'package:jal_sanchalan/screens/panchayat/vwsc_member_list.dart';
@@ -12,7 +14,7 @@ import 'package:jal_sanchalan/screens/ssg_member/ssg_landingpage.dart';
 import 'package:jal_sanchalan/screens/ssg_member/ssg_login.dart';
 import 'package:jal_sanchalan/screens/ssg_member/ssg_questionscategory.dart';
 import 'package:jal_sanchalan/screens/vwsc/member_list/members_tab_screen.dart';
-import 'package:jal_sanchalan/screens/panchayat/ssg_registration.dart';
+import 'package:jal_sanchalan/screens/panchayat/ssg_reg/ssg_registration.dart';
 import 'package:jal_sanchalan/screens/panchayat/wso_registration.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_landing_screen.dart';
 import 'package:jal_sanchalan/screens/vwsc/vwsc_login.dart';
@@ -58,9 +60,12 @@ class AppRoutes {
           const VwscLandingScreen(),
       AppConstants.navigateToWsoRegistrationForm: (context) =>
           const WSORegistrationForm(),
-      AppConstants.navigateToSSGRegistrationForm: (context) =>
-          const SSGMemberRegistrationForm(),
+      AppConstants.navigateToSSGRegistrationForm: (context) => const SSGMemberRegistrationForm(),
       AppConstants.navigateToVWSCMemberScrenn: (context) => MembersTabScreen(),
+      AppConstants.navigateToMembersCommunitywqms: (context) => MembersCommunitywqms(),
+      AppConstants.navigateToMembersCommunitymobilization: (context) => MembersCommunitymobilization(),
+
+
 
       // SUJALAM SHAKTI GROUP MEMBER
       AppConstants.navigateToSSGLogin: (context) => SSGMemberLogin(),
