@@ -222,7 +222,7 @@ class _SanitaryInspectionFormState
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.97),
+          color: Colors.white.withValues(alpha:0.97),
           borderRadius: BorderRadius.circular(22),
 
           // Elegant textured border
@@ -233,7 +233,7 @@ class _SanitaryInspectionFormState
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha:0.06),
               blurRadius: 18,
               offset: const Offset(0, 8),
             ),
@@ -247,7 +247,7 @@ class _SanitaryInspectionFormState
               height: 60,
               width: 60,
               decoration: BoxDecoration(
-                color: const Color(0xFF1976D2).withOpacity(0.08),
+                color: const Color(0xFF1976D2).withValues(alpha:0.08),
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(
                   color: const Color(0xFF1976D2),
@@ -353,7 +353,7 @@ class _SanitaryInspectionFormState
 
         decoration: BoxDecoration(
           color: selected
-              ? const Color(0xFF1976D2).withOpacity(0.12)
+              ? const Color(0xFF1976D2).withValues(alpha:0.12)
               : Colors.transparent,
 
           borderRadius: BorderRadius.circular(8),
@@ -395,8 +395,8 @@ class _SanitaryInspectionFormState
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.97),
-            Colors.blue.shade50.withOpacity(0.9),
+            Colors.white.withValues(alpha:0.97),
+            Colors.blue.shade50.withValues(alpha:0.9),
           ],
         ),
         borderRadius: BorderRadius.circular(22),
@@ -409,7 +409,7 @@ class _SanitaryInspectionFormState
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.18),
+            color: Colors.blue.withValues(alpha:0.18),
             blurRadius: 22,
             offset: const Offset(0, 8),
           ),
@@ -580,7 +580,7 @@ class _SanitaryInspectionFormState
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.blue.withValues(alpha:0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

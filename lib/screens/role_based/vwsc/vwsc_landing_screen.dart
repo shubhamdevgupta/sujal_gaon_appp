@@ -161,7 +161,7 @@ class VwscLandingScreen extends StatelessWidget {
               height: 44,
               width: 44,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.18),
+                color: Colors.white.withValues(alpha:0.18),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: Colors.white, size: 24),
@@ -207,7 +207,7 @@ class VwscLandingScreen extends StatelessWidget {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha:0.06),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -262,7 +262,7 @@ class VwscLandingScreen extends StatelessWidget {
               height: 46,
               width: 46,
               decoration: BoxDecoration(
-                color: const Color(0xFF1E88E5).withOpacity(0.12),
+                color: const Color(0xFF1E88E5).withValues(alpha:0.12),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(icon, color: const Color(0xFF1565C0), size: 24),
@@ -405,10 +405,10 @@ class VwscLandingScreen extends StatelessWidget {
           stops: [0.0, 0.6, 1.0],
         ),
 
-        border: Border.all(color: Colors.blue.withOpacity(0.1)),
+        border: Border.all(color: Colors.blue.withValues(alpha:0.1)),
 
         boxShadow: [
-          BoxShadow(color: Colors.blue.withOpacity(0.05), blurRadius: 10),
+          BoxShadow(color: Colors.blue.withValues(alpha:0.05), blurRadius: 10),
         ],
       ),
 

@@ -133,7 +133,7 @@ class _EscalationAlertsScreen extends State<EscalationAlertsScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.08),
+            color: Colors.blue.withValues(alpha:0.08),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -147,7 +147,7 @@ class _EscalationAlertsScreen extends State<EscalationAlertsScreen> {
             width: 42,
             decoration: BoxDecoration(
               color: isActive
-                  ? borderColor.withOpacity(0.15)
+                  ? borderColor.withValues(alpha:0.15)
                   : Colors.blueGrey.shade100,
               borderRadius: BorderRadius.circular(12),
             ),

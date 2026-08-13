@@ -252,7 +252,7 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
           ),
 
           boxShadow: [
-            BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 10),
+            BoxShadow(color: Colors.blue.withValues(alpha:0.25), blurRadius: 10),
           ],
         ),
 
@@ -321,10 +321,10 @@ class _SsgLandingpageState extends State<SsgLandingpage> {
           stops: [0.0, 0.6, 1.0],
         ),
 
-        border: Border.all(color: Colors.blue.withOpacity(0.1)),
+        border: Border.all(color: Colors.blue.withValues(alpha:0.1)),
 
         boxShadow: [
-          BoxShadow(color: Colors.blue.withOpacity(0.05), blurRadius: 10),
+          BoxShadow(color: Colors.blue.withValues(alpha:0.05), blurRadius: 10),
         ],
       ),
 

@@ -86,7 +86,7 @@ class _VwscListScreenState extends State<VwscMemberList> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.blue.withOpacity(0.15),
+                    color: Colors.blue.withValues(alpha:0.15),
                     blurRadius: 10,
                     offset: const Offset(0, 6),
                   ),

@@ -215,8 +215,8 @@ class _MembersCommunitymobilization
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.97),
-            Colors.blue.shade50.withOpacity(0.9),
+            Colors.white.withValues(alpha:0.97),
+            Colors.blue.shade50.withValues(alpha:0.9),
           ],
         ),
         borderRadius: BorderRadius.circular(22),
@@ -226,7 +226,7 @@ class _MembersCommunitymobilization
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.18),
+            color: Colors.blue.withValues(alpha:0.18),
             blurRadius: 22,
             offset: const Offset(0, 8),
           ),

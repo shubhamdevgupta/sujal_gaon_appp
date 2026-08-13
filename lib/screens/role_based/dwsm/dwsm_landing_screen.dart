@@ -141,11 +141,11 @@ class _DwsmLandingScreenState extends State<DwsmLandingScreen> {
           colors: [Color(0xFFF5FAFF), Color(0xFFE3F2FD), Color(0xFFD6EBFF)],
         ),
 
-        border: Border.all(color: Colors.blue.withOpacity(.55)),
+        border: Border.all(color: Colors.blue.withValues(alpha:.55)),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(.10),
+            color: Colors.blue.withValues(alpha:.10),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -161,7 +161,7 @@ class _DwsmLandingScreenState extends State<DwsmLandingScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1565C0).withOpacity(.12),
+                  color: const Color(0xFF1565C0).withValues(alpha:.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
@@ -190,7 +190,7 @@ class _DwsmLandingScreenState extends State<DwsmLandingScreen> {
             "Overview your Dwsm Area",
             style: TextStyle(
               fontSize: 13,
-              color: Colors.black.withOpacity(.65),
+              color: Colors.black.withValues(alpha:.65),
             ),
           ),
 
@@ -245,16 +245,16 @@ class _DwsmLandingScreenState extends State<DwsmLandingScreen> {
 
           gradient: LinearGradient(
             colors: [
-              Colors.white.withOpacity(.9),
-              Colors.blue.shade50.withOpacity(.9),
+              Colors.white.withValues(alpha:.9),
+              Colors.blue.shade50.withValues(alpha:.9),
             ],
           ),
 
-          border: Border.all(color: Colors.blue.withOpacity(.55)),
+          border: Border.all(color: Colors.blue.withValues(alpha:.55)),
 
           boxShadow: [
             BoxShadow(
-              color: Colors.blue.withOpacity(.12),
+              color: Colors.blue.withValues(alpha:.12),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -306,7 +306,7 @@ class _DwsmLandingScreenState extends State<DwsmLandingScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 10,
-                color: Colors.black.withOpacity(.6),
+                color: Colors.black.withValues(alpha:.6),
               ),
             ),
           ],
@@ -325,8 +325,8 @@ class _DwsmLandingScreenState extends State<DwsmLandingScreen> {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            color: Colors.white.withOpacity(.65),
-            border: Border.all(color: Colors.white.withOpacity(.4)),
+            color: Colors.white.withValues(alpha:.65),
+            border: Border.all(color: Colors.white.withValues(alpha:.4)),
           ),
           child: child,
         ),
@@ -356,7 +356,7 @@ class _DwsmLandingScreenState extends State<DwsmLandingScreen> {
                 height: 42,
                 width: 42,
                 decoration: BoxDecoration(
-                  color: iconColor.withOpacity(.15),
+                  color: iconColor.withValues(alpha:.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: iconColor),
@@ -421,10 +421,10 @@ class _DwsmLandingScreenState extends State<DwsmLandingScreen> {
           stops: [0.0, 0.6, 1.0],
         ),
 
-        border: Border.all(color: Colors.blue.withOpacity(.55)),
+        border: Border.all(color: Colors.blue.withValues(alpha:.55)),
 
         boxShadow: [
-          BoxShadow(color: Colors.blue.withOpacity(0.05), blurRadius: 10),
+          BoxShadow(color: Colors.blue.withValues(alpha:0.05), blurRadius: 10),
         ],
       ),
 

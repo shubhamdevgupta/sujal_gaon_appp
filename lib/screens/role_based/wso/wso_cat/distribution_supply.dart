@@ -268,8 +268,8 @@ class _DistributionSupplyFormState
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.97),
-            Colors.blue.shade50.withOpacity(0.9),
+            Colors.white.withValues(alpha:0.97),
+            Colors.blue.shade50.withValues(alpha:0.9),
           ],
         ),
         borderRadius: BorderRadius.circular(22),

@@ -125,7 +125,7 @@ class RegisterVwscScreen extends StatelessWidget {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.25),
+            color: Colors.blue.withValues(alpha:0.25),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -195,13 +195,13 @@ class RegisterVwscScreen extends StatelessWidget {
       padding: const EdgeInsets.all(20),
 
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.97),
+        color: Colors.white.withValues(alpha:0.97),
 
         borderRadius: BorderRadius.circular(22),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.1),
+            color: Colors.blue.withValues(alpha:0.1),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -221,7 +221,7 @@ class RegisterVwscScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
 
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1976D2).withOpacity(0.1),
+                  color: const Color(0xFF1976D2).withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
 
@@ -338,7 +338,7 @@ class RegisterVwscScreen extends StatelessWidget {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.blue.withValues(alpha:0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

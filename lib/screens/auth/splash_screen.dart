@@ -155,7 +155,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
 
-          Container(color: Colors.black.withOpacity(0.45)),
+          Container(color: Colors.black.withValues(alpha:0.45)),
 
           Center(
             child: FadeTransition(

@@ -70,7 +70,7 @@ class _CreatePasswordDialogState extends State<CreatePasswordDialog> {
                 colors: [
                   Colors.white,
                   Colors.blue.shade50,
-                  Colors.blue.shade100.withOpacity(.3),
+                  Colors.blue.shade100.withValues(alpha:.3),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -118,10 +118,10 @@ class _CreatePasswordDialogState extends State<CreatePasswordDialog> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(.8),
+                          color: Colors.white.withValues(alpha:.8),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: Colors.blue.withOpacity(.3),
+                            color: Colors.blue.withValues(alpha:.3),
                           ),
                         ),
                         child: Column(

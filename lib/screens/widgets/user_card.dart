@@ -29,22 +29,22 @@ class UserCard extends StatelessWidget {
         /// TRANSPARENT GRADIENT
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(.2),
-            const Color(0xFFE3F2FD).withOpacity(.75),
-            const Color(0xFFBBDEFB).withOpacity(.55),
+            Colors.white.withValues(alpha:.2),
+            const Color(0xFFE3F2FD).withValues(alpha:.75),
+            const Color(0xFFBBDEFB).withValues(alpha:.55),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
 
         border: Border.all(
-          color: const Color(0xFF1976D2).withOpacity(.25),
+          color: const Color(0xFF1976D2).withValues(alpha:.25),
           width: 1.2,
         ),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(.08),
+            color: Colors.blue.withValues(alpha:.08),
             blurRadius: 10,
             offset: const Offset(0, 4),
           )
@@ -137,7 +137,7 @@ class UserCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(.15),
+              color: iconColor.withValues(alpha:.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, size: 16, color: iconColor),

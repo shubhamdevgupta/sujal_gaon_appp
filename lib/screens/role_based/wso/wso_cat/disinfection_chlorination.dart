@@ -254,7 +254,7 @@ class _DisinfectionFormState
                             decoration: BoxDecoration(
                               color:
                               chlorineStatusColor
-                                  .withOpacity(0.1),
+                                  .withValues(alpha:0.1),
                               borderRadius:
                               BorderRadius.circular(
                                   12),
@@ -350,8 +350,8 @@ class _DisinfectionFormState
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.97),
-            Colors.blue.shade50.withOpacity(0.9),
+            Colors.white.withValues(alpha:0.97),
+            Colors.blue.shade50.withValues(alpha:0.9),
           ],
         ),
         borderRadius: BorderRadius.circular(22),

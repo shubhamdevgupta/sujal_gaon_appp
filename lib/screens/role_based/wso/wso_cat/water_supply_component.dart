@@ -23,7 +23,7 @@ class _WaterSupplyComponent extends State<WaterSupplyComponent> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor:  Colors.blue.shade700.withOpacity(0.9),
+        backgroundColor:  Colors.blue.shade700.withValues(alpha:0.9),
         title: const Text("Water Supply Components",style: TextStyle(color: Colors.white),),
         centerTitle: true,
       ),
@@ -236,8 +236,8 @@ class CategoryCard extends StatelessWidget {
 
                 gradient: LinearGradient(
                   colors: [
-                    Colors.white.withOpacity(0.9),
-                    Colors.blue.shade50.withOpacity(0.2),
+                    Colors.white.withValues(alpha:0.9),
+                    Colors.blue.shade50.withValues(alpha:0.2),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -245,7 +245,7 @@ class CategoryCard extends StatelessWidget {
 
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.blue.withOpacity(0.18),
+                    color: Colors.blue.withValues(alpha:0.18),
                     blurRadius: 20,
                     spreadRadius: 1,
                     offset: const Offset(0, 8),
@@ -253,7 +253,7 @@ class CategoryCard extends StatelessWidget {
                 ],
 
                 border: Border.all(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha:0.1),
                   width: 1,
                 ),
               ),

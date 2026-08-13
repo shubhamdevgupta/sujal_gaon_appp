@@ -277,9 +277,9 @@ class _NonSupplyFormState
         gradient: LinearGradient(
           colors: [
             Colors.white
-                .withOpacity(0.97),
+                .withValues(alpha:0.97),
             Colors.blue.shade50
-                .withOpacity(0.9),
+                .withValues(alpha:0.9),
           ],
         ),
         borderRadius:

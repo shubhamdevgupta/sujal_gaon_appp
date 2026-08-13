@@ -156,7 +156,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.blue.withOpacity(0.4),
+              color: Colors.blue.withValues(alpha:0.4),
               blurRadius: 12,
               offset: const Offset(0, 6),
             ),
@@ -213,7 +213,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                 borderRadius: BorderRadius.circular(2),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFFFFD54F).withOpacity(0.7),
+                    color: const Color(0xFFFFD54F).withValues(alpha:0.7),
                     blurRadius: 6,
                     spreadRadius: 1,
                   ),
@@ -229,7 +229,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
               child: Container(
                 height: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFC107).withOpacity(0.18),
+                  color: const Color(0xFFFFC107).withValues(alpha:0.18),
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(16),
                     bottomRight: Radius.circular(16),
@@ -265,7 +265,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.blue.withOpacity(0.4),
+              color: Colors.blue.withValues(alpha:0.4),
               blurRadius: 12,
               offset: const Offset(0, 6),
             ),
@@ -319,7 +319,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
                 borderRadius: BorderRadius.circular(2),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF90ABC5).withOpacity(0.7),
+                    color: const Color(0xFF90ABC5).withValues(alpha:0.7),
                     blurRadius: 6,
                     spreadRadius: 1,
                   ),
@@ -335,7 +335,7 @@ class _PreLoginScreenState extends State<PreLoginScreen> {
               child: Container(
                 height: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E88E5).withOpacity(0.18),
+                  color: const Color(0xFF1E88E5).withValues(alpha:0.18),
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(16),
                     bottomRight: Radius.circular(16),

@@ -39,7 +39,7 @@ class _WsoRegularEntry extends State<WsoRegularEntry> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: Colors.blue.shade700.withOpacity(0.9),
+        backgroundColor: Colors.blue.shade700.withValues(alpha:0.9),
         title: const Text("Regular Inventory", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
@@ -96,7 +96,7 @@ Widget buildHabitationCard(String serviceArea) {
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
-      border: Border.all(color: Colors.blue.shade100.withOpacity(0.5)),
+      border: Border.all(color: Colors.blue.shade100.withValues(alpha:0.5)),
     ),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
@@ -107,7 +107,7 @@ Widget buildHabitationCard(String serviceArea) {
             height: 50,
             width: 50,
             decoration: BoxDecoration(
-              color: habitationThemeColor.withOpacity(0.1),
+              color: habitationThemeColor.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Icon(
@@ -152,7 +152,7 @@ Widget buildHabitationCard(String serviceArea) {
           /// DECORATIVE ELEMENT (Optional: Small checkmark or map icon)
           Icon(
             Icons.map_outlined,
-            color: habitationThemeColor.withOpacity(0.2),
+            color: habitationThemeColor.withValues(alpha:0.2),
             size: 20,
           ),
         ],
@@ -172,7 +172,7 @@ Widget buildAssetsCard(WsoProvider provider) {
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
-      border: Border.all(color: Colors.blue.shade100.withOpacity(0.5)),
+      border: Border.all(color: Colors.blue.shade100.withValues(alpha:0.5)),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,7 +238,7 @@ Widget buildNormalAssetCard(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isExpanded
-                ? themeColor.withOpacity(0.3)
+                ? themeColor.withValues(alpha:0.3)
                 : Colors.grey.shade200,
           ),
         ),
@@ -320,7 +320,7 @@ Widget buildNormalAssetCard(
                   children: [
                     CircleAvatar(
                       radius: 18,
-                      backgroundColor: themeColor.withOpacity(.1),
+                      backgroundColor: themeColor.withValues(alpha:.1),
                       child: Icon(
                         _getAssetIcon(asset.assetTypeId),
                         color: themeColor,

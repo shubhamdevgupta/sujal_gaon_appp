@@ -89,13 +89,13 @@ class _NjmWsoLogin extends State<WsoLogin> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.42),
+                  color: Colors.white.withValues(alpha:0.42),
                   // Transparency5
                   borderRadius: BorderRadius.circular(22),
 
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blue.withOpacity(0.15),
+                      color: Colors.blue.withValues(alpha:0.15),
                       blurRadius: 20,
                       spreadRadius: 2,
                       offset: const Offset(0, 8),
@@ -103,7 +103,7 @@ class _NjmWsoLogin extends State<WsoLogin> {
                   ],
 
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.4),
+                    color: Colors.white.withValues(alpha:0.4),
                     // Glass border
                     width: 1.2,
                   ),

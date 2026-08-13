@@ -338,7 +338,7 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.97),
+          color: Colors.white.withValues(alpha:0.97),
           borderRadius: BorderRadius.circular(22),
 
           // 🔵 Textured border
@@ -349,7 +349,7 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha:0.06),
               blurRadius: 18,
               offset: const Offset(0, 8),
             ),
@@ -363,7 +363,7 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
               height: 60,
               width: 60,
               decoration: BoxDecoration(
-                color: const Color(0xFF1976D2).withOpacity(0.08),
+                color: const Color(0xFF1976D2).withValues(alpha:0.08),
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(
                   color: const Color(0xFF1976D2),
@@ -462,8 +462,8 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.97),
-            Colors.blue.shade50.withOpacity(0.9),
+            Colors.white.withValues(alpha:0.97),
+            Colors.blue.shade50.withValues(alpha:0.9),
           ],
         ),
         borderRadius: BorderRadius.circular(22),
@@ -476,7 +476,7 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.18),
+            color: Colors.blue.withValues(alpha:0.18),
             blurRadius: 22,
             offset: const Offset(0, 8),
           ),
@@ -583,12 +583,12 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
       }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.95),
+        color: Colors.white.withValues(alpha:0.95),
         borderRadius: BorderRadius.circular(14),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.08),
+            color: Colors.blue.withValues(alpha:0.08),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -647,7 +647,7 @@ class _WaterSampleFormState extends State<WaterSampleForm> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.blue.withValues(alpha:0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

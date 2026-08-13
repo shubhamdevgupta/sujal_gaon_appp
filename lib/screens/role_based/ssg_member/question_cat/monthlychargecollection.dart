@@ -128,7 +128,7 @@ class _MonthlyChargeCollectionFormState
                         borderRadius: BorderRadius.circular(14),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.blue.withOpacity(0.3),
+                            color: Colors.blue.withValues(alpha:0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
                           ),
@@ -564,7 +564,7 @@ class _MonthlyChargeCollectionFormState
       child: DataTable(
         columnSpacing: 20,
         headingRowColor: MaterialStateProperty.all(
-          const Color(0xFF1976D2).withOpacity(0.1),
+          const Color(0xFF1976D2).withValues(alpha:0.1),
         ),
         columns: const [
           DataColumn(
@@ -620,8 +620,8 @@ class _MonthlyChargeCollectionFormState
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0.95),
-            Colors.blue.shade50.withOpacity(0.9),
+            Colors.white.withValues(alpha:0.95),
+            Colors.blue.shade50.withValues(alpha:0.9),
           ],
         ),
 
@@ -629,7 +629,7 @@ class _MonthlyChargeCollectionFormState
 
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.18),
+            color: Colors.blue.withValues(alpha:0.18),
             blurRadius: 22,
             offset: const Offset(0, 8),
           ),
@@ -850,7 +850,7 @@ class _MonthlyChargeCollectionFormState
           padding: const EdgeInsets.symmetric(
               horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.15),
+            color: color.withValues(alpha:0.15),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
