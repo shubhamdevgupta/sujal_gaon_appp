@@ -23,7 +23,7 @@ class VwscLandingScreen extends StatelessWidget {
         ),
 
         title: const Text(
-          "Sujal Gaon",
+          "Sujalam Bharat",
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
