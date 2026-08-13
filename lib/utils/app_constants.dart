@@ -32,11 +32,15 @@ class AppConstants {
   static const String navigateToGramPanchayatLogin = '/panchayatlogin ';
   static const String navigateToVWSCListScreen = '/listofvwsc ';
 
+  //dwsm
+  static const String navigateToDwsmLogin = '/DwsmLogin ';
+  static const String navigateToDwsmLandingPage = '/DwsmLandingPage ';
+
   //vwsc
   static const String navigateToVwscLogin = '/VwscLogin ';
   static const String navigateToVWSCLandingScreen = '/VWSClandingscreen';
   static const String navigateToWsoRegistrationForm = '/NJMPRegistrationForm';
-  static const String navigateToSSGRegistrationForm ='/SHGFTKRegistrationForm';
+  static const String navigateToSSGRegistrationForm ='/SSGFTKRegistrationForm';
   static const String navigateToVWSCMemberScrenn = '/listofvwscmember';
   static const String navigateToMembersCommunitywqms = '/memberscommunity';
   static const String navigateToMembersCommunitymobilization = '/memberscommunitymobilzation';
@@ -70,5 +74,9 @@ class AppConstants {
   static const String navigateToNonSupplyForm = '/NonSupplyForm ';
   static const String navigateToEscalationAlertsScreen = '/EscalationAlertsScreen ';
   static const String navigateToWSORegularEntry = '/WSORegularEntry ';
+
+
+  static const String navigateToWSOUserVerifyPage = '/WSOUserVerifyPage';
+
 
 }

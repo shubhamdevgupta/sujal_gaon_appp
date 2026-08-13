@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/repository/ftk_shg/ftk_shg_repo.dart';
+
+import '../../repository/ftk_ssg/ftk_ssg_repo.dart';
 
 class SsgProvider extends ChangeNotifier {
   final SSGRepo _njmRepo = SSGRepo();

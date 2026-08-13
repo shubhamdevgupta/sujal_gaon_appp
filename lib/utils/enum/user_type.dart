@@ -28,7 +28,7 @@ extension UserTypeExtension on UserType {
       case UserType.njmp:
         return "NJMP";
       case UserType.ftk:
-        return "SHGs / FTK Trained Women";
+        return "SSG / FTK Trained Women";
     }
   }
 }
