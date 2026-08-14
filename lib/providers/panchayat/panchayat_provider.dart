@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/models/vwsc/vwsc_member_list.dart';
-import 'package:jal_sanchalan/models/vwsc/vwsc_ps_response.dart';
-import 'package:jal_sanchalan/repository/panchayat/panchayat_repo.dart';
+
+import '../../models/vwsc/vwsc_member_list.dart';
+import '../../models/vwsc/vwsc_ps_response.dart';
+import '../../repository/panchayat/panchayat_repo.dart';
 
 class PanchayatProvider extends ChangeNotifier {
   final PanchayatRepo _panchayatRepo;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../providers/vwsc/vwsc_provider.dart';
 import '../../../widgets/user_card.dart';
 
 

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/repository/vwsc/vwsc_repo.dart';
 
 import '../../models/njm_ftk_response/WsoSSGRegistrationResponse.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
+import '../../repository/vwsc/vwsc_repo.dart';
 
 class VwscProvider extends ChangeNotifier {
   final VwscRepo _vwscRepo;

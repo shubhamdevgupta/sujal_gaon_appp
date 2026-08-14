@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/providers/authentication_provider.dart';
-import 'package:jal_sanchalan/utils/custom%20screen/app_text_field.dart';
-import 'package:jal_sanchalan/utils/enum/user_type.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../providers/authentication_provider.dart';
 import '../../../../utils/app_constants.dart';
+import '../../../../utils/custom screen/app_text_field.dart';
+import '../../../../utils/enum/user_type.dart';
 import '../../../../utils/toast_helper.dart';
 
 class PanchayatLogin extends StatefulWidget {

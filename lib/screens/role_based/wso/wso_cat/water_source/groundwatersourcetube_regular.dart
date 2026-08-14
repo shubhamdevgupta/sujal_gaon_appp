@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jal_sanchalan/providers/wso/wso_provider.dart';
-import 'package:jal_sanchalan/utils/device_utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../providers/wso/wso_provider.dart';
 import '../../../../../utils/app_constants.dart';
 import '../../../../../utils/app_dialog.dart';
+import '../../../../../utils/device_utils.dart';
 import '../../../../../utils/enum/app_dialog.dart';
 import '../../../../../utils/toast_helper.dart';
 

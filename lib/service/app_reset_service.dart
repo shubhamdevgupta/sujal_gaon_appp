@@ -1,11 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/providers/master_provider.dart';
-
-import 'package:provider/provider.dart';
-
-import '../providers/authentication_provider.dart';
-
-
 class AppResetService {
   static Future<void> fullReset(BuildContext context) async {
     /*// 1. Clear Shared Preferences

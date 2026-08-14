@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:jal_sanchalan/main.dart';
+import 'package:sujalam_bharat/main.dart';
 
 
 void main() {

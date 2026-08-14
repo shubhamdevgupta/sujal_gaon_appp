@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/providers/vwsc/vwsc_provider.dart';
-import 'package:jal_sanchalan/utils/auth/user_session_manager.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../providers/vwsc/vwsc_provider.dart';
+import '../../../../utils/auth/user_session_manager.dart';
 import '../../../../utils/enum/user_type.dart';
 import 'ftk_sgh_page.dart';
 import 'njm_wso_page.dart';

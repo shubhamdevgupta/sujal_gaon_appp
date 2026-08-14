@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jal_sanchalan/repository/njm_wso/njm_wso_repo.dart';
 
 import '../../models/njm_ftk_response/WsoSSGRegistrationResponse.dart';
 import '../../models/njm_ftk_response/habitation_assest.dart';
 import '../../models/vwsc/njm_ftk_memberList.dart';
 import '../../models/wso/wso_get_ground_water.dart';
 import '../../models/wso/wso_groundwatersource_response.dart';
+import '../../repository/njm_wso/njm_wso_repo.dart';
 import '../../utils/global_exception_handler.dart';
 
 class WsoProvider extends ChangeNotifier {

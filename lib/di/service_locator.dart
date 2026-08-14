@@ -1,9 +1,10 @@
 import 'package:get_it/get_it.dart';
-import 'package:jal_sanchalan/repository/master_repositary.dart';
-import 'package:jal_sanchalan/repository/njm_ftk_repository.dart';
-import 'package:jal_sanchalan/repository/njm_wso/njm_wso_repo.dart';
+
 
 import '../repository/authentication_repository.dart';
+import '../repository/master_repositary.dart';
+import '../repository/njm_ftk_repository.dart';
+import '../repository/njm_wso/njm_wso_repo.dart';
 import '../repository/panchayat/panchayat_repo.dart';
 import '../repository/vwsc/vwsc_repo.dart';
 import '../service/base_api_service.dart';

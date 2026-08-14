@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/screens/widgets/user_card.dart';
 
 import '../../../../utils/app_constants.dart';
+import '../../../widgets/user_card.dart';
 
 class WsoUserVerifyPage extends StatefulWidget {
   const WsoUserVerifyPage({super.key});

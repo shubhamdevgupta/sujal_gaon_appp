@@ -1,17 +1,12 @@
 import 'dart:convert';
 
-import 'package:jal_sanchalan/models/njm_ftk_response/wso_ssg_dashboard_response.dart';
-import 'package:jal_sanchalan/models/njm_ftk_response/wso_ssg_login_response.dart';
-import 'package:jal_sanchalan/models/njm_ftk_response/password_login.dart';
-
-import '../models/njm_ftk_response/habitation_assest.dart';
 import '../models/panchayat/panchayat_login_response.dart';
-import '../models/update_password.dart';
 import '../service/base_api_service.dart';
 import '../utils/global_exception_handler.dart';
 
 class AuthenticaitonRepository {
   final BaseApiService _apiService;
+
   AuthenticaitonRepository(this._apiService);
 
   Future<PanchayatLoginResponse> panchayatLoginUser(

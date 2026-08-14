@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jal_sanchalan/providers/wso/wso_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../models/njm_ftk_response/habitation_assest.dart';
+import '../../../../../providers/wso/wso_provider.dart';
 import '../../../../../service/local_storage_service.dart';
 import '../../../../../utils/app_constants.dart';
 import '../../../../../utils/app_dialog.dart';
