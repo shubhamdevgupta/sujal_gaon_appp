@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 
 
 import '../repository/authentication_repository.dart';
-import '../repository/master_repositary.dart';
+import '../repository/master_repository.dart';
 import '../repository/njm_ftk_repository.dart';
 import '../repository/njm_wso/njm_wso_repo.dart';
 import '../repository/panchayat/panchayat_repo.dart';
@@ -17,8 +17,8 @@ void setupDI() {
     ..registerLazySingleton<AuthenticaitonRepository>(
       () => AuthenticaitonRepository(getIt()),
     )
-    ..registerLazySingleton<MasterRepositary>(
-      () => MasterRepositary(getIt()),
+    ..registerLazySingleton<MasterRepository>(
+      () => MasterRepository(getIt()),
     )
     ..registerLazySingleton<WsoSSGRepository>(
       () => WsoSSGRepository(getIt()),

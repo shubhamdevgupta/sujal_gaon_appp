@@ -9,7 +9,7 @@ import 'package:sujalam_bharat/providers/wso/ohsr_provider.dart';
 import 'package:sujalam_bharat/providers/wso/wso_provider.dart';
 import 'package:sujalam_bharat/providers/wso_ssg_provider.dart';
 import 'package:sujalam_bharat/repository/authentication_repository.dart';
-import 'package:sujalam_bharat/repository/master_repositary.dart';
+import 'package:sujalam_bharat/repository/master_repository.dart';
 import 'package:sujalam_bharat/repository/njm_ftk_repository.dart';
 import 'package:sujalam_bharat/repository/njm_wso/njm_wso_repo.dart';
 import 'package:sujalam_bharat/repository/panchayat/panchayat_repo.dart';
@@ -35,7 +35,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => MasterProvider(getIt<MasterRepositary>()),
+          create: (_) => MasterProvider(getIt<MasterRepository>()),
         ),
         ChangeNotifierProvider(
           create: (_) =>
@@ -45,15 +45,11 @@ void main() async {
           create: (_) => PanchayatProvider(getIt<PanchayatRepo>()),
         ),
         ChangeNotifierProvider(create: (_) => VwscProvider(getIt<VwscRepo>())),
-        ChangeNotifierProvider(
-          create: (_) => WsoProvider(getIt<WsoRepo>()),
-        ),
+        ChangeNotifierProvider(create: (_) => WsoProvider(getIt<WsoRepo>())),
         ChangeNotifierProvider(
           create: (_) => WsoSSGProvider(getIt<WsoSSGRepository>()),
         ),
-        ChangeNotifierProvider(
-          create: (_) => OhsrProvider(getIt<WsoRepo>()),
-        ),
+        ChangeNotifierProvider(create: (_) => OhsrProvider(getIt<WsoRepo>())),
         ChangeNotifierProvider(create: (_) => UpdateViewModel()),
       ],
       child: const MyApp(),

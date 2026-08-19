@@ -11,9 +11,9 @@ import '../models/master_directory/village_mdoel.dart';
 import '../service/base_api_service.dart';
 import '../utils/custom screen/global_exception_handler.dart';
 
-class MasterRepositary {
+class MasterRepository {
   final BaseApiService _apiService;
-  MasterRepositary(this._apiService);
+  MasterRepository(this._apiService);
   Future<BaseResponseModel<Statelist>> fetchState() async {
     try {
       debugPrint("📡 fetchState() API Call Started");

@@ -7,12 +7,12 @@ import '../models/master_directory/gp_model.dart';
 import '../models/master_directory/habitaion_model.dart';
 import '../models/master_directory/state_model.dart';
 import '../models/master_directory/village_mdoel.dart';
-import '../repository/master_repositary.dart';
+import '../repository/master_repository.dart';
 
 class MasterProvider extends ChangeNotifier {
 
-  final MasterRepositary _masterRepositary ;
-  MasterProvider(this._masterRepositary);
+  final MasterRepository _masterRepository ;
+  MasterProvider(this._masterRepository);
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -99,7 +99,7 @@ class MasterProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawState = await _masterRepositary.fetchState();
+      final rawState = await _masterRepository.fetchState();
 
       baseStatus = rawState.status;
 
@@ -140,7 +140,7 @@ class MasterProvider extends ChangeNotifier {
     try {
 
       final rawDistrict =
-      await _masterRepositary.fetchDistrict(stateId);
+      await _masterRepository.fetchDistrict(stateId);
 
       baseStatus = rawDistrict.status;
 
@@ -179,7 +179,7 @@ class MasterProvider extends ChangeNotifier {
     try {
 
       final rawBlock =
-      await _masterRepositary.fetchBlock(districtId);
+      await _masterRepository.fetchBlock(districtId);
 
       baseStatus = rawBlock.status;
 
@@ -216,7 +216,7 @@ class MasterProvider extends ChangeNotifier {
     try {
 
       final rawGp =
-      await _masterRepositary.fetchGramPanchayat(blockId);
+      await _masterRepository.fetchGramPanchayat(blockId);
 
       baseStatus = rawGp.status;
 
@@ -253,7 +253,7 @@ class MasterProvider extends ChangeNotifier {
     try {
 
       final rawVillage =
-      await _masterRepositary.fetchVillage(panchayatId);
+      await _masterRepository.fetchVillage(panchayatId);
 
       baseStatus = rawVillage.status;
 
@@ -300,7 +300,7 @@ class MasterProvider extends ChangeNotifier {
     try {
 
       final rawHab =
-      await _masterRepositary.fetchHabitation(villageId);
+      await _masterRepository.fetchHabitation(villageId);
 
       baseStatus = rawHab.status;
 
@@ -343,7 +343,7 @@ class MasterProvider extends ChangeNotifier {
     try {
 
       final rawDir =
-      await _masterRepositary.fetchDirectory(
+      await _masterRepository.fetchDirectory(
         selectedStateId!,
         selectedDistrictId!
      /*   selectedBlockId!,
